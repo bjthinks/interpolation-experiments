@@ -47,5 +47,12 @@ int main(int argc, char *argv[])
   should(x_plus_y(b) == 5.0);
   should(x_plus_y(c) == 0.0);
 
+  // Polynomial *= constant
+  MPoly<3> x_times_4(x);
+  x_times_4 *= 4.0;
+  should(x_times_4(a) == 12.0);
+  should(x_times_4(b) == 0.0);
+  should(x_times_4(c) == 0.0);
+
   return 0;
 }
