@@ -54,5 +54,19 @@ int main(int argc, char *argv[])
   should(x_times_4(b) == 0.0);
   should(x_times_4(c) == 0.0);
 
+  // Now MPoly<N> should be a VectorSpace<double,MPoly<N> >
+  should((+x)(a) == 3.0);
+  should((+x)(b) == 0.0);
+  should((+x)(c) == 0.0);
+  should((x + y + z)(a) == 3.0);
+  should((x + y + z)(b) == 5.0);
+  should((x + y + z)(c) == 7.0);
+  should((x + y - z)(a) == 3.0);
+  should((x + y - z)(b) == 5.0);
+  should((x + y - z)(c) == -7.0);
+  should((2.0 * x - 3.0 * y + 4.0 * z)(a) == 6.0);
+  should((2.0 * x - 3.0 * y + 4.0 * z)(b) == -15.0);
+  should((2.0 * x - 3.0 * y + 4.0 * z)(c) == 28.0);
+
   return 0;
 }

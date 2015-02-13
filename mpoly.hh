@@ -26,9 +26,12 @@ public:
 
   bool operator<(const Monomial<N> &rhs) const
   {
-    for (int i = 0; i < N; ++i)
+    for (int i = 0; i < N; ++i) {
       if (powers[i] < rhs.powers[i])
         return true;
+      if (powers[i] > rhs.powers[i])
+        return false;
+    }
     return false;
   }
 
@@ -45,7 +48,7 @@ private:
 };
 
 template <int N>
-class MPoly
+class MPoly : public VectorSpace<double, MPoly<N> >
 {
 public:
   static MPoly<N> var(int n)
@@ -75,9 +78,14 @@ public:
   const MPoly<N> &operator+=(const MPoly &rhs)
   {
     for (c_iter i = rhs.terms.begin(); i != rhs.terms.end(); ++i) {
-      terms[i->first] += i->second;
-      if (terms[i->first] == 0.0)
-        terms.erase(i->first);
+      iter j = terms.find(i->first);
+      if (j == terms.end())
+        terms[i->first] = i->second;
+      else {
+        j->second += i->second;
+        if (j->second == 0.0)
+          terms.erase(i->first);
+      }
     }
     return *this;
   }
