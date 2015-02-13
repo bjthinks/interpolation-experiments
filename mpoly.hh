@@ -72,6 +72,16 @@ public:
     return f;
   }
 
+  const MPoly<N> &operator+=(const MPoly &rhs)
+  {
+    for (c_iter i = rhs.terms.begin(); i != rhs.terms.end(); ++i) {
+      terms[i->first] += i->second;
+      if (terms[i->first] == 0.0)
+        terms.erase(i->first);
+    }
+    return *this;
+  }
+
 private:
   std::map<Monomial<N>,double> terms;
   typedef typename std::map<Monomial<N>,double>::const_iterator c_iter;

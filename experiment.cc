@@ -40,5 +40,12 @@ int main(int argc, char *argv[])
   should((-y)(b) == -5.0);
   should((-z)(c) == -7.0);
 
+  // Polynomial +=
+  MPoly<3> x_plus_y(x);
+  x_plus_y += y;
+  should(x_plus_y(a) == 3.0);
+  should(x_plus_y(b) == 5.0);
+  should(x_plus_y(c) == 0.0);
+
   return 0;
 }
