@@ -35,5 +35,10 @@ int main(int argc, char *argv[])
   should(z(b) == 0.0);
   should(z(c) == 7.0);
 
+  // Polynomial negation
+  should((-x)(a) == -3.0);
+  should((-y)(b) == -5.0);
+  should((-z)(c) == -7.0);
+
   return 0;
 }

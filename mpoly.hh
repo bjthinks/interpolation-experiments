@@ -59,14 +59,22 @@ public:
   double operator()(const Vector<N> &p) const
   {
     double value = 0.0;
-    typename std::map<Monomial<N>,double>::const_iterator i;
-    for (i = terms.begin(); i != terms.end(); ++i)
+    for (c_iter i = terms.begin(); i != terms.end(); ++i)
       value += (i->second) * (i->first)(p);
     return value;
   }
 
+  MPoly<N> operator-() const
+  {
+    MPoly<N> f;
+    for (c_iter i = terms.begin(); i != terms.end(); ++i)
+      f.terms[(i->first)] = -(i->second);
+    return f;
+  }
+
 private:
   std::map<Monomial<N>,double> terms;
+  typedef typename std::map<Monomial<N>,double>::const_iterator c_iter;
 };
 
 #endif
