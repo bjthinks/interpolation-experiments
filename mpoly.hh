@@ -48,9 +48,16 @@ private:
 };
 
 template <int N>
-class MPoly : public VectorSpace<double, MPoly<N> >
+class MPoly : public Algebra<double, MPoly<N> >
 {
 public:
+  MPoly() {}
+
+  explicit MPoly(double c)
+  {
+    terms[Monomial<N>()] = c;
+  }
+
   static MPoly<N> var(int n)
   {
     Monomial<N> x = Monomial<N>::var(n);
@@ -102,6 +109,8 @@ public:
     }
     return *this;
   }
+
+  using Algebra<double,MPoly<N> >::operator=;
 
 private:
   std::map<Monomial<N>,double> terms;

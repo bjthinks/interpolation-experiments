@@ -68,5 +68,21 @@ int main(int argc, char *argv[])
   should((2.0 * x - 3.0 * y + 4.0 * z)(b) == -15.0);
   should((2.0 * x - 3.0 * y + 4.0 * z)(c) == 28.0);
 
+  // Explicit construction from doubles
+  MPoly<3> one(1.0);
+  should(one(a) == 1.0);
+  should(one(b) == 1.0);
+  should(one(c) == 1.0);
+
+  // Now MPoly<N> should be an Algebra<double,MPoly<N> >
+  should((x + 1.0)(a) == 4.0);
+  should((y + 1.0)(a) == 1.0);
+  should((z + 1.0)(a) == 1.0);
+  MPoly<3> v;
+  v = 2.0;
+  should(v(a) == 2.0);
+  should(v(b) == 2.0);
+  should(v(c) == 2.0);
+
   return 0;
 }
