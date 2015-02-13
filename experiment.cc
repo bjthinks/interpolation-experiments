@@ -84,5 +84,16 @@ int main(int argc, char *argv[])
   should(v(b) == 2.0);
   should(v(c) == 2.0);
 
+  MPoly<3> xyz;
+  xyz = x * y;
+  xyz *= z;
+  should(xyz(a) == 0.0);
+  should(xyz(b) == 0.0);
+  should(xyz(c) == 0.0);
+  should(xyz(a+b) == 0.0);
+  should(xyz(b+c) == 0.0);
+  should(xyz(a+c) == 0.0);
+  should(xyz(a + b + c) == 105.0);
+
   return 0;
 }

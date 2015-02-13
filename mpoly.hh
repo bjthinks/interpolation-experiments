@@ -43,12 +43,20 @@ public:
     return value;
   }
 
+  Monomial<N> operator*(const Monomial<N> &rhs) const
+  {
+    Monomial<N> product;
+    for (int i = 0; i < N; ++i)
+      product.powers[i] = powers[i] + rhs.powers[i];
+    return product;
+  }
+
 private:
   int powers[N];
 };
 
 template <int N>
-class MPoly : public Algebra<double, MPoly<N> >
+class MPoly : public CommutativeAlgebra<double, MPoly<N> >
 {
 public:
   MPoly() {}
@@ -88,12 +96,10 @@ public:
       iter j = terms.find(i->first);
       if (j == terms.end())
         terms[i->first] = i->second;
-      else {
+      else
         j->second += i->second;
-        if (j->second == 0.0)
-          terms.erase(i->first);
-      }
     }
+    cleanup();
     return *this;
   }
 
@@ -111,6 +117,28 @@ public:
   }
 
   using Algebra<double,MPoly<N> >::operator=;
+
+  MPoly<N> operator*(const MPoly &rhs)
+  {
+    MPoly<N> product;
+    for (c_iter i = terms.begin(); i != terms.end(); ++i)
+      for (c_iter j = rhs.terms.begin(); j != rhs.terms.end(); ++j) {
+        Monomial<N> p(i->first * j->first);
+        iter k = product.terms.find(p);
+        if (k != product.terms.end())
+          k->second += i->second * j->second;
+        else
+          product.terms[p] = i->second * j->second;
+      }
+    product.cleanup();
+    return product;
+  }
+
+  void cleanup()
+  {
+    // This is where we would remove terms with
+    // zero coefficients, if we cared.
+  }
 
 private:
   std::map<Monomial<N>,double> terms;
