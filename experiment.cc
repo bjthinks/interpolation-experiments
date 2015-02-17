@@ -4,16 +4,14 @@
 #include "mpoly.hh"
 
 #define should(b) should_((b), __LINE__)
-inline void should_(bool b, int line)
-{
+inline void should_(bool b, int line) {
   if (!b) {
     printf("Line %d: Something should be true but isn\'t.\n", line);
     exit(1);
   }
 }
 
-int main(int argc, char *argv[])
-{
+void mpoly_tests() {
   // Variables
   MPoly<3> x = MPoly<3>::var(0);
   MPoly<3> y = MPoly<3>::var(1);
@@ -106,6 +104,8 @@ int main(int argc, char *argv[])
   should(product(b+c) == 0.0);
   should(product(a+c) == 0.0);
   should(product(a + b + c) == 105.0);
+}
 
-  return 0;
+int main(int argc, char *argv[]) {
+  mpoly_tests();
 }
