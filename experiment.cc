@@ -199,4 +199,22 @@ int main(int argc, char *argv[]) {
   should(double_equal(h(q), 0.0));
   should(double_equal(h(r), 0.0));
   should(double_equal(h(s), 1.0));
+
+  double p_value = random_double();
+  double q_value = random_double();
+  double r_value = random_double();
+  double s_value = random_double();
+  double t_value = random_double();
+
+  MPoly<3> linear1 = p_value * a + q_value * b + r_value * c + s_value * d;
+  MPoly<3> linear2 = t_value * e + q_value * f + r_value * g + s_value * h;
+
+  should(double_equal(linear1(p), p_value));
+  should(double_equal(linear1(q), q_value));
+  should(double_equal(linear1(r), r_value));
+  should(double_equal(linear1(s), s_value));
+  should(double_equal(linear2(t), t_value));
+  should(double_equal(linear2(q), q_value));
+  should(double_equal(linear2(r), r_value));
+  should(double_equal(linear2(s), s_value));
 }
