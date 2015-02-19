@@ -133,9 +133,9 @@ MPoly<3> linear_indicator(const Vector<3> &one,
     / (pre_result(one) - pre_result(zero1));
 }
 
-bool feq(double a, double b) {
+bool double_equal(double a, double b) {
   double diff = a - b;
-  if (fabs(diff) < 16.0 * DBL_EPSILON)
+  if (fabs(diff) < 32.0 * DBL_EPSILON)
     return true;
   return false;
 }
@@ -154,15 +154,49 @@ int main(int argc, char *argv[]) {
   Vector<3> q = random_vector<3>();
   Vector<3> r = random_vector<3>();
   Vector<3> s = random_vector<3>();
-  //Vector<3> t = random_vector<3>();
+  Vector<3> t = random_vector<3>();
 
   MPoly<3> a = linear_indicator(p, q, r, s);
   MPoly<3> b = linear_indicator(q, p, r, s);
   MPoly<3> c = linear_indicator(r, p, q, s);
   MPoly<3> d = linear_indicator(s, p, q, r);
 
-  should(feq(a(p), 1.0));
-  should(feq(a(q), 0.0));
-  should(feq(a(r), 0.0));
-  should(feq(a(s), 0.0));
+  should(double_equal(a(p), 1.0));
+  should(double_equal(a(q), 0.0));
+  should(double_equal(a(r), 0.0));
+  should(double_equal(a(s), 0.0));
+  should(double_equal(b(p), 0.0));
+  should(double_equal(b(q), 1.0));
+  should(double_equal(b(r), 0.0));
+  should(double_equal(b(s), 0.0));
+  should(double_equal(c(p), 0.0));
+  should(double_equal(c(q), 0.0));
+  should(double_equal(c(r), 1.0));
+  should(double_equal(c(s), 0.0));
+  should(double_equal(d(p), 0.0));
+  should(double_equal(d(q), 0.0));
+  should(double_equal(d(r), 0.0));
+  should(double_equal(d(s), 1.0));
+
+  MPoly<3> e = linear_indicator(t, q, r, s);
+  MPoly<3> f = linear_indicator(q, t, r, s);
+  MPoly<3> g = linear_indicator(r, t, q, s);
+  MPoly<3> h = linear_indicator(s, t, q, r);
+
+  should(double_equal(e(t), 1.0));
+  should(double_equal(e(q), 0.0));
+  should(double_equal(e(r), 0.0));
+  should(double_equal(e(s), 0.0));
+  should(double_equal(f(t), 0.0));
+  should(double_equal(f(q), 1.0));
+  should(double_equal(f(r), 0.0));
+  should(double_equal(f(s), 0.0));
+  should(double_equal(g(t), 0.0));
+  should(double_equal(g(q), 0.0));
+  should(double_equal(g(r), 1.0));
+  should(double_equal(g(s), 0.0));
+  should(double_equal(h(t), 0.0));
+  should(double_equal(h(q), 0.0));
+  should(double_equal(h(r), 0.0));
+  should(double_equal(h(s), 1.0));
 }
