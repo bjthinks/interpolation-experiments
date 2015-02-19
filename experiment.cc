@@ -109,7 +109,7 @@ void mpoly_tests() {
 }
 
 double random_double() {
-  return double(rand()) / double(RAND_MAX);
+  return 2.0 * double(rand()) / double(RAND_MAX) - 1.0;
 }
 
 template <int N>
@@ -141,7 +141,7 @@ bool double_equal(double a, double b) {
 }
 
 int main(int argc, char *argv[]) {
-  srand(time(NULL));
+  srand(345987);
 
   mpoly_tests();
 
