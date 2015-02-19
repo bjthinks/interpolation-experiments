@@ -1,5 +1,7 @@
 #include <cstdlib>
 #include <cstdio>
+#include <ctime>
+#include <cfloat>
 
 #include "mpoly.hh"
 
@@ -106,6 +108,61 @@ void mpoly_tests() {
   should(product(a + b + c) == 105.0);
 }
 
+double random_double() {
+  return double(rand()) / double(RAND_MAX);
+}
+
+template <int N>
+Vector<N> random_vector() {
+  Vector<N> foo;
+  for (int i = 0; i < N; ++i)
+    foo[i] = random_double();
+  return foo;
+}
+
+MPoly<3> linear_indicator(const Vector<3> &one,
+                          const Vector<3> &zero1,
+                          const Vector<3> &zero2,
+                          const Vector<3> &zero3) {
+  Vector<3> zero_normal = cross_product(zero2 - zero1, zero3 - zero1);
+  MPoly<3> pre_result
+    = zero_normal[0] * MPoly<3>::var(0)
+    + zero_normal[1] * MPoly<3>::var(1)
+    + zero_normal[2] * MPoly<3>::var(2);
+  return (pre_result - pre_result(zero1))
+    / (pre_result(one) - pre_result(zero1));
+}
+
+bool feq(double a, double b) {
+  double diff = a - b;
+  if (fabs(diff) < 16.0 * DBL_EPSILON)
+    return true;
+  return false;
+}
+
 int main(int argc, char *argv[]) {
+  srand(time(NULL));
+
   mpoly_tests();
+
+  MPoly<3> x(MPoly<3>::var(0));
+  MPoly<3> y(MPoly<3>::var(1));
+  MPoly<3> z(MPoly<3>::var(2));
+  MPoly<3> k(1.0);
+
+  Vector<3> p = random_vector<3>();
+  Vector<3> q = random_vector<3>();
+  Vector<3> r = random_vector<3>();
+  Vector<3> s = random_vector<3>();
+  //Vector<3> t = random_vector<3>();
+
+  MPoly<3> a = linear_indicator(p, q, r, s);
+  MPoly<3> b = linear_indicator(q, p, r, s);
+  MPoly<3> c = linear_indicator(r, p, q, s);
+  MPoly<3> d = linear_indicator(s, p, q, r);
+
+  should(feq(a(p), 1.0));
+  should(feq(a(q), 0.0));
+  should(feq(a(r), 0.0));
+  should(feq(a(s), 0.0));
 }
