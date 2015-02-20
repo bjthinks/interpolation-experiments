@@ -51,7 +51,7 @@
 
 #include "genericops.hh"
 
-template <unsigned n, typename T>
+template <int n, typename T>
 class Array : public Equality<Array<n,T> >
 {
 public:
@@ -62,7 +62,7 @@ public:
   // behavior when assigned a scalar.
   explicit Array(const T &x)
   {
-    for (unsigned i = 0; i < n; ++i)
+    for (int i = 0; i < n; ++i)
       data[i] = x;
   }
 
@@ -74,7 +74,7 @@ public:
   template <typename U>
   explicit Array(const Array<n,U> &xs)
   {
-    for (unsigned i=0; i<n; ++i)
+    for (int i=0; i<n; ++i)
       data[i] = T(xs[i]);
   }
 
@@ -83,17 +83,17 @@ public:
   std::vector<T> toVector() const
   {
     std::vector<T> r;
-    for (unsigned i = 0; i < n; ++i)
+    for (int i = 0; i < n; ++i)
       r.push_back(data[i]);
     return r;
   }
 
-  T &operator[](unsigned i)
+  T &operator[](int i)
   {
     check_index(i);
     return data[i];
   }
-  const T &operator[](unsigned i) const
+  const T &operator[](int i) const
   {
     check_index(i);
     return data[i];
@@ -101,18 +101,18 @@ public:
 
   bool operator==(const Array<n,T> &rhs) const
   {
-    for (unsigned i = 0; i < n; ++i)
+    for (int i = 0; i < n; ++i)
       if (data[i] != rhs.data[i])
         return false;
     return true;
   }
 
 protected:
-  T &unsafe_element(unsigned i)
+  T &unsafe_element(int i)
   {
     return data[i];
   }
-  const T &unsafe_element(unsigned i) const
+  const T &unsafe_element(int i) const
   {
     return data[i];
   }
@@ -120,15 +120,15 @@ protected:
 private:
   T data[n];
 
-  void check_index(unsigned i) const
+  void check_index(int i) const
   {
-    if (i >= n)
+    if (i < 0 || i >= n)
       throw_array_range_exception();
   }
   void throw_array_range_exception() const;
 };
 
-template <unsigned n, typename T>
+template <int n, typename T>
 inline void Array<n,T>::throw_array_range_exception() const
 {
   throw std::range_error("Array<> index out of range");

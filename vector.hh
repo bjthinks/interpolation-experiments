@@ -50,7 +50,7 @@
 
 #include "array.hh"
 
-template <unsigned n, typename T, class V>
+template <int n, typename T, class V>
 class GenericVector : public Array<n,T>, public VectorSpace<T,V>
 {
 protected:
@@ -61,13 +61,13 @@ public:
   // Allow all elements of a vector to be set with assignment
   const V &operator=(T x)
   {
-    for (unsigned i=0; i<n; ++i)
+    for (int i=0; i<n; ++i)
       (*this)[i] = x;
     return *static_cast<V *>(this);
   }
 };
 
-template <unsigned n>
+template <int n>
 class Vector : public GenericVector<n, double, Vector<n> >
 {
 public:
@@ -79,7 +79,7 @@ public:
 
 // FVector exists only for converting doubles to floats prior to
 // uploading vertex data to the GPU.
-template <unsigned n>
+template <int n>
 class FVector : public GenericVector<n, float, FVector<n> >
 {
 public:
@@ -94,7 +94,7 @@ public:
   using GenericVector<n, float, FVector<n> >::operator=;
 };
 
-template <unsigned n>
+template <int n>
 class CVector : public GenericVector<n, std::complex<double>, CVector<n> >
 {
 public:
@@ -106,7 +106,7 @@ public:
 };
 
 template <class V>
-inline V genericBasisVector(unsigned i)
+inline V genericBasisVector(int i)
 {
   V z(0.0);
 
@@ -115,66 +115,66 @@ inline V genericBasisVector(unsigned i)
   return z;
 }
 
-template <unsigned n>
-inline Vector<n> basisVector(unsigned i)
+template <int n>
+inline Vector<n> basisVector(int i)
 {
   return genericBasisVector<Vector<n> >(i);
 }
 
-template <unsigned n>
-inline CVector<n> cBasisVector(unsigned i)
+template <int n>
+inline CVector<n> cBasisVector(int i)
 {
   return genericBasisVector<CVector<n> >(i);
 }
 
-template <unsigned n, typename T, class V>
+template <int n, typename T, class V>
 inline const V &operator+=(GenericVector<n,T,V> &x,
                            const GenericVector<n,T,V> &y)
 {
-  for (unsigned i = 0; i < n; ++i)
+  for (int i = 0; i < n; ++i)
     x[i] += y[i];
 
   return static_cast<V &>(x);
 }
 
-template <unsigned n, typename T, class V>
+template <int n, typename T, class V>
 inline V operator-(const GenericVector<n,T,V> &x)
 {
   V z;
 
-  for (unsigned i=0; i<n; ++i)
+  for (int i=0; i<n; ++i)
     z[i] = -x[i];
 
   return z;
 }
 
-template <unsigned n, typename T, class V>
+template <int n, typename T, class V>
 inline const V &operator*=(GenericVector<n,T,V> &x, T y)
 {
-  for (unsigned i = 0; i < n; ++i)
+  for (int i = 0; i < n; ++i)
     x[i] *= y;
 
   return static_cast<V &>(x);
 }
 
-template <unsigned n>
+template <int n>
 inline double dot_product(const Vector<n> &x, const Vector<n> &y)
 {
   double z = 0.0;
 
-  for (unsigned i=0; i<n; ++i)
+  for (int i=0; i<n; ++i)
     z += x[i] * y[i];
 
   return z;
 }
 
-template <unsigned n>
+template <int n>
 inline std::complex<double> dot_product(const CVector<n> &x,
                                         const CVector<n> &y)
 {
   std::complex<double> z = 0.0;
 
-  for (unsigned i=0; i<n; ++i)
+  for (int i=0; i<n; ++i)
     z += x[i] * conj(y[i]);
 
   return z;
@@ -189,14 +189,14 @@ inline Vector<3> cross_product(const Vector<3> &x, const Vector<3> &y)
   return z;
 }
 
-template <unsigned n, typename T, class V>
+template <int n, typename T, class V>
 inline T norm_squared(const GenericVector<n,T,V> &x)
 {
   const V &vx = static_cast<const V &>(x);
   return dot_product(vx,vx);
 }
 
-template <unsigned n, typename T, class V>
+template <int n, typename T, class V>
 inline T norm(const GenericVector<n,T,V> &x)
 {
   return std::sqrt(norm_squared(x));
