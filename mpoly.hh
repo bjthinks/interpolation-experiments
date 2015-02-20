@@ -51,6 +51,19 @@ public:
     return product;
   }
 
+  bool has_diff(int n) const {
+    if (powers[n] > 0)
+      return true;
+    return false;
+  }
+
+  std::pair<double,Monomial<N> > diff(int n) const {
+    Monomial<N> d(*this);
+    int c = powers[n];
+    d.powers[n] = c - 1;
+    return std::make_pair(double(c), d);
+  }
+
 private:
   int powers[N];
 };
@@ -132,6 +145,17 @@ public:
       }
     product.cleanup();
     return product;
+  }
+
+  MPoly<N> diff(int n) const {
+    MPoly<N> d;
+    for (c_iter i = terms.begin(); i != terms.end(); ++i) {
+      if (i->first.has_diff(n)) {
+        std::pair<double,Monomial<N> > d_term = i->first.diff(n);
+        d.terms[d_term.second] = d_term.first * i->second;
+      }
+    }
+    return d;
   }
 
   void cleanup()

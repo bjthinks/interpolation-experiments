@@ -108,6 +108,32 @@ void mpoly_tests() {
   should(product(a + b + c) == 105.0);
 }
 
+void mpoly_diff_tests() {
+  MPoly<1> t = MPoly<1>::var(0);
+  MPoly<1> k(1.0);
+  should(k.diff(0)(Vector<1>(0.0)) == 0.0);
+  should(k.diff(0)(Vector<1>(3.0)) == 0.0);
+  should(t.diff(0)(Vector<1>(0.0)) == 1.0);
+  should(t.diff(0)(Vector<1>(3.0)) == 1.0);
+  should((t * t).diff(0)(Vector<1>(0.0)) == 0.0);
+  should((t * t).diff(0)(Vector<1>(3.0)) == 6.0);
+
+  // Variables
+  MPoly<3> x = MPoly<3>::var(0);
+  MPoly<3> y = MPoly<3>::var(1);
+  MPoly<3> z = MPoly<3>::var(2);
+
+  // Test point
+  Vector<3> p;
+  p[0] = p[1] = p[2] = 1.0;
+
+  MPoly<3> f = x * x * y + 3.0 * y * y * z - 5.0 * x * z * z + 7.0 * x * x * x;
+  should(f(p) == 6.0);
+  should(f.diff(0)(p) == 18.0);
+  should(f.diff(1)(p) == 7.0);
+  should(f.diff(2)(p) == -7.0);
+}
+
 double random_double() {
   return 2.0 * double(rand()) / double(RAND_MAX) - 1.0;
 }
@@ -217,4 +243,6 @@ int main(int argc, char *argv[]) {
   should(double_equal(linear2(q), q_value));
   should(double_equal(linear2(r), r_value));
   should(double_equal(linear2(s), s_value));
+
+  mpoly_diff_tests();
 }
