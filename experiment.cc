@@ -108,6 +108,14 @@ void mpoly_tests() {
   should(product(a + b + c) == 105.0);
 }
 
+template <int N>
+Vector<N> gradient(const MPoly<N> &f, const Vector<N> &p) {
+  Vector<N> g;
+  for (int i = 0; i < N; ++i)
+    g[i] = f.diff(i)(p);
+  return g;
+}
+
 void mpoly_diff_tests() {
   MPoly<1> t = MPoly<1>::var(0);
   MPoly<1> k(1.0);
@@ -129,9 +137,14 @@ void mpoly_diff_tests() {
 
   MPoly<3> f = x * x * y + 3.0 * y * y * z - 5.0 * x * z * z + 7.0 * x * x * x;
   should(f(p) == 6.0);
-  should(f.diff(0)(p) == 18.0);
-  should(f.diff(1)(p) == 7.0);
-  should(f.diff(2)(p) == -7.0);
+  Vector<3> result;
+  result[0] = 18.0;
+  result[1] = 7.0;
+  result[2] = -7.0;
+  should(f.diff(0)(p) == result[0]);
+  should(f.diff(1)(p) == result[1]);
+  should(f.diff(2)(p) == result[2]);
+  should(gradient(f, p) == result);
 }
 
 double random_double() {
