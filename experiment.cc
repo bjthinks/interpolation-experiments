@@ -179,6 +179,14 @@ bool double_equal(double a, double b) {
   return false;
 }
 
+template <int N>
+bool vector_equal(const Vector<N> &x, const Vector<N> &y) {
+  for (int i = 0; i < N; ++i)
+    if (!double_equal(x[i], y[i]))
+      return false;
+  return true;
+}
+
 void test_zero_values(const MPoly<3> &f,
                       const Vector<3> &p, const Vector<3> &q,
                       const Vector<3> &r, const Vector<3> &s) {
@@ -344,4 +352,20 @@ int main(int argc, char *argv[]) {
   test_cubic_gradients(q, ffe, ffg, ffh, t, r, s);
   test_cubic_gradients(r, gge, ggf, ggh, t, q, s);
   test_cubic_gradients(s, hhe, hhf, hhg, t, q, r);
+
+  Vector<3> p_gradient = random_vector<3>();
+  //Vector<3> q_gradient = random_vector<3>();
+  //Vector<3> r_gradient = random_vector<3>();
+  //Vector<3> s_gradient = random_vector<3>();
+  //Vector<3> t_gradient = random_vector<3>();
+
+  MPoly<3> cubic1 = linear1
+    - dot_product(gradient(linear1, p), q - p) * aab
+    - dot_product(gradient(linear1, p), r - p) * aac
+    - dot_product(gradient(linear1, p), s - p) * aad
+    + dot_product(p_gradient, q - p) * aab
+    + dot_product(p_gradient, r - p) * aac
+    + dot_product(p_gradient, s - p) * aad;
+
+  should(vector_equal(gradient(cubic1, p), p_gradient));
 }
