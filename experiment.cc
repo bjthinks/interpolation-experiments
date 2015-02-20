@@ -258,4 +258,57 @@ int main(int argc, char *argv[]) {
   should(double_equal(linear2(s), s_value));
 
   mpoly_diff_tests();
+
+  MPoly<3> aab = a * a * b;
+  MPoly<3> aac = a * a * c;
+  MPoly<3> aad = a * a * d;
+  MPoly<3> bba = b * b * a;
+  MPoly<3> bbc = b * b * c;
+  MPoly<3> bbd = b * b * d;
+  MPoly<3> cca = c * c * a;
+  MPoly<3> ccb = c * c * b;
+  MPoly<3> ccd = c * c * d;
+  MPoly<3> dda = d * d * a;
+  MPoly<3> ddb = d * d * b;
+  MPoly<3> ddc = d * d * c;
+
+  should(double_equal(dot_product(gradient(aab, p), q - p), 1.0));
+  should(double_equal(dot_product(gradient(aab, p), r - p), 0.0));
+  should(double_equal(dot_product(gradient(aab, p), s - p), 0.0));
+  should(double_equal(dot_product(gradient(aac, p), q - p), 0.0));
+  should(double_equal(dot_product(gradient(aac, p), r - p), 1.0));
+  should(double_equal(dot_product(gradient(aac, p), s - p), 0.0));
+  should(double_equal(dot_product(gradient(aad, p), q - p), 0.0));
+  should(double_equal(dot_product(gradient(aad, p), r - p), 0.0));
+  should(double_equal(dot_product(gradient(aad, p), s - p), 1.0));
+
+  should(double_equal(dot_product(gradient(bba, q), p - q), 1.0));
+  should(double_equal(dot_product(gradient(bba, q), r - q), 0.0));
+  should(double_equal(dot_product(gradient(bba, q), s - q), 0.0));
+  should(double_equal(dot_product(gradient(bbc, q), p - q), 0.0));
+  should(double_equal(dot_product(gradient(bbc, q), r - q), 1.0));
+  should(double_equal(dot_product(gradient(bbc, q), s - q), 0.0));
+  should(double_equal(dot_product(gradient(bbd, q), p - q), 0.0));
+  should(double_equal(dot_product(gradient(bbd, q), r - q), 0.0));
+  should(double_equal(dot_product(gradient(bbd, q), s - q), 1.0));
+
+  should(double_equal(dot_product(gradient(cca, r), p - r), 1.0));
+  should(double_equal(dot_product(gradient(cca, r), q - r), 0.0));
+  should(double_equal(dot_product(gradient(cca, r), s - r), 0.0));
+  should(double_equal(dot_product(gradient(ccb, r), p - r), 0.0));
+  should(double_equal(dot_product(gradient(ccb, r), q - r), 1.0));
+  should(double_equal(dot_product(gradient(ccb, r), s - r), 0.0));
+  should(double_equal(dot_product(gradient(ccd, r), p - r), 0.0));
+  should(double_equal(dot_product(gradient(ccd, r), q - r), 0.0));
+  should(double_equal(dot_product(gradient(ccd, r), s - r), 1.0));
+
+  should(double_equal(dot_product(gradient(dda, s), p - s), 1.0));
+  should(double_equal(dot_product(gradient(dda, s), q - s), 0.0));
+  should(double_equal(dot_product(gradient(dda, s), r - s), 0.0));
+  should(double_equal(dot_product(gradient(ddb, s), p - s), 0.0));
+  should(double_equal(dot_product(gradient(ddb, s), q - s), 1.0));
+  should(double_equal(dot_product(gradient(ddb, s), r - s), 0.0));
+  should(double_equal(dot_product(gradient(ddc, s), p - s), 0.0));
+  should(double_equal(dot_product(gradient(ddc, s), q - s), 0.0));
+  should(double_equal(dot_product(gradient(ddc, s), r - s), 1.0));
 }
