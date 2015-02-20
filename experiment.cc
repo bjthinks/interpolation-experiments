@@ -272,6 +272,66 @@ int main(int argc, char *argv[]) {
   MPoly<3> ddb = d * d * b;
   MPoly<3> ddc = d * d * c;
 
+  should(double_equal(aab(p), 0.0));
+  should(double_equal(aab(q), 0.0));
+  should(double_equal(aab(r), 0.0));
+  should(double_equal(aab(s), 0.0));
+
+  should(double_equal(aac(p), 0.0));
+  should(double_equal(aac(q), 0.0));
+  should(double_equal(aac(r), 0.0));
+  should(double_equal(aac(s), 0.0));
+
+  should(double_equal(aad(p), 0.0));
+  should(double_equal(aad(q), 0.0));
+  should(double_equal(aad(r), 0.0));
+  should(double_equal(aad(s), 0.0));
+
+  should(double_equal(bba(p), 0.0));
+  should(double_equal(bba(q), 0.0));
+  should(double_equal(bba(r), 0.0));
+  should(double_equal(bba(s), 0.0));
+
+  should(double_equal(bbc(p), 0.0));
+  should(double_equal(bbc(q), 0.0));
+  should(double_equal(bbc(r), 0.0));
+  should(double_equal(bbc(s), 0.0));
+
+  should(double_equal(bbd(p), 0.0));
+  should(double_equal(bbd(q), 0.0));
+  should(double_equal(bbd(r), 0.0));
+  should(double_equal(bbd(s), 0.0));
+
+  should(double_equal(cca(p), 0.0));
+  should(double_equal(cca(q), 0.0));
+  should(double_equal(cca(r), 0.0));
+  should(double_equal(cca(s), 0.0));
+
+  should(double_equal(ccb(p), 0.0));
+  should(double_equal(ccb(q), 0.0));
+  should(double_equal(ccb(r), 0.0));
+  should(double_equal(ccb(s), 0.0));
+
+  should(double_equal(ccd(p), 0.0));
+  should(double_equal(ccd(q), 0.0));
+  should(double_equal(ccd(r), 0.0));
+  should(double_equal(ccd(s), 0.0));
+
+  should(double_equal(dda(p), 0.0));
+  should(double_equal(dda(q), 0.0));
+  should(double_equal(dda(r), 0.0));
+  should(double_equal(dda(s), 0.0));
+
+  should(double_equal(ddb(p), 0.0));
+  should(double_equal(ddb(q), 0.0));
+  should(double_equal(ddb(r), 0.0));
+  should(double_equal(ddb(s), 0.0));
+
+  should(double_equal(ddc(p), 0.0));
+  should(double_equal(ddc(q), 0.0));
+  should(double_equal(ddc(r), 0.0));
+  should(double_equal(ddc(s), 0.0));
+
   should(double_equal(dot_product(gradient(aab, p), q - p), 1.0));
   should(double_equal(dot_product(gradient(aab, p), r - p), 0.0));
   should(double_equal(dot_product(gradient(aab, p), s - p), 0.0));
