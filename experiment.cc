@@ -373,6 +373,10 @@ int main(int argc, char *argv[]) {
     + dot_product(s_gradient - gradient(linear1, s), q - s) * ddb
     + dot_product(s_gradient - gradient(linear1, s), r - s) * ddc;
 
+  should(double_equal(cubic1(p), p_value));
+  should(double_equal(cubic1(q), q_value));
+  should(double_equal(cubic1(r), r_value));
+  should(double_equal(cubic1(s), s_value));
   should(vector_equal(gradient(cubic1, p), p_gradient));
   should(vector_equal(gradient(cubic1, q), q_gradient));
   should(vector_equal(gradient(cubic1, r), r_gradient));
@@ -392,6 +396,10 @@ int main(int argc, char *argv[]) {
     + dot_product(s_gradient - gradient(linear2, s), q - s) * hhf
     + dot_product(s_gradient - gradient(linear2, s), r - s) * hhg;
 
+  should(double_equal(cubic2(t), t_value));
+  should(double_equal(cubic2(q), q_value));
+  should(double_equal(cubic2(r), r_value));
+  should(double_equal(cubic2(s), s_value));
   should(vector_equal(gradient(cubic2, t), t_gradient));
   should(vector_equal(gradient(cubic2, q), q_gradient));
   should(vector_equal(gradient(cubic2, r), r_gradient));
