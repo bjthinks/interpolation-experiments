@@ -354,18 +354,46 @@ int main(int argc, char *argv[]) {
   test_cubic_gradients(s, hhe, hhf, hhg, t, q, r);
 
   Vector<3> p_gradient = random_vector<3>();
-  //Vector<3> q_gradient = random_vector<3>();
-  //Vector<3> r_gradient = random_vector<3>();
-  //Vector<3> s_gradient = random_vector<3>();
-  //Vector<3> t_gradient = random_vector<3>();
+  Vector<3> q_gradient = random_vector<3>();
+  Vector<3> r_gradient = random_vector<3>();
+  Vector<3> s_gradient = random_vector<3>();
+  Vector<3> t_gradient = random_vector<3>();
 
   MPoly<3> cubic1 = linear1
-    - dot_product(gradient(linear1, p), q - p) * aab
-    - dot_product(gradient(linear1, p), r - p) * aac
-    - dot_product(gradient(linear1, p), s - p) * aad
-    + dot_product(p_gradient, q - p) * aab
-    + dot_product(p_gradient, r - p) * aac
-    + dot_product(p_gradient, s - p) * aad;
+    + dot_product(p_gradient - gradient(linear1, p), q - p) * aab
+    + dot_product(p_gradient - gradient(linear1, p), r - p) * aac
+    + dot_product(p_gradient - gradient(linear1, p), s - p) * aad
+    + dot_product(q_gradient - gradient(linear1, q), p - q) * bba
+    + dot_product(q_gradient - gradient(linear1, q), r - q) * bbc
+    + dot_product(q_gradient - gradient(linear1, q), s - q) * bbd
+    + dot_product(r_gradient - gradient(linear1, r), p - r) * cca
+    + dot_product(r_gradient - gradient(linear1, r), q - r) * ccb
+    + dot_product(r_gradient - gradient(linear1, r), s - r) * ccd
+    + dot_product(s_gradient - gradient(linear1, s), p - s) * dda
+    + dot_product(s_gradient - gradient(linear1, s), q - s) * ddb
+    + dot_product(s_gradient - gradient(linear1, s), r - s) * ddc;
 
   should(vector_equal(gradient(cubic1, p), p_gradient));
+  should(vector_equal(gradient(cubic1, q), q_gradient));
+  should(vector_equal(gradient(cubic1, r), r_gradient));
+  should(vector_equal(gradient(cubic1, s), s_gradient));
+
+  MPoly<3> cubic2 = linear2
+    + dot_product(t_gradient - gradient(linear2, t), q - t) * eef
+    + dot_product(t_gradient - gradient(linear2, t), r - t) * eeg
+    + dot_product(t_gradient - gradient(linear2, t), s - t) * eeh
+    + dot_product(q_gradient - gradient(linear2, q), t - q) * ffe
+    + dot_product(q_gradient - gradient(linear2, q), r - q) * ffg
+    + dot_product(q_gradient - gradient(linear2, q), s - q) * ffh
+    + dot_product(r_gradient - gradient(linear2, r), t - r) * gge
+    + dot_product(r_gradient - gradient(linear2, r), q - r) * ggf
+    + dot_product(r_gradient - gradient(linear2, r), s - r) * ggh
+    + dot_product(s_gradient - gradient(linear2, s), t - s) * hhe
+    + dot_product(s_gradient - gradient(linear2, s), q - s) * hhf
+    + dot_product(s_gradient - gradient(linear2, s), r - s) * hhg;
+
+  should(vector_equal(gradient(cubic2, t), t_gradient));
+  should(vector_equal(gradient(cubic2, q), q_gradient));
+  should(vector_equal(gradient(cubic2, r), r_gradient));
+  should(vector_equal(gradient(cubic2, s), s_gradient));
 }
