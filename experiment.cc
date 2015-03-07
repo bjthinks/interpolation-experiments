@@ -211,6 +211,12 @@ void test_cubic_gradients(const Vector<3> &p, const MPoly<3> &f,
   should(double_equal(dot_product(gradient(h, p), s - p), 1.0));
 }
 
+template <int N>
+Vector<N> random_on_segment(const Vector<N> &x, const Vector<N> &y) {
+  double t = double(rand()) / double(RAND_MAX);
+  return t * x + (1.0 - t) * y;
+}
+
 int main(int argc, char *argv[]) {
   srand(345987);
 
@@ -404,4 +410,236 @@ int main(int argc, char *argv[]) {
   should(vector_equal(gradient(cubic2, q), q_gradient));
   should(vector_equal(gradient(cubic2, r), r_gradient));
   should(vector_equal(gradient(cubic2, s), s_gradient));
+
+  MPoly<3> aabc = a * a * b * c;
+  MPoly<3> aabd = a * a * b * d;
+  MPoly<3> aacd = a * a * c * d;
+  MPoly<3> bbac = b * b * a * c;
+  MPoly<3> bbad = b * b * a * d;
+  MPoly<3> bbcd = b * b * c * d;
+  MPoly<3> ccab = c * c * a * b;
+  MPoly<3> ccad = c * c * a * d;
+  MPoly<3> ccbd = c * c * b * d;
+  MPoly<3> ddab = d * d * a * b;
+  MPoly<3> ddac = d * d * a * c;
+  MPoly<3> ddbc = d * d * b * c;
+
+  MPoly<3> quartic1 = cubic1
+    + 0.0;
+
+  should(double_equal(quartic1(p), p_value));
+  should(double_equal(quartic1(q), q_value));
+  should(double_equal(quartic1(r), r_value));
+  should(double_equal(quartic1(s), s_value));
+  should(vector_equal(gradient(quartic1, p), p_gradient));
+  should(vector_equal(gradient(quartic1, q), q_gradient));
+  should(vector_equal(gradient(quartic1, r), r_gradient));
+  should(vector_equal(gradient(quartic1, s), s_gradient));
+
+  MPoly<3> eefg = e * e * f * g;
+  MPoly<3> eefh = e * e * f * h;
+  MPoly<3> eegh = e * e * g * h;
+  MPoly<3> ffeg = f * f * e * g;
+  MPoly<3> ffeh = f * f * e * h;
+  MPoly<3> ffgh = f * f * g * h;
+  MPoly<3> ggef = g * g * e * f;
+  MPoly<3> ggeh = g * g * e * h;
+  MPoly<3> ggfh = g * g * f * h;
+  MPoly<3> hhef = h * h * e * f;
+  MPoly<3> hheg = h * h * e * g;
+  MPoly<3> hhfg = h * h * f * g;
+
+  MPoly<3> quartic2 = cubic2
+    + 0.0;
+
+  should(double_equal(quartic2(t), t_value));
+  should(double_equal(quartic2(q), q_value));
+  should(double_equal(quartic2(r), r_value));
+  should(double_equal(quartic2(s), s_value));
+  should(vector_equal(gradient(quartic2, t), t_gradient));
+  should(vector_equal(gradient(quartic2, q), q_gradient));
+  should(vector_equal(gradient(quartic2, r), r_gradient));
+  should(vector_equal(gradient(quartic2, s), s_gradient));
+
+  Vector<3> qr = (q + r) / 2.0;
+  Vector<3> qs = (q + s) / 2.0;
+  Vector<3> rs = (r + s) / 2.0;
+  Vector<3> pq = (p + q) / 2.0;
+  Vector<3> pr = (p + r) / 2.0;
+  Vector<3> ps = (p + s) / 2.0;
+
+  printf("\tqr->p\tqr->s\tqs->p\tqs->r\trs->p\trs->q\n");
+  printf("\tpq->r\tpq->s\tpr->q\tpr->s\tps->q\tps->r\n");
+  printf("aabc\t%+.4f\t%+.4f\t%+.4f\t%+.4f\t%+.4f\t%+.4f\n",
+         dot_product(gradient(aabc, qr), p - qr),
+         dot_product(gradient(aabc, qr), s - qr),
+         dot_product(gradient(aabc, qs), p - qs),
+         dot_product(gradient(aabc, qs), r - qs),
+         dot_product(gradient(aabc, rs), p - rs),
+         dot_product(gradient(aabc, rs), q - rs));
+  printf("\t%+.4f\t%+.4f\t%+.4f\t%+.4f\t%+.4f\t%+.4f\n",
+         dot_product(gradient(aabc, pq), r - pq),
+         dot_product(gradient(aabc, pq), s - pq),
+         dot_product(gradient(aabc, pr), q - pr),
+         dot_product(gradient(aabc, pr), s - pr),
+         dot_product(gradient(aabc, ps), q - ps),
+         dot_product(gradient(aabc, ps), r - ps));
+  printf("aabd\t%+.4f\t%+.4f\t%+.4f\t%+.4f\t%+.4f\t%+.4f\n",
+         dot_product(gradient(aabd, qr), p - qr),
+         dot_product(gradient(aabd, qr), s - qr),
+         dot_product(gradient(aabd, qs), p - qs),
+         dot_product(gradient(aabd, qs), r - qs),
+         dot_product(gradient(aabd, rs), p - rs),
+         dot_product(gradient(aabd, rs), q - rs));
+  printf("\t%+.4f\t%+.4f\t%+.4f\t%+.4f\t%+.4f\t%+.4f\n",
+         dot_product(gradient(aabd, pq), r - pq),
+         dot_product(gradient(aabd, pq), s - pq),
+         dot_product(gradient(aabd, pr), q - pr),
+         dot_product(gradient(aabd, pr), s - pr),
+         dot_product(gradient(aabd, ps), q - ps),
+         dot_product(gradient(aabd, ps), r - ps));
+  printf("aacd\t%+.4f\t%+.4f\t%+.4f\t%+.4f\t%+.4f\t%+.4f\n",
+         dot_product(gradient(aacd, qr), p - qr),
+         dot_product(gradient(aacd, qr), s - qr),
+         dot_product(gradient(aacd, qs), p - qs),
+         dot_product(gradient(aacd, qs), r - qs),
+         dot_product(gradient(aacd, rs), p - rs),
+         dot_product(gradient(aacd, rs), q - rs));
+  printf("\t%+.4f\t%+.4f\t%+.4f\t%+.4f\t%+.4f\t%+.4f\n",
+         dot_product(gradient(aacd, pq), r - pq),
+         dot_product(gradient(aacd, pq), s - pq),
+         dot_product(gradient(aacd, pr), q - pr),
+         dot_product(gradient(aacd, pr), s - pr),
+         dot_product(gradient(aacd, ps), q - ps),
+         dot_product(gradient(aacd, ps), r - ps));
+  printf("bbac\t%+.4f\t%+.4f\t%+.4f\t%+.4f\t%+.4f\t%+.4f\n",
+         dot_product(gradient(bbac, qr), p - qr),
+         dot_product(gradient(bbac, qr), s - qr),
+         dot_product(gradient(bbac, qs), p - qs),
+         dot_product(gradient(bbac, qs), r - qs),
+         dot_product(gradient(bbac, rs), p - rs),
+         dot_product(gradient(bbac, rs), q - rs));
+  printf("\t%+.4f\t%+.4f\t%+.4f\t%+.4f\t%+.4f\t%+.4f\n",
+         dot_product(gradient(bbac, pq), r - pq),
+         dot_product(gradient(bbac, pq), s - pq),
+         dot_product(gradient(bbac, pr), q - pr),
+         dot_product(gradient(bbac, pr), s - pr),
+         dot_product(gradient(bbac, ps), q - ps),
+         dot_product(gradient(bbac, ps), r - ps));
+  printf("bbad\t%+.4f\t%+.4f\t%+.4f\t%+.4f\t%+.4f\t%+.4f\n",
+         dot_product(gradient(bbad, qr), p - qr),
+         dot_product(gradient(bbad, qr), s - qr),
+         dot_product(gradient(bbad, qs), p - qs),
+         dot_product(gradient(bbad, qs), r - qs),
+         dot_product(gradient(bbad, rs), p - rs),
+         dot_product(gradient(bbad, rs), q - rs));
+  printf("\t%+.4f\t%+.4f\t%+.4f\t%+.4f\t%+.4f\t%+.4f\n",
+         dot_product(gradient(bbad, pq), r - pq),
+         dot_product(gradient(bbad, pq), s - pq),
+         dot_product(gradient(bbad, pr), q - pr),
+         dot_product(gradient(bbad, pr), s - pr),
+         dot_product(gradient(bbad, ps), q - ps),
+         dot_product(gradient(bbad, ps), r - ps));
+  printf("bbcd\t%+.4f\t%+.4f\t%+.4f\t%+.4f\t%+.4f\t%+.4f\n",
+         dot_product(gradient(bbcd, qr), p - qr),
+         dot_product(gradient(bbcd, qr), s - qr),
+         dot_product(gradient(bbcd, qs), p - qs),
+         dot_product(gradient(bbcd, qs), r - qs),
+         dot_product(gradient(bbcd, rs), p - rs),
+         dot_product(gradient(bbcd, rs), q - rs));
+  printf("\t%+.4f\t%+.4f\t%+.4f\t%+.4f\t%+.4f\t%+.4f\n",
+         dot_product(gradient(bbcd, pq), r - pq),
+         dot_product(gradient(bbcd, pq), s - pq),
+         dot_product(gradient(bbcd, pr), q - pr),
+         dot_product(gradient(bbcd, pr), s - pr),
+         dot_product(gradient(bbcd, ps), q - ps),
+         dot_product(gradient(bbcd, ps), r - ps));
+  printf("ccab\t%+.4f\t%+.4f\t%+.4f\t%+.4f\t%+.4f\t%+.4f\n",
+         dot_product(gradient(ccab, qr), p - qr),
+         dot_product(gradient(ccab, qr), s - qr),
+         dot_product(gradient(ccab, qs), p - qs),
+         dot_product(gradient(ccab, qs), r - qs),
+         dot_product(gradient(ccab, rs), p - rs),
+         dot_product(gradient(ccab, rs), q - rs));
+  printf("\t%+.4f\t%+.4f\t%+.4f\t%+.4f\t%+.4f\t%+.4f\n",
+         dot_product(gradient(ccab, pq), r - pq),
+         dot_product(gradient(ccab, pq), s - pq),
+         dot_product(gradient(ccab, pr), q - pr),
+         dot_product(gradient(ccab, pr), s - pr),
+         dot_product(gradient(ccab, ps), q - ps),
+         dot_product(gradient(ccab, ps), r - ps));
+  printf("ccad\t%+.4f\t%+.4f\t%+.4f\t%+.4f\t%+.4f\t%+.4f\n",
+         dot_product(gradient(ccad, qr), p - qr),
+         dot_product(gradient(ccad, qr), s - qr),
+         dot_product(gradient(ccad, qs), p - qs),
+         dot_product(gradient(ccad, qs), r - qs),
+         dot_product(gradient(ccad, rs), p - rs),
+         dot_product(gradient(ccad, rs), q - rs));
+  printf("\t%+.4f\t%+.4f\t%+.4f\t%+.4f\t%+.4f\t%+.4f\n",
+         dot_product(gradient(ccad, pq), r - pq),
+         dot_product(gradient(ccad, pq), s - pq),
+         dot_product(gradient(ccad, pr), q - pr),
+         dot_product(gradient(ccad, pr), s - pr),
+         dot_product(gradient(ccad, ps), q - ps),
+         dot_product(gradient(ccad, ps), r - ps));
+  printf("ccbd\t%+.4f\t%+.4f\t%+.4f\t%+.4f\t%+.4f\t%+.4f\n",
+         dot_product(gradient(ccbd, qr), p - qr),
+         dot_product(gradient(ccbd, qr), s - qr),
+         dot_product(gradient(ccbd, qs), p - qs),
+         dot_product(gradient(ccbd, qs), r - qs),
+         dot_product(gradient(ccbd, rs), p - rs),
+         dot_product(gradient(ccbd, rs), q - rs));
+  printf("\t%+.4f\t%+.4f\t%+.4f\t%+.4f\t%+.4f\t%+.4f\n",
+         dot_product(gradient(ccbd, pq), r - pq),
+         dot_product(gradient(ccbd, pq), s - pq),
+         dot_product(gradient(ccbd, pr), q - pr),
+         dot_product(gradient(ccbd, pr), s - pr),
+         dot_product(gradient(ccbd, ps), q - ps),
+         dot_product(gradient(ccbd, ps), r - ps));
+  printf("ddab\t%+.4f\t%+.4f\t%+.4f\t%+.4f\t%+.4f\t%+.4f\n",
+         dot_product(gradient(ddab, qr), p - qr),
+         dot_product(gradient(ddab, qr), s - qr),
+         dot_product(gradient(ddab, qs), p - qs),
+         dot_product(gradient(ddab, qs), r - qs),
+         dot_product(gradient(ddab, rs), p - rs),
+         dot_product(gradient(ddab, rs), q - rs));
+  printf("\t%+.4f\t%+.4f\t%+.4f\t%+.4f\t%+.4f\t%+.4f\n",
+         dot_product(gradient(ddab, pq), r - pq),
+         dot_product(gradient(ddab, pq), s - pq),
+         dot_product(gradient(ddab, pr), q - pr),
+         dot_product(gradient(ddab, pr), s - pr),
+         dot_product(gradient(ddab, ps), q - ps),
+         dot_product(gradient(ddab, ps), r - ps));
+  printf("ddac\t%+.4f\t%+.4f\t%+.4f\t%+.4f\t%+.4f\t%+.4f\n",
+         dot_product(gradient(ddac, qr), p - qr),
+         dot_product(gradient(ddac, qr), s - qr),
+         dot_product(gradient(ddac, qs), p - qs),
+         dot_product(gradient(ddac, qs), r - qs),
+         dot_product(gradient(ddac, rs), p - rs),
+         dot_product(gradient(ddac, rs), q - rs));
+  printf("\t%+.4f\t%+.4f\t%+.4f\t%+.4f\t%+.4f\t%+.4f\n",
+         dot_product(gradient(ddac, pq), r - pq),
+         dot_product(gradient(ddac, pq), s - pq),
+         dot_product(gradient(ddac, pr), q - pr),
+         dot_product(gradient(ddac, pr), s - pr),
+         dot_product(gradient(ddac, ps), q - ps),
+         dot_product(gradient(ddac, ps), r - ps));
+  printf("ddbc\t%+.4f\t%+.4f\t%+.4f\t%+.4f\t%+.4f\t%+.4f\n",
+         dot_product(gradient(ddbc, qr), p - qr),
+         dot_product(gradient(ddbc, qr), s - qr),
+         dot_product(gradient(ddbc, qs), p - qs),
+         dot_product(gradient(ddbc, qs), r - qs),
+         dot_product(gradient(ddbc, rs), p - rs),
+         dot_product(gradient(ddbc, rs), q - rs));
+  printf("\t%+.4f\t%+.4f\t%+.4f\t%+.4f\t%+.4f\t%+.4f\n",
+         dot_product(gradient(ddbc, pq), r - pq),
+         dot_product(gradient(ddbc, pq), s - pq),
+         dot_product(gradient(ddbc, pr), q - pr),
+         dot_product(gradient(ddbc, pr), s - pr),
+         dot_product(gradient(ddbc, ps), q - ps),
+         dot_product(gradient(ddbc, ps), r - ps));
+
+  should(vector_equal(gradient(quartic1, qr), gradient(quartic2, qr)));
+  should(vector_equal(gradient(quartic1, qs), gradient(quartic2, qs)));
+  should(vector_equal(gradient(quartic1, rs), gradient(quartic2, rs)));
 }
