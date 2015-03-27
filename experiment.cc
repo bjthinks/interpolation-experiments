@@ -459,6 +459,16 @@ int main(int argc, char *argv[]) {
   should(vector_equal(gradient(cubic2, r), r_gradient));
   should(vector_equal(gradient(cubic2, s), s_gradient));
 
+  Vector<3> qr = (q + r) / 2.0;
+  Vector<3> qs = (q + s) / 2.0;
+  Vector<3> rs = (r + s) / 2.0;
+  Vector<3> pq = (p + q) / 2.0;
+  Vector<3> pr = (p + r) / 2.0;
+  Vector<3> ps = (p + s) / 2.0;
+  Vector<3> tq = (t + q) / 2.0;
+  Vector<3> tr = (t + r) / 2.0;
+  Vector<3> ts = (t + s) / 2.0;
+
   MPoly<3> aabc = a * a * b * c;
   MPoly<3> aabd = a * a * b * d;
   MPoly<3> aacd = a * a * c * d;
@@ -509,13 +519,7 @@ int main(int argc, char *argv[]) {
   should(vector_equal(gradient(quartic2, r), r_gradient));
   should(vector_equal(gradient(quartic2, s), s_gradient));
 
-  Vector<3> qr = (q + r) / 2.0;
-  Vector<3> qs = (q + s) / 2.0;
-  Vector<3> rs = (r + s) / 2.0;
-  Vector<3> pq = (p + q) / 2.0;
-  Vector<3> pr = (p + r) / 2.0;
-  Vector<3> ps = (p + s) / 2.0;
-
+#if 0
   printf("\tqr->p\tqr->s\tqs->p\tqs->r\trs->p\trs->q\n");
   printf("\tpq->r\tpq->s\tpr->q\tpr->s\tps->q\tps->r\n");
   printf("aabc\t%+.4f\t%+.4f\t%+.4f\t%+.4f\t%+.4f\t%+.4f\n",
@@ -686,6 +690,7 @@ int main(int argc, char *argv[]) {
          dot_product(gradient(ddbc, pr), s - pr),
          dot_product(gradient(ddbc, ps), q - ps),
          dot_product(gradient(ddbc, ps), r - ps));
+#endif
 
   should(vector_equal(gradient(quartic1, qr), gradient(quartic2, qr)));
   should(vector_equal(gradient(quartic1, qs), gradient(quartic2, qs)));
