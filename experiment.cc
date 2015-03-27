@@ -482,6 +482,17 @@ int main(int argc, char *argv[]) {
   MPoly<3> ddac = d * d * a * c;
   MPoly<3> ddbc = d * d * b * c;
 
+  MPoly<3> t1_qr_p = 4.0 * (- aabc + bbac + ccab);
+  MPoly<3> t1_pr_q = 4.0 * (+ aabc - bbac + ccab);
+  MPoly<3> t1_pq_r = 4.0 * (+ aabc + bbac - ccab);
+  MPoly<3> t1_qs_p = 4.0 * (- aabd + bbad + ddab);
+  MPoly<3> t1_ps_q = 4.0 * (+ aabd - bbad + ddab);
+  MPoly<3> t1_pq_s = 4.0 * (+ aabd + bbad - ddab);
+  MPoly<3> t1_rs_p = 4.0 * (- aacd + ccad + ddac);
+  MPoly<3> t1_ps_r = 4.0 * (+ aacd - ccad + ddac);
+  MPoly<3> t1_pr_s = 4.0 * (+ aacd - ccad + ddac);
+  MPoly<3> t1_rs_q = 4.0 * (+ bbcd - ccbd + ddbc);
+
   MPoly<3> quartic1 = cubic1
     + 0.0;
 
