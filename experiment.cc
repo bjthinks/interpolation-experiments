@@ -211,6 +211,52 @@ void test_cubic_gradients(const Vector<3> &p, const MPoly<3> &f,
   should(double_equal(dot_product(gradient(h, p), s - p), 1.0));
 }
 
+void show_value(const MPoly<3> &f, const char *f_name,
+                const Vector<3> &p, const char *p_name)
+{
+  printf("%s(%s) = %f\n", f_name, p_name, f(p));
+}
+
+void show_dd(const MPoly<3> &f, const char *f_name,
+             const Vector<3> &p, const char *p_name,
+             const Vector<3> &q, const char *q_name)
+{
+  printf("grad(%s)(%s) dot %s-%s = %f\n", f_name, p_name, q_name, p_name,
+         dot_product(gradient(f, p), q - p));
+}
+
+void diag
+(const MPoly<3> &f, const char *f_name,
+ const Vector<3> &p, const char *p_name, const Vector<3> &q, const char *q_name,
+ const Vector<3> &r, const char *r_name, const Vector<3> &s, const char *s_name)
+{
+  show_value(f, f_name, p, p_name);
+  show_value(f, f_name, q, q_name);
+  show_value(f, f_name, r, r_name);
+  show_value(f, f_name, s, s_name);
+  show_dd(f, f_name, p, p_name, q, q_name);
+  show_dd(f, f_name, p, p_name, r, r_name);
+  show_dd(f, f_name, p, p_name, s, s_name);
+  show_dd(f, f_name, q, q_name, p, p_name);
+  show_dd(f, f_name, q, q_name, r, r_name);
+  show_dd(f, f_name, q, q_name, s, s_name);
+  show_dd(f, f_name, r, r_name, p, p_name);
+  show_dd(f, f_name, r, r_name, q, q_name);
+  show_dd(f, f_name, r, r_name, s, s_name);
+  show_dd(f, f_name, s, s_name, p, p_name);
+  show_dd(f, f_name, s, s_name, q, q_name);
+  show_dd(f, f_name, s, s_name, r, r_name);
+#if 0
+  printf("aabc\t%+.4f\t%+.4f\t%+.4f\t%+.4f\t%+.4f\t%+.4f\n",
+         dot_product(gradient(aabc, qr), p - qr),
+         dot_product(gradient(aabc, qr), s - qr),
+         dot_product(gradient(aabc, qs), p - qs),
+         dot_product(gradient(aabc, qs), r - qs),
+         dot_product(gradient(aabc, rs), p - rs),
+         dot_product(gradient(aabc, rs), q - rs));
+#endif
+}
+
 template <int N>
 Vector<N> random_on_segment(const Vector<N> &x, const Vector<N> &y) {
   double t = double(rand()) / double(RAND_MAX);
@@ -237,6 +283,8 @@ int main(int argc, char *argv[]) {
   MPoly<3> b = linear_indicator(q, p, r, s);
   MPoly<3> c = linear_indicator(r, p, q, s);
   MPoly<3> d = linear_indicator(s, p, q, r);
+
+  diag(a, "a", p, "p", q, "q", r, "r", s, "s");
 
   should(double_equal(a(p), 1.0));
   should(double_equal(a(q), 0.0));
