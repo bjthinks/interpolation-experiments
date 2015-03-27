@@ -1,7 +1,7 @@
 OPT_OR_DEBUG = -O3
 
 CXX = g++
-CXXFLAGS := -Wall -Wshadow -Werror $(OPT_OR_DEBUG)
+CXXFLAGS := -Wall -Wshadow $(OPT_OR_DEBUG)
 LINKFLAGS := 
 
 OFILES=\
