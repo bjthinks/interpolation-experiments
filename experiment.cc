@@ -5,6 +5,8 @@
 
 #include "mpoly.hh"
 
+using namespace std;
+
 #define should(b) should_((b), __LINE__)
 inline void should_(bool b, int line) {
   if (!b) {
@@ -216,28 +218,30 @@ bool is_zero(double x)
   return fabs(x) < 1e-6;
 }
 
-void show_value(const MPoly<3> &f, const char *f_name,
-                const Vector<3> &p, const char *p_name)
+void show_value(const MPoly<3> &f,  const string &f_name,
+                const Vector<3> &p, const string &p_name)
 {
   double value = f(p);
   if (!is_zero(value))
-    printf("%s(%s) = %f\n", f_name, p_name, f(p));
+    printf("%s(%s) = %f\n", f_name.c_str(), p_name.c_str(), f(p));
 }
 
-void show_dd(const MPoly<3> &f, const char *f_name,
-             const Vector<3> &p, const char *p_name,
-             const Vector<3> &q, const char *q_name)
+void show_dd(const MPoly<3> &f,  const string &f_name,
+             const Vector<3> &p, const string &p_name,
+             const Vector<3> &q, const string &q_name)
 {
   double dd_value = dot_product(gradient(f, p), q - p);
   if (!is_zero(dd_value))
-    printf("grad(%s)(%s) dot %s-%s = %f\n", f_name, p_name, q_name, p_name,
-           dd_value);
+    printf("grad(%s)(%s) dot %s-%s = %f\n", f_name.c_str(), p_name.c_str(),
+           q_name.c_str(), p_name.c_str(), dd_value);
 }
 
 void diag
-(const MPoly<3> &f, const char *f_name,
- const Vector<3> &p, const char *p_name, const Vector<3> &q, const char *q_name,
- const Vector<3> &r, const char *r_name, const Vector<3> &s, const char *s_name)
+(const MPoly<3> &f,  const string &f_name,
+ const Vector<3> &p, const string &p_name,
+ const Vector<3> &q, const string &q_name,
+ const Vector<3> &r, const string &r_name,
+ const Vector<3> &s, const string &s_name)
 {
   printf("Nonzero values and gradients:\n");
   show_value(f, f_name, p, p_name);
