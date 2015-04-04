@@ -211,18 +211,27 @@ void test_cubic_gradients(const Vector<3> &p, const MPoly<3> &f,
   should(double_equal(dot_product(gradient(h, p), s - p), 1.0));
 }
 
+bool is_zero(double x)
+{
+  return fabs(x) < 1e-6;
+}
+
 void show_value(const MPoly<3> &f, const char *f_name,
                 const Vector<3> &p, const char *p_name)
 {
-  printf("%s(%s) = %f\n", f_name, p_name, f(p));
+  double value = f(p);
+  if (!is_zero(value))
+    printf("%s(%s) = %f\n", f_name, p_name, f(p));
 }
 
 void show_dd(const MPoly<3> &f, const char *f_name,
              const Vector<3> &p, const char *p_name,
              const Vector<3> &q, const char *q_name)
 {
-  printf("grad(%s)(%s) dot %s-%s = %f\n", f_name, p_name, q_name, p_name,
-         dot_product(gradient(f, p), q - p));
+  double dd_value = dot_product(gradient(f, p), q - p);
+  if (!is_zero(dd_value))
+    printf("grad(%s)(%s) dot %s-%s = %f\n", f_name, p_name, q_name, p_name,
+           dd_value);
 }
 
 void diag
@@ -230,6 +239,7 @@ void diag
  const Vector<3> &p, const char *p_name, const Vector<3> &q, const char *q_name,
  const Vector<3> &r, const char *r_name, const Vector<3> &s, const char *s_name)
 {
+  printf("Nonzero values and gradients:\n");
   show_value(f, f_name, p, p_name);
   show_value(f, f_name, q, q_name);
   show_value(f, f_name, r, r_name);
