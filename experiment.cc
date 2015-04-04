@@ -260,15 +260,22 @@ void diag
   show_dd(f, f_name, s, s_name, p, p_name);
   show_dd(f, f_name, s, s_name, q, q_name);
   show_dd(f, f_name, s, s_name, r, r_name);
-#if 0
-  printf("aabc\t%+.4f\t%+.4f\t%+.4f\t%+.4f\t%+.4f\t%+.4f\n",
-         dot_product(gradient(aabc, qr), p - qr),
-         dot_product(gradient(aabc, qr), s - qr),
-         dot_product(gradient(aabc, qs), p - qs),
-         dot_product(gradient(aabc, qs), r - qs),
-         dot_product(gradient(aabc, rs), p - rs),
-         dot_product(gradient(aabc, rs), q - rs));
-#endif
+  show_dd(f, f_name, (p + q) / 2.0, p_name + q_name, r, r_name);
+  show_dd(f, f_name, (p + q) / 2.0, p_name + q_name, s, s_name);
+  show_dd(f, f_name, (p + r) / 2.0, p_name + r_name, q, q_name);
+  show_dd(f, f_name, (p + r) / 2.0, p_name + r_name, s, s_name);
+  show_dd(f, f_name, (p + s) / 2.0, p_name + s_name, q, q_name);
+  show_dd(f, f_name, (p + s) / 2.0, p_name + s_name, r, r_name);
+  show_dd(f, f_name, (q + r) / 2.0, q_name + r_name, p, p_name);
+  show_dd(f, f_name, (q + r) / 2.0, q_name + r_name, s, s_name);
+  show_dd(f, f_name, (q + s) / 2.0, q_name + s_name, p, p_name);
+  show_dd(f, f_name, (q + s) / 2.0, q_name + s_name, r, r_name);
+  show_dd(f, f_name, (r + s) / 2.0, r_name + s_name, p, p_name);
+  show_dd(f, f_name, (r + s) / 2.0, r_name + s_name, q, q_name);
+  show_dd(f, f_name, (p + q + r) / 3.0, p_name + q_name + r_name, s, s_name);
+  show_dd(f, f_name, (p + q + s) / 3.0, p_name + q_name + s_name, r, r_name);
+  show_dd(f, f_name, (p + r + s) / 3.0, p_name + r_name + s_name, q, q_name);
+  show_dd(f, f_name, (q + r + s) / 3.0, q_name + r_name + s_name, p, p_name);
 }
 
 template <int N>
