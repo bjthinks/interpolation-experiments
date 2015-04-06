@@ -176,8 +176,9 @@ MPoly<3> linear_indicator(const Vector<3> &one,
 
 bool double_equal(double a, double b) {
   double diff = a - b;
-  if (fabs(diff) < 32.0 * DBL_EPSILON)
+  if (fabs(diff) < 128.0 * DBL_EPSILON)
     return true;
+  printf("%f %f %f\n", a, b, a-b);
   return false;
 }
 
