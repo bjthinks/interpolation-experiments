@@ -488,37 +488,6 @@ int main(int argc, char *argv[]) {
 
   mpoly_diff_tests();
 
-  MPoly<3> aab = a * a * b;
-  MPoly<3> aac = a * a * c;
-  MPoly<3> aad = a * a * d;
-  MPoly<3> bba = b * b * a;
-  MPoly<3> bbc = b * b * c;
-  MPoly<3> bbd = b * b * d;
-  MPoly<3> cca = c * c * a;
-  MPoly<3> ccb = c * c * b;
-  MPoly<3> ccd = c * c * d;
-  MPoly<3> dda = d * d * a;
-  MPoly<3> ddb = d * d * b;
-  MPoly<3> ddc = d * d * c;
-
-  test_zero_values(aab, p, q, r, s);
-  test_zero_values(aac, p, q, r, s);
-  test_zero_values(aad, p, q, r, s);
-  test_zero_values(bba, p, q, r, s);
-  test_zero_values(bbc, p, q, r, s);
-  test_zero_values(bbd, p, q, r, s);
-  test_zero_values(cca, p, q, r, s);
-  test_zero_values(ccb, p, q, r, s);
-  test_zero_values(ccd, p, q, r, s);
-  test_zero_values(dda, p, q, r, s);
-  test_zero_values(ddb, p, q, r, s);
-  test_zero_values(ddc, p, q, r, s);
-
-  test_cubic_gradients(p, aab, aac, aad, q, r, s);
-  test_cubic_gradients(q, bba, bbc, bbd, p, r, s);
-  test_cubic_gradients(r, cca, ccb, ccd, p, q, s);
-  test_cubic_gradients(s, dda, ddb, ddc, p, q, r);
-
   MPoly<3> eef = e * e * f;
   MPoly<3> eeg = e * e * g;
   MPoly<3> eeh = e * e * h;
