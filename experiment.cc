@@ -370,164 +370,76 @@ int main(int argc, char *argv[]) {
   should(double_equal(d(r), 0.0));
   should(double_equal(d(s), 1.0));
 
-  MPoly<3> face_qrs = 27.0 * a*b*c*d * (1.0 - 3.0 * a);
+  MPoly<3> face_qrs = faceGradient(b, c, d, a);
+  MPoly<3> face_prs = faceGradient(a, c, d, b);
+  MPoly<3> face_pqs = faceGradient(a, b, d, c);
+  MPoly<3> face_pqr = faceGradient(a, b, c, d);
+
   diag(face_qrs, "face_qrs", p, "p", q, "q", r, "r", s, "s");
-  MPoly<3> face_prs = 27.0 * a*b*c*d * (1.0 - 3.0 * b);
   diag(face_prs, "face_prs", p, "p", q, "q", r, "r", s, "s");
-  MPoly<3> face_pqs = 27.0 * a*b*c*d * (1.0 - 3.0 * c);
   diag(face_pqs, "face_pqs", p, "p", q, "q", r, "r", s, "s");
-  MPoly<3> face_pqr = 27.0 * a*b*c*d * (1.0 - 3.0 * d);
   diag(face_pqr, "face_pqr", p, "p", q, "q", r, "r", s, "s");
 
-  MPoly<3> edge_pq_to_r = 4.0 * a*b*c * (a + b - c)
-    + 16.0 / 81.0 * face_pqr
-    -  8.0 / 27.0 * face_pqs;
+  MPoly<3> edge_pq_to_r = edgeGradient(a, b, c, d);
+  MPoly<3> edge_pq_to_s = edgeGradient(a, b, d, c);
+  MPoly<3> edge_pr_to_q = edgeGradient(a, c, b, d);
+  MPoly<3> edge_pr_to_s = edgeGradient(a, c, d, b);
+  MPoly<3> edge_qr_to_p = edgeGradient(b, c, a, d);
+  MPoly<3> edge_qr_to_s = edgeGradient(b, c, d, a);
+  MPoly<3> edge_ps_to_q = edgeGradient(a, d, b, c);
+  MPoly<3> edge_ps_to_r = edgeGradient(a, d, c, b);
+  MPoly<3> edge_qs_to_p = edgeGradient(b, d, a, c);
+  MPoly<3> edge_qs_to_r = edgeGradient(b, d, c, a);
+  MPoly<3> edge_rs_to_p = edgeGradient(c, d, a, b);
+  MPoly<3> edge_rs_to_q = edgeGradient(c, d, b, a);
+
   diag(edge_pq_to_r, "edge_pq_to_r", p, "p", q, "q", r, "r", s, "s");
-  MPoly<3> edge_pq_to_s = 4.0 * a*b*d * (a + b - d)
-    + 16.0 / 81.0 * face_pqs
-    -  8.0 / 27.0 * face_pqr;
   diag(edge_pq_to_s, "edge_pq_to_s", p, "p", q, "q", r, "r", s, "s");
-  MPoly<3> edge_pr_to_q = 4.0 * a*b*c * (a + c - b)
-    + 16.0 / 81.0 * face_pqr
-    -  8.0 / 27.0 * face_prs;
   diag(edge_pr_to_q, "edge_pr_to_q", p, "p", q, "q", r, "r", s, "s");
-  MPoly<3> edge_pr_to_s = 4.0 * a*c*d * (a + c - d)
-    + 16.0 / 81.0 * face_prs
-    -  8.0 / 27.0 * face_pqr;
   diag(edge_pr_to_s, "edge_pr_to_s", p, "p", q, "q", r, "r", s, "s");
-  MPoly<3> edge_qr_to_p = 4.0 * a*b*c * (b + c - a)
-    + 16.0 / 81.0 * face_pqr
-    -  8.0 / 27.0 * face_qrs;
   diag(edge_qr_to_p, "edge_qr_to_p", p, "p", q, "q", r, "r", s, "s");
-  MPoly<3> edge_qr_to_s = 4.0 * b*c*d * (b + c - d)
-    + 16.0 / 81.0 * face_qrs
-    -  8.0 / 27.0 * face_pqr;
   diag(edge_qr_to_s, "edge_qr_to_s", p, "p", q, "q", r, "r", s, "s");
-  MPoly<3> edge_ps_to_q = 4.0 * a*b*d * (a + d - b)
-    + 16.0 / 81.0 * face_pqs
-    -  8.0 / 27.0 * face_prs;
   diag(edge_ps_to_q, "edge_ps_to_q", p, "p", q, "q", r, "r", s, "s");
-  MPoly<3> edge_ps_to_r = 4.0 * a*c*d * (a + d - c)
-    + 16.0 / 81.0 * face_prs
-    -  8.0 / 27.0 * face_pqs;
   diag(edge_ps_to_r, "edge_ps_to_r", p, "p", q, "q", r, "r", s, "s");
-  MPoly<3> edge_qs_to_p = 4.0 * a*b*d * (b + d - a)
-    + 16.0 / 81.0 * face_pqs
-    -  8.0 / 27.0 * face_qrs;
   diag(edge_qs_to_p, "edge_qs_to_p", p, "p", q, "q", r, "r", s, "s");
-  MPoly<3> edge_qs_to_r = 4.0 * b*c*d * (b + d - c)
-    + 16.0 / 81.0 * face_qrs
-    -  8.0 / 27.0 * face_pqs;
   diag(edge_qs_to_r, "edge_qs_to_r", p, "p", q, "q", r, "r", s, "s");
-  MPoly<3> edge_rs_to_p = 4.0 * a*c*d * (c + d - a)
-    + 16.0 / 81.0 * face_prs
-    -  8.0 / 27.0 * face_qrs;
   diag(edge_rs_to_p, "edge_rs_to_p", p, "p", q, "q", r, "r", s, "s");
-  MPoly<3> edge_rs_to_q = 4.0 * b*c*d * (c + d - b)
-    + 16.0 / 81.0 * face_qrs
-    -  8.0 / 27.0 * face_prs;
   diag(edge_rs_to_q, "edge_rs_to_q", p, "p", q, "q", r, "r", s, "s");
 
-  MPoly<3> vert_p_to_q = a*a*b
-    + 3.0 / 8.0 * (edge_pq_to_r + edge_pq_to_s)
-    - 1.0 / 4.0 * (edge_pr_to_q + edge_ps_to_q)
-    + 1.0 / 9.0 * (face_pqr + face_pqs - face_prs);
+  MPoly<3> vert_p_to_q = vertexGradient(a, b, c, d);
+  MPoly<3> vert_p_to_r = vertexGradient(a, c, b, d);
+  MPoly<3> vert_p_to_s = vertexGradient(a, d, b, c);
+  MPoly<3> vert_q_to_p = vertexGradient(b, a, c, d);
+  MPoly<3> vert_q_to_r = vertexGradient(b, c, a, d);
+  MPoly<3> vert_q_to_s = vertexGradient(b, d, a, c);
+  MPoly<3> vert_r_to_p = vertexGradient(c, a, b, d);
+  MPoly<3> vert_r_to_q = vertexGradient(c, b, a, d);
+  MPoly<3> vert_r_to_s = vertexGradient(c, d, a, b);
+  MPoly<3> vert_s_to_p = vertexGradient(d, a, b, c);
+  MPoly<3> vert_s_to_q = vertexGradient(d, b, a, c);
+  MPoly<3> vert_s_to_r = vertexGradient(d, c, a, b);
+
   diag(vert_p_to_q, "vert_p_to_q", p, "p", q, "q", r, "r", s, "s");
-  MPoly<3> vert_p_to_r = a*a*c
-    + 3.0 / 8.0 * (edge_pr_to_q + edge_pr_to_s)
-    - 1.0 / 4.0 * (edge_pq_to_r + edge_ps_to_r)
-    + 1.0 / 9.0 * (face_pqr + face_prs - face_pqs);
   diag(vert_p_to_r, "vert_p_to_r", p, "p", q, "q", r, "r", s, "s");
-  MPoly<3> vert_p_to_s = a*a*d
-    + 3.0 / 8.0 * (edge_ps_to_q + edge_ps_to_r)
-    - 1.0 / 4.0 * (edge_pq_to_s + edge_pr_to_s)
-    + 1.0 / 9.0 * (face_pqs + face_prs - face_pqr);
   diag(vert_p_to_s, "vert_p_to_s", p, "p", q, "q", r, "r", s, "s");
-  MPoly<3> vert_q_to_p = b*b*a
-    + 3.0 / 8.0 * (edge_pq_to_r + edge_pq_to_s)
-    - 1.0 / 4.0 * (edge_qr_to_p + edge_qs_to_p)
-    + 1.0 / 9.0 * (face_pqr + face_pqs - face_qrs);
   diag(vert_q_to_p, "vert_q_to_p", p, "p", q, "q", r, "r", s, "s");
-  MPoly<3> vert_q_to_r = b*b*c
-    + 3.0 / 8.0 * (edge_qr_to_p + edge_qr_to_s)
-    - 1.0 / 4.0 * (edge_pq_to_r + edge_qs_to_r)
-    + 1.0 / 9.0 * (face_pqr + face_qrs - face_pqs);
   diag(vert_q_to_r, "vert_q_to_r", p, "p", q, "q", r, "r", s, "s");
-  MPoly<3> vert_q_to_s = b*b*d
-    + 3.0 / 8.0 * (edge_qs_to_p + edge_qs_to_r)
-    - 1.0 / 4.0 * (edge_pq_to_s + edge_qr_to_s)
-    + 1.0 / 9.0 * (face_pqs + face_qrs - face_pqr);
   diag(vert_q_to_s, "vert_q_to_s", p, "p", q, "q", r, "r", s, "s");
-  MPoly<3> vert_r_to_p = c*c*a
-    + 3.0 / 8.0 * (edge_pr_to_q + edge_pr_to_s)
-    - 1.0 / 4.0 * (edge_qr_to_p + edge_rs_to_p)
-    + 1.0 / 9.0 * (face_pqr + face_prs - face_qrs);
   diag(vert_r_to_p, "vert_r_to_p", p, "p", q, "q", r, "r", s, "s");
-  MPoly<3> vert_r_to_q = c*c*b
-    + 3.0 / 8.0 * (edge_qr_to_p + edge_qr_to_s)
-    - 1.0 / 4.0 * (edge_pr_to_q + edge_rs_to_q)
-    + 1.0 / 9.0 * (face_pqr + face_qrs - face_prs);
   diag(vert_r_to_q, "vert_r_to_q", p, "p", q, "q", r, "r", s, "s");
-  MPoly<3> vert_r_to_s = c*c*d
-    + 3.0 / 8.0 * (edge_rs_to_p + edge_rs_to_q)
-    - 1.0 / 4.0 * (edge_pr_to_s + edge_qr_to_s)
-    + 1.0 / 9.0 * (face_prs + face_qrs - face_pqr);
   diag(vert_r_to_s, "vert_r_to_s", p, "p", q, "q", r, "r", s, "s");
-  MPoly<3> vert_s_to_p = d*d*a
-    + 3.0 / 8.0 * (edge_ps_to_q + edge_ps_to_r)
-    - 1.0 / 4.0 * (edge_qs_to_p + edge_rs_to_p)
-    + 1.0 / 9.0 * (face_pqs + face_prs - face_qrs);
   diag(vert_s_to_p, "vert_s_to_p", p, "p", q, "q", r, "r", s, "s");
-  MPoly<3> vert_s_to_q = d*d*b
-    + 3.0 / 8.0 * (edge_qs_to_p + edge_qs_to_r)
-    - 1.0 / 4.0 * (edge_ps_to_q + edge_rs_to_q)
-    + 1.0 / 9.0 * (face_pqs + face_qrs - face_prs);
   diag(vert_s_to_q, "vert_s_to_q", p, "p", q, "q", r, "r", s, "s");
-  MPoly<3> vert_s_to_r = d*d*c
-    + 3.0 / 8.0 * (edge_rs_to_p + edge_rs_to_q)
-    - 1.0 / 4.0 * (edge_ps_to_r + edge_qs_to_r)
-    + 1.0 / 9.0 * (face_prs + face_qrs - face_pqs);
   diag(vert_s_to_r, "vert_s_to_r", p, "p", q, "q", r, "r", s, "s");
 
-  MPoly<3> vert_p = a
-    + vert_p_to_q + vert_p_to_r + vert_p_to_s
-    - vert_q_to_p - vert_r_to_p - vert_s_to_p
-    + 1.0 / 2.0 * (edge_pq_to_r + edge_pq_to_s +
-                   edge_pr_to_q + edge_pr_to_s +
-                   edge_ps_to_q + edge_ps_to_r)
-    - edge_qr_to_p - edge_qs_to_p - edge_rs_to_p
-    + 1.0 / 3.0 * (face_pqr + face_pqs + face_prs)
-    - face_qrs;
+  MPoly<3> vert_p = vertexValue(a, b, c, d);
+  MPoly<3> vert_q = vertexValue(b, a, c, d);
+  MPoly<3> vert_r = vertexValue(c, a, b, d);
+  MPoly<3> vert_s = vertexValue(d, a, b, c);
+
   diag(vert_p, "vert_p", p, "p", q, "q", r, "r", s, "s");
-  MPoly<3> vert_q = b
-    + vert_q_to_p + vert_q_to_r + vert_q_to_s
-    - vert_p_to_q - vert_r_to_q - vert_s_to_q
-    + 1.0 / 2.0 * (edge_pq_to_r + edge_pq_to_s +
-                   edge_qr_to_p + edge_qr_to_s +
-                   edge_qs_to_p + edge_qs_to_r)
-    - edge_pr_to_q - edge_ps_to_q - edge_rs_to_q
-    + 1.0 / 3.0 * (face_pqr + face_pqs + face_qrs)
-    - face_prs;
   diag(vert_q, "vert_q", p, "p", q, "q", r, "r", s, "s");
-  MPoly<3> vert_r = c
-    + vert_r_to_p + vert_r_to_q + vert_r_to_s
-    - vert_p_to_r - vert_q_to_r - vert_s_to_r
-    + 1.0 / 2.0 * (edge_pr_to_q + edge_pr_to_s +
-                   edge_qr_to_p + edge_qr_to_s +
-                   edge_rs_to_p + edge_rs_to_q)
-    - edge_pq_to_r - edge_ps_to_r - edge_qs_to_r
-    + 1.0 / 3.0 * (face_pqr + face_prs + face_qrs)
-    - face_pqs;
   diag(vert_r, "vert_r", p, "p", q, "q", r, "r", s, "s");
-  MPoly<3> vert_s = d
-    + vert_s_to_p + vert_s_to_q + vert_s_to_r
-    - vert_p_to_s - vert_q_to_s - vert_r_to_s
-    + 1.0 / 2.0 * (edge_ps_to_q + edge_ps_to_r +
-                   edge_qs_to_p + edge_qs_to_r +
-                   edge_rs_to_p + edge_rs_to_q)
-    - edge_pq_to_s - edge_pr_to_s - edge_qr_to_s
-    + 1.0 / 3.0 * (face_pqs + face_prs + face_qrs)
-    - face_pqr;
   diag(vert_s, "vert_s", p, "p", q, "q", r, "r", s, "s");
 
   MPoly<3> e = linear_indicator(t, q, r, s);
