@@ -510,7 +510,11 @@ int main(int argc, char *argv[]) {
   double s_value = random_double();
   double t_value = random_double();
 
-  MPoly<3> linear1 = p_value * a + q_value * b + r_value * c + s_value * d;
+  MPoly<3> linear1 =
+    p_value * vert_p +
+    q_value * vert_q +
+    r_value * vert_r +
+    s_value * vert_s;
   MPoly<3> linear2 = t_value * e + q_value * f + r_value * g + s_value * h;
 
   should(double_equal(linear1(p), p_value));
@@ -593,18 +597,18 @@ int main(int argc, char *argv[]) {
   Vector<3> t_gradient = random_vector<3>();
 
   MPoly<3> cubic1 = linear1
-    + dot_product(p_gradient - gradient(linear1, p), q - p) * aab
-    + dot_product(p_gradient - gradient(linear1, p), r - p) * aac
-    + dot_product(p_gradient - gradient(linear1, p), s - p) * aad
-    + dot_product(q_gradient - gradient(linear1, q), p - q) * bba
-    + dot_product(q_gradient - gradient(linear1, q), r - q) * bbc
-    + dot_product(q_gradient - gradient(linear1, q), s - q) * bbd
-    + dot_product(r_gradient - gradient(linear1, r), p - r) * cca
-    + dot_product(r_gradient - gradient(linear1, r), q - r) * ccb
-    + dot_product(r_gradient - gradient(linear1, r), s - r) * ccd
-    + dot_product(s_gradient - gradient(linear1, s), p - s) * dda
-    + dot_product(s_gradient - gradient(linear1, s), q - s) * ddb
-    + dot_product(s_gradient - gradient(linear1, s), r - s) * ddc;
+    + dot_product(p_gradient, q - p) * vert_p_to_q
+    + dot_product(p_gradient, r - p) * vert_p_to_r
+    + dot_product(p_gradient, s - p) * vert_p_to_s
+    + dot_product(q_gradient, p - q) * vert_q_to_p
+    + dot_product(q_gradient, r - q) * vert_q_to_r
+    + dot_product(q_gradient, s - q) * vert_q_to_s
+    + dot_product(r_gradient, p - r) * vert_r_to_p
+    + dot_product(r_gradient, q - r) * vert_r_to_q
+    + dot_product(r_gradient, s - r) * vert_r_to_s
+    + dot_product(s_gradient, p - s) * vert_s_to_p
+    + dot_product(s_gradient, q - s) * vert_s_to_q
+    + dot_product(s_gradient, r - s) * vert_s_to_r;
 
   should(double_equal(cubic1(p), p_value));
   should(double_equal(cubic1(q), q_value));
