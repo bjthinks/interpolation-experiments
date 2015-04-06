@@ -690,6 +690,7 @@ int main(int argc, char *argv[]) {
   should(vector_equal(gradient(cubic2, r), r_gradient));
   should(vector_equal(gradient(cubic2, s), s_gradient));
 
+#if 0
   Vector<3> qr = (q + r) / 2.0;
   Vector<3> qs = (q + s) / 2.0;
   Vector<3> rs = (r + s) / 2.0;
@@ -699,6 +700,7 @@ int main(int argc, char *argv[]) {
   Vector<3> tq = (t + q) / 2.0;
   Vector<3> tr = (t + r) / 2.0;
   Vector<3> ts = (t + s) / 2.0;
+#endif
 
   MPoly<3> quartic1 = cubic1
     + 0.0;
