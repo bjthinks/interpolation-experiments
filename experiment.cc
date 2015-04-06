@@ -284,6 +284,54 @@ Vector<N> random_on_segment(const Vector<N> &x, const Vector<N> &y) {
   return t * x + (1.0 - t) * y;
 }
 
+MPoly<3> faceGradient(MPoly<3> &f1, MPoly<3> &f2, MPoly<3> &f3,
+                      MPoly<3> &opp) {
+  return 27.0 * f1 * f2 * f3 * opp * (1.0 - 3.0 * opp);
+}
+
+MPoly<3> edgeGradient(MPoly<3> &e1, MPoly<3> &e2, MPoly<3> &to,
+                      MPoly<3> &opp) {
+  return 4.0 * e1 * e2 * to * (e1 + e2 - to)
+    + 16.0 / 81.0 * faceGradient(e1, e2, to, opp)
+    -  8.0 / 27.0 * faceGradient(e1, e2, opp, to);
+}
+
+MPoly<3> vertexGradient(MPoly<3> &v, MPoly<3> &dir,
+                        MPoly<3> &opp1, MPoly<3> &opp2) {
+  return v * v * dir
+    + 3.0 / 8.0 * (edgeGradient(v, dir, opp1, opp2)
+                   + edgeGradient(v, dir, opp2, opp1))
+    - 1.0 / 4.0 * (edgeGradient(v, opp1, dir, opp2)
+                   + edgeGradient(v, opp2, dir, opp1))
+    + 1.0 / 9.0 * (faceGradient(v, dir, opp1, opp2)
+                   + faceGradient(v, dir, opp2, opp1)
+                   - faceGradient(v, opp1, opp2, dir));
+}
+
+MPoly<3> vertexValue(MPoly<3> &v, MPoly<3> &opp1,
+                     MPoly<3> &opp2, MPoly<3> &opp3) {
+  return v
+    + vertexGradient(v, opp1, opp2, opp3)
+    + vertexGradient(v, opp2, opp1, opp3)
+    + vertexGradient(v, opp3, opp1, opp2)
+    - vertexGradient(opp1, v, opp2, opp3)
+    - vertexGradient(opp2, v, opp1, opp3)
+    - vertexGradient(opp3, v, opp1, opp2)
+    + 0.5 * (edgeGradient(v, opp1, opp2, opp3)
+             + edgeGradient(v, opp1, opp3, opp2)
+             + edgeGradient(v, opp2, opp1, opp3)
+             + edgeGradient(v, opp2, opp3, opp1)
+             + edgeGradient(v, opp3, opp1, opp2)
+             + edgeGradient(v, opp3, opp2, opp1))
+    - edgeGradient(opp1, opp2, v, opp3)
+    - edgeGradient(opp1, opp3, v, opp2)
+    - edgeGradient(opp2, opp3, v, opp1)
+    + 1.0 / 3.0 * (faceGradient(v, opp1, opp2, opp3)
+                   + faceGradient(v, opp1, opp3, opp2)
+                   + faceGradient(v, opp2, opp3, opp1))
+    - faceGradient(opp1, opp2, opp3, v);
+}
+
 int main(int argc, char *argv[]) {
   srand(345987);
 
