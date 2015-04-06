@@ -322,13 +322,13 @@ int main(int argc, char *argv[]) {
   should(double_equal(d(r), 0.0));
   should(double_equal(d(s), 1.0));
 
-  MPoly<3> face_qrs = a*b*c*d * (b + c + d - 2.0 * a) * 27.0;
+  MPoly<3> face_qrs = 27.0 * a*b*c*d * (1.0 - 3.0 * a);
   diag(face_qrs, "face_qrs", p, "p", q, "q", r, "r", s, "s");
-  MPoly<3> face_prs = a*b*c*d * (a + c + d - 2.0 * b) * 27.0;
+  MPoly<3> face_prs = 27.0 * a*b*c*d * (1.0 - 3.0 * b);
   diag(face_prs, "face_prs", p, "p", q, "q", r, "r", s, "s");
-  MPoly<3> face_pqs = a*b*c*d * (a + b + d - 2.0 * c) * 27.0;
+  MPoly<3> face_pqs = 27.0 * a*b*c*d * (1.0 - 3.0 * c);
   diag(face_pqs, "face_pqs", p, "p", q, "q", r, "r", s, "s");
-  MPoly<3> face_pqr = a*b*c*d * (a + b + c - 2.0 * d) * 27.0;
+  MPoly<3> face_pqr = 27.0 * a*b*c*d * (1.0 - 3.0 * d);
   diag(face_pqr, "face_pqr", p, "p", q, "q", r, "r", s, "s");
 
   MPoly<3> edge_pq_to_r = 4.0 * a*b*c * (a + b - c)
