@@ -652,30 +652,6 @@ int main(int argc, char *argv[]) {
   Vector<3> tr = (t + r) / 2.0;
   Vector<3> ts = (t + s) / 2.0;
 
-  MPoly<3> aabc = a * a * b * c;
-  MPoly<3> aabd = a * a * b * d;
-  MPoly<3> aacd = a * a * c * d;
-  MPoly<3> bbac = b * b * a * c;
-  MPoly<3> bbad = b * b * a * d;
-  MPoly<3> bbcd = b * b * c * d;
-  MPoly<3> ccab = c * c * a * b;
-  MPoly<3> ccad = c * c * a * d;
-  MPoly<3> ccbd = c * c * b * d;
-  MPoly<3> ddab = d * d * a * b;
-  MPoly<3> ddac = d * d * a * c;
-  MPoly<3> ddbc = d * d * b * c;
-
-  MPoly<3> t1_qr_p = 4.0 * (- aabc + bbac + ccab);
-  MPoly<3> t1_pr_q = 4.0 * (+ aabc - bbac + ccab);
-  MPoly<3> t1_pq_r = 4.0 * (+ aabc + bbac - ccab);
-  MPoly<3> t1_qs_p = 4.0 * (- aabd + bbad + ddab);
-  MPoly<3> t1_ps_q = 4.0 * (+ aabd - bbad + ddab);
-  MPoly<3> t1_pq_s = 4.0 * (+ aabd + bbad - ddab);
-  MPoly<3> t1_rs_p = 4.0 * (- aacd + ccad + ddac);
-  MPoly<3> t1_ps_r = 4.0 * (+ aacd - ccad + ddac);
-  MPoly<3> t1_pr_s = 4.0 * (+ aacd - ccad + ddac);
-  MPoly<3> t1_rs_q = 4.0 * (+ bbcd - ccbd + ddbc);
-
   MPoly<3> quartic1 = cubic1
     + 0.0;
 
@@ -687,19 +663,6 @@ int main(int argc, char *argv[]) {
   should(vector_equal(gradient(quartic1, q), q_gradient));
   should(vector_equal(gradient(quartic1, r), r_gradient));
   should(vector_equal(gradient(quartic1, s), s_gradient));
-
-  MPoly<3> eefg = e * e * f * g;
-  MPoly<3> eefh = e * e * f * h;
-  MPoly<3> eegh = e * e * g * h;
-  MPoly<3> ffeg = f * f * e * g;
-  MPoly<3> ffeh = f * f * e * h;
-  MPoly<3> ffgh = f * f * g * h;
-  MPoly<3> ggef = g * g * e * f;
-  MPoly<3> ggeh = g * g * e * h;
-  MPoly<3> ggfh = g * g * f * h;
-  MPoly<3> hhef = h * h * e * f;
-  MPoly<3> hheg = h * h * e * g;
-  MPoly<3> hhfg = h * h * f * g;
 
   MPoly<3> quartic2 = cubic2
     + 0.0;
