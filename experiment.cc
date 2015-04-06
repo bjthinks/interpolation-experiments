@@ -339,7 +339,7 @@ int main(int argc, char *argv[]) {
     + 16.0 / 81.0 * face_pqs
     -  8.0 / 27.0 * face_pqr;
   diag(edge_pq_to_s, "edge_pq_to_s", p, "p", q, "q", r, "r", s, "s");
-  MPoly<3> edge_pr_to_q = 4.0 * a*c*b * (a + c - b)
+  MPoly<3> edge_pr_to_q = 4.0 * a*b*c * (a + c - b)
     + 16.0 / 81.0 * face_pqr
     -  8.0 / 27.0 * face_prs;
   diag(edge_pr_to_q, "edge_pr_to_q", p, "p", q, "q", r, "r", s, "s");
@@ -347,7 +347,7 @@ int main(int argc, char *argv[]) {
     + 16.0 / 81.0 * face_prs
     -  8.0 / 27.0 * face_pqr;
   diag(edge_pr_to_s, "edge_pr_to_s", p, "p", q, "q", r, "r", s, "s");
-  MPoly<3> edge_qr_to_p = 4.0 * b*c*a * (b + c - a)
+  MPoly<3> edge_qr_to_p = 4.0 * a*b*c * (b + c - a)
     + 16.0 / 81.0 * face_pqr
     -  8.0 / 27.0 * face_qrs;
   diag(edge_qr_to_p, "edge_qr_to_p", p, "p", q, "q", r, "r", s, "s");
@@ -355,27 +355,27 @@ int main(int argc, char *argv[]) {
     + 16.0 / 81.0 * face_qrs
     -  8.0 / 27.0 * face_pqr;
   diag(edge_qr_to_s, "edge_qr_to_s", p, "p", q, "q", r, "r", s, "s");
-  MPoly<3> edge_ps_to_q = 4.0 * a*d*b * (a + d - b)
+  MPoly<3> edge_ps_to_q = 4.0 * a*b*d * (a + d - b)
     + 16.0 / 81.0 * face_pqs
     -  8.0 / 27.0 * face_prs;
   diag(edge_ps_to_q, "edge_ps_to_q", p, "p", q, "q", r, "r", s, "s");
-  MPoly<3> edge_ps_to_r = 4.0 * a*d*c * (a + d - c)
+  MPoly<3> edge_ps_to_r = 4.0 * a*c*d * (a + d - c)
     + 16.0 / 81.0 * face_prs
     -  8.0 / 27.0 * face_pqs;
   diag(edge_ps_to_r, "edge_ps_to_r", p, "p", q, "q", r, "r", s, "s");
-  MPoly<3> edge_qs_to_p = 4.0 * b*d*a * (b + d - a)
+  MPoly<3> edge_qs_to_p = 4.0 * a*b*d * (b + d - a)
     + 16.0 / 81.0 * face_pqs
     -  8.0 / 27.0 * face_qrs;
   diag(edge_qs_to_p, "edge_qs_to_p", p, "p", q, "q", r, "r", s, "s");
-  MPoly<3> edge_qs_to_r = 4.0 * b*d*c * (b + d - c)
+  MPoly<3> edge_qs_to_r = 4.0 * b*c*d * (b + d - c)
     + 16.0 / 81.0 * face_qrs
     -  8.0 / 27.0 * face_pqs;
   diag(edge_qs_to_r, "edge_qs_to_r", p, "p", q, "q", r, "r", s, "s");
-  MPoly<3> edge_rs_to_p = 4.0 * d*c*a * (d + c - a)
+  MPoly<3> edge_rs_to_p = 4.0 * a*c*d * (c + d - a)
     + 16.0 / 81.0 * face_prs
     -  8.0 / 27.0 * face_qrs;
   diag(edge_rs_to_p, "edge_rs_to_p", p, "p", q, "q", r, "r", s, "s");
-  MPoly<3> edge_rs_to_q = 4.0 * c*d*b * (c + d - b)
+  MPoly<3> edge_rs_to_q = 4.0 * b*c*d * (c + d - b)
     + 16.0 / 81.0 * face_qrs
     -  8.0 / 27.0 * face_prs;
   diag(edge_rs_to_q, "edge_rs_to_q", p, "p", q, "q", r, "r", s, "s");
