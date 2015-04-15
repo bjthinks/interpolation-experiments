@@ -337,11 +337,6 @@ int main(int argc, char *argv[]) {
 
   mpoly_tests();
 
-  MPoly<3> x(MPoly<3>::var(0));
-  MPoly<3> y(MPoly<3>::var(1));
-  MPoly<3> z(MPoly<3>::var(2));
-  MPoly<3> k(1.0);
-
   Vector<3> p = random_vector<3>();
   Vector<3> q = random_vector<3>();
   Vector<3> r = random_vector<3>();
