@@ -176,7 +176,7 @@ MPoly<3> linear_indicator(const Vector<3> &one,
 
 bool double_equal(double a, double b) {
   double diff = a - b;
-  if (fabs(diff) < 256.0 * DBL_EPSILON)
+  if (fabs(diff) < 1e-12)
     return true;
   printf("%f %f %f\n", a, b, a-b);
   return false;
@@ -336,6 +336,9 @@ int main(int argc, char *argv[]) {
   srand(345987);
 
   mpoly_tests();
+  mpoly_diff_tests();
+
+  // Make two random tetrahedra with a shared face: (p,q,r,s) & (t,q,r,s)
 
   Vector<3> p = random_vector<3>();
   Vector<3> q = random_vector<3>();
@@ -343,10 +346,19 @@ int main(int argc, char *argv[]) {
   Vector<3> s = random_vector<3>();
   Vector<3> t = random_vector<3>();
 
+  // Define some linear functions on the tetrahedra
+
   MPoly<3> a = linear_indicator(p, q, r, s);
   MPoly<3> b = linear_indicator(q, p, r, s);
   MPoly<3> c = linear_indicator(r, p, q, s);
   MPoly<3> d = linear_indicator(s, p, q, r);
+
+  MPoly<3> e = linear_indicator(t, q, r, s);
+  MPoly<3> f = linear_indicator(q, t, r, s);
+  MPoly<3> g = linear_indicator(r, t, q, s);
+  MPoly<3> h = linear_indicator(s, t, q, r);
+
+  // Make sure they have the desired properties
 
   should(double_equal(a(p), 1.0));
   should(double_equal(a(q), 0.0));
@@ -365,41 +377,35 @@ int main(int argc, char *argv[]) {
   should(double_equal(d(r), 0.0));
   should(double_equal(d(s), 1.0));
 
-  MPoly<3> face_bcd = faceGradient(b, c, d, a);
-  MPoly<3> face_acd = faceGradient(a, c, d, b);
-  MPoly<3> face_abd = faceGradient(a, b, d, c);
-  MPoly<3> face_abc = faceGradient(a, b, c, d);
+  should(double_equal(e(t), 1.0));
+  should(double_equal(e(q), 0.0));
+  should(double_equal(e(r), 0.0));
+  should(double_equal(e(s), 0.0));
+  should(double_equal(f(t), 0.0));
+  should(double_equal(f(q), 1.0));
+  should(double_equal(f(r), 0.0));
+  should(double_equal(f(s), 0.0));
+  should(double_equal(g(t), 0.0));
+  should(double_equal(g(q), 0.0));
+  should(double_equal(g(r), 1.0));
+  should(double_equal(g(s), 0.0));
+  should(double_equal(h(t), 0.0));
+  should(double_equal(h(q), 0.0));
+  should(double_equal(h(r), 0.0));
+  should(double_equal(h(s), 1.0));
 
-  diag(face_bcd, "face_bcd", p, "p", q, "q", r, "r", s, "s");
-  diag(face_acd, "face_acd", p, "p", q, "q", r, "r", s, "s");
-  diag(face_abd, "face_abd", p, "p", q, "q", r, "r", s, "s");
-  diag(face_abc, "face_abc", p, "p", q, "q", r, "r", s, "s");
+  // Next, define a basis of functions for the first tetrahedron,
+  // and verify its properties
 
-  MPoly<3> edge_ab_to_c = edgeGradient(a, b, c, d);
-  MPoly<3> edge_ab_to_d = edgeGradient(a, b, d, c);
-  MPoly<3> edge_ac_to_b = edgeGradient(a, c, b, d);
-  MPoly<3> edge_ac_to_d = edgeGradient(a, c, d, b);
-  MPoly<3> edge_bc_to_a = edgeGradient(b, c, a, d);
-  MPoly<3> edge_bc_to_d = edgeGradient(b, c, d, a);
-  MPoly<3> edge_ad_to_b = edgeGradient(a, d, b, c);
-  MPoly<3> edge_ad_to_c = edgeGradient(a, d, c, b);
-  MPoly<3> edge_bd_to_a = edgeGradient(b, d, a, c);
-  MPoly<3> edge_bd_to_c = edgeGradient(b, d, c, a);
-  MPoly<3> edge_cd_to_a = edgeGradient(c, d, a, b);
-  MPoly<3> edge_cd_to_b = edgeGradient(c, d, b, a);
+  MPoly<3> vert_a = vertexValue(a, b, c, d);
+  MPoly<3> vert_b = vertexValue(b, a, c, d);
+  MPoly<3> vert_c = vertexValue(c, a, b, d);
+  MPoly<3> vert_d = vertexValue(d, a, b, c);
 
-  diag(edge_ab_to_c, "edge_ab_to_c", p, "p", q, "q", r, "r", s, "s");
-  diag(edge_ab_to_d, "edge_ab_to_d", p, "p", q, "q", r, "r", s, "s");
-  diag(edge_ac_to_b, "edge_ac_to_b", p, "p", q, "q", r, "r", s, "s");
-  diag(edge_ac_to_d, "edge_ac_to_d", p, "p", q, "q", r, "r", s, "s");
-  diag(edge_bc_to_a, "edge_bc_to_a", p, "p", q, "q", r, "r", s, "s");
-  diag(edge_bc_to_d, "edge_bc_to_d", p, "p", q, "q", r, "r", s, "s");
-  diag(edge_ad_to_b, "edge_ad_to_b", p, "p", q, "q", r, "r", s, "s");
-  diag(edge_ad_to_c, "edge_ad_to_c", p, "p", q, "q", r, "r", s, "s");
-  diag(edge_bd_to_a, "edge_bd_to_a", p, "p", q, "q", r, "r", s, "s");
-  diag(edge_bd_to_c, "edge_bd_to_c", p, "p", q, "q", r, "r", s, "s");
-  diag(edge_cd_to_a, "edge_cd_to_a", p, "p", q, "q", r, "r", s, "s");
-  diag(edge_cd_to_b, "edge_cd_to_b", p, "p", q, "q", r, "r", s, "s");
+  diag(vert_a, "vert_a", p, "p", q, "q", r, "r", s, "s");
+  diag(vert_b, "vert_b", p, "p", q, "q", r, "r", s, "s");
+  diag(vert_c, "vert_c", p, "p", q, "q", r, "r", s, "s");
+  diag(vert_d, "vert_d", p, "p", q, "q", r, "r", s, "s");
 
   MPoly<3> vert_a_to_b = vertexGradient(a, b, c, d);
   MPoly<3> vert_a_to_c = vertexGradient(a, c, b, d);
@@ -427,37 +433,117 @@ int main(int argc, char *argv[]) {
   diag(vert_d_to_b, "vert_d_to_b", p, "p", q, "q", r, "r", s, "s");
   diag(vert_d_to_c, "vert_d_to_c", p, "p", q, "q", r, "r", s, "s");
 
-  MPoly<3> vert_a = vertexValue(a, b, c, d);
-  MPoly<3> vert_b = vertexValue(b, a, c, d);
-  MPoly<3> vert_c = vertexValue(c, a, b, d);
-  MPoly<3> vert_d = vertexValue(d, a, b, c);
+  MPoly<3> edge_ab_to_c = edgeGradient(a, b, c, d);
+  MPoly<3> edge_ab_to_d = edgeGradient(a, b, d, c);
+  MPoly<3> edge_ac_to_b = edgeGradient(a, c, b, d);
+  MPoly<3> edge_ac_to_d = edgeGradient(a, c, d, b);
+  MPoly<3> edge_bc_to_a = edgeGradient(b, c, a, d);
+  MPoly<3> edge_bc_to_d = edgeGradient(b, c, d, a);
+  MPoly<3> edge_ad_to_b = edgeGradient(a, d, b, c);
+  MPoly<3> edge_ad_to_c = edgeGradient(a, d, c, b);
+  MPoly<3> edge_bd_to_a = edgeGradient(b, d, a, c);
+  MPoly<3> edge_bd_to_c = edgeGradient(b, d, c, a);
+  MPoly<3> edge_cd_to_a = edgeGradient(c, d, a, b);
+  MPoly<3> edge_cd_to_b = edgeGradient(c, d, b, a);
 
-  diag(vert_a, "vert_a", p, "p", q, "q", r, "r", s, "s");
-  diag(vert_b, "vert_b", p, "p", q, "q", r, "r", s, "s");
-  diag(vert_c, "vert_c", p, "p", q, "q", r, "r", s, "s");
-  diag(vert_d, "vert_d", p, "p", q, "q", r, "r", s, "s");
+  diag(edge_ab_to_c, "edge_ab_to_c", p, "p", q, "q", r, "r", s, "s");
+  diag(edge_ab_to_d, "edge_ab_to_d", p, "p", q, "q", r, "r", s, "s");
+  diag(edge_ac_to_b, "edge_ac_to_b", p, "p", q, "q", r, "r", s, "s");
+  diag(edge_ac_to_d, "edge_ac_to_d", p, "p", q, "q", r, "r", s, "s");
+  diag(edge_bc_to_a, "edge_bc_to_a", p, "p", q, "q", r, "r", s, "s");
+  diag(edge_bc_to_d, "edge_bc_to_d", p, "p", q, "q", r, "r", s, "s");
+  diag(edge_ad_to_b, "edge_ad_to_b", p, "p", q, "q", r, "r", s, "s");
+  diag(edge_ad_to_c, "edge_ad_to_c", p, "p", q, "q", r, "r", s, "s");
+  diag(edge_bd_to_a, "edge_bd_to_a", p, "p", q, "q", r, "r", s, "s");
+  diag(edge_bd_to_c, "edge_bd_to_c", p, "p", q, "q", r, "r", s, "s");
+  diag(edge_cd_to_a, "edge_cd_to_a", p, "p", q, "q", r, "r", s, "s");
+  diag(edge_cd_to_b, "edge_cd_to_b", p, "p", q, "q", r, "r", s, "s");
 
-  MPoly<3> e = linear_indicator(t, q, r, s);
-  MPoly<3> f = linear_indicator(q, t, r, s);
-  MPoly<3> g = linear_indicator(r, t, q, s);
-  MPoly<3> h = linear_indicator(s, t, q, r);
+  MPoly<3> face_bcd = faceGradient(b, c, d, a);
+  MPoly<3> face_acd = faceGradient(a, c, d, b);
+  MPoly<3> face_abd = faceGradient(a, b, d, c);
+  MPoly<3> face_abc = faceGradient(a, b, c, d);
 
-  should(double_equal(e(t), 1.0));
-  should(double_equal(e(q), 0.0));
-  should(double_equal(e(r), 0.0));
-  should(double_equal(e(s), 0.0));
-  should(double_equal(f(t), 0.0));
-  should(double_equal(f(q), 1.0));
-  should(double_equal(f(r), 0.0));
-  should(double_equal(f(s), 0.0));
-  should(double_equal(g(t), 0.0));
-  should(double_equal(g(q), 0.0));
-  should(double_equal(g(r), 1.0));
-  should(double_equal(g(s), 0.0));
-  should(double_equal(h(t), 0.0));
-  should(double_equal(h(q), 0.0));
-  should(double_equal(h(r), 0.0));
-  should(double_equal(h(s), 1.0));
+  diag(face_bcd, "face_bcd", p, "p", q, "q", r, "r", s, "s");
+  diag(face_acd, "face_acd", p, "p", q, "q", r, "r", s, "s");
+  diag(face_abd, "face_abd", p, "p", q, "q", r, "r", s, "s");
+  diag(face_abc, "face_abc", p, "p", q, "q", r, "r", s, "s");
+
+  // Now, do the same for the second tetrahedron
+
+  MPoly<3> vert_e = vertexValue(e, f, g, h);
+  MPoly<3> vert_f = vertexValue(f, e, g, h);
+  MPoly<3> vert_g = vertexValue(g, e, f, h);
+  MPoly<3> vert_h = vertexValue(h, e, f, g);
+
+  diag(vert_e, "vert_e", t, "t", q, "q", r, "r", s, "s");
+  diag(vert_f, "vert_f", t, "t", q, "q", r, "r", s, "s");
+  diag(vert_g, "vert_g", t, "t", q, "q", r, "r", s, "s");
+  diag(vert_h, "vert_h", t, "t", q, "q", r, "r", s, "s");
+
+  MPoly<3> vert_e_to_f = vertexGradient(e, f, g, h);
+  MPoly<3> vert_e_to_g = vertexGradient(e, g, f, h);
+  MPoly<3> vert_e_to_h = vertexGradient(e, h, f, g);
+  MPoly<3> vert_f_to_e = vertexGradient(f, e, g, h);
+  MPoly<3> vert_f_to_g = vertexGradient(f, g, e, h);
+  MPoly<3> vert_f_to_h = vertexGradient(f, h, e, g);
+  MPoly<3> vert_g_to_e = vertexGradient(g, e, f, h);
+  MPoly<3> vert_g_to_f = vertexGradient(g, f, e, h);
+  MPoly<3> vert_g_to_h = vertexGradient(g, h, e, f);
+  MPoly<3> vert_h_to_e = vertexGradient(h, e, f, g);
+  MPoly<3> vert_h_to_f = vertexGradient(h, f, e, g);
+  MPoly<3> vert_h_to_g = vertexGradient(h, g, e, f);
+
+  diag(vert_e_to_f, "vert_e_to_f", t, "t", q, "q", r, "r", s, "s");
+  diag(vert_e_to_g, "vert_e_to_g", t, "t", q, "q", r, "r", s, "s");
+  diag(vert_e_to_h, "vert_e_to_h", t, "t", q, "q", r, "r", s, "s");
+  diag(vert_f_to_e, "vert_f_to_e", t, "t", q, "q", r, "r", s, "s");
+  diag(vert_f_to_g, "vert_f_to_g", t, "t", q, "q", r, "r", s, "s");
+  diag(vert_f_to_h, "vert_f_to_h", t, "t", q, "q", r, "r", s, "s");
+  diag(vert_g_to_e, "vert_g_to_e", t, "t", q, "q", r, "r", s, "s");
+  diag(vert_g_to_f, "vert_g_to_f", t, "t", q, "q", r, "r", s, "s");
+  diag(vert_g_to_h, "vert_g_to_h", t, "t", q, "q", r, "r", s, "s");
+  diag(vert_h_to_e, "vert_h_to_e", t, "t", q, "q", r, "r", s, "s");
+  diag(vert_h_to_f, "vert_h_to_f", t, "t", q, "q", r, "r", s, "s");
+  diag(vert_h_to_g, "vert_h_to_g", t, "t", q, "q", r, "r", s, "s");
+
+  MPoly<3> edge_ef_to_g = edgeGradient(e, f, g, h);
+  MPoly<3> edge_ef_to_h = edgeGradient(e, f, h, g);
+  MPoly<3> edge_eg_to_f = edgeGradient(e, g, f, h);
+  MPoly<3> edge_eg_to_h = edgeGradient(e, g, h, f);
+  MPoly<3> edge_fg_to_e = edgeGradient(f, g, e, h);
+  MPoly<3> edge_fg_to_h = edgeGradient(f, g, h, e);
+  MPoly<3> edge_eh_to_f = edgeGradient(e, h, f, g);
+  MPoly<3> edge_eh_to_g = edgeGradient(e, h, g, f);
+  MPoly<3> edge_fh_to_e = edgeGradient(f, h, e, g);
+  MPoly<3> edge_fh_to_g = edgeGradient(f, h, g, e);
+  MPoly<3> edge_gh_to_e = edgeGradient(g, h, e, f);
+  MPoly<3> edge_gh_to_f = edgeGradient(g, h, f, e);
+
+  diag(edge_ef_to_g, "edge_ef_to_g", t, "t", q, "q", r, "r", s, "s");
+  diag(edge_ef_to_h, "edge_ef_to_h", t, "t", q, "q", r, "r", s, "s");
+  diag(edge_eg_to_f, "edge_eg_to_f", t, "t", q, "q", r, "r", s, "s");
+  diag(edge_eg_to_h, "edge_eg_to_h", t, "t", q, "q", r, "r", s, "s");
+  diag(edge_fg_to_e, "edge_fg_to_e", t, "t", q, "q", r, "r", s, "s");
+  diag(edge_fg_to_h, "edge_fg_to_h", t, "t", q, "q", r, "r", s, "s");
+  diag(edge_eh_to_f, "edge_eh_to_f", t, "t", q, "q", r, "r", s, "s");
+  diag(edge_eh_to_g, "edge_eh_to_g", t, "t", q, "q", r, "r", s, "s");
+  diag(edge_fh_to_e, "edge_fh_to_e", t, "t", q, "q", r, "r", s, "s");
+  diag(edge_fh_to_g, "edge_fh_to_g", t, "t", q, "q", r, "r", s, "s");
+  diag(edge_gh_to_e, "edge_gh_to_e", t, "t", q, "q", r, "r", s, "s");
+  diag(edge_gh_to_f, "edge_gh_to_f", t, "t", q, "q", r, "r", s, "s");
+
+  MPoly<3> face_fgh = faceGradient(f, g, h, e);
+  MPoly<3> face_egh = faceGradient(e, g, h, f);
+  MPoly<3> face_efh = faceGradient(e, f, h, g);
+  MPoly<3> face_efg = faceGradient(e, f, g, h);
+
+  diag(face_fgh, "face_fgh", t, "t", q, "q", r, "r", s, "s");
+  diag(face_egh, "face_egh", t, "t", q, "q", r, "r", s, "s");
+  diag(face_efh, "face_efh", t, "t", q, "q", r, "r", s, "s");
+  diag(face_efg, "face_efg", t, "t", q, "q", r, "r", s, "s");
+
+  // Make up some values for the interpolant to have at the points
 
   double p_value = random_double();
   double q_value = random_double();
@@ -465,23 +551,31 @@ int main(int argc, char *argv[]) {
   double s_value = random_double();
   double t_value = random_double();
 
-  MPoly<3> linear1 =
+  // Make interpolants that have these values
+
+  MPoly<3> values1 =
     p_value * vert_a +
     q_value * vert_b +
     r_value * vert_c +
     s_value * vert_d;
-  MPoly<3> linear2 = t_value * e + q_value * f + r_value * g + s_value * h;
+  MPoly<3> values2 =
+    t_value * vert_e +
+    q_value * vert_f +
+    r_value * vert_g +
+    s_value * vert_h;
 
-  should(double_equal(linear1(p), p_value));
-  should(double_equal(linear1(q), q_value));
-  should(double_equal(linear1(r), r_value));
-  should(double_equal(linear1(s), s_value));
-  should(double_equal(linear2(t), t_value));
-  should(double_equal(linear2(q), q_value));
-  should(double_equal(linear2(r), r_value));
-  should(double_equal(linear2(s), s_value));
+  // And check that they are correct
 
-  mpoly_diff_tests();
+  should(double_equal(values1(p), p_value));
+  should(double_equal(values1(q), q_value));
+  should(double_equal(values1(r), r_value));
+  should(double_equal(values1(s), s_value));
+  should(double_equal(values2(t), t_value));
+  should(double_equal(values2(q), q_value));
+  should(double_equal(values2(r), r_value));
+  should(double_equal(values2(s), s_value));
+
+  // Rest is un-refactored
 
   MPoly<3> eef = e * e * f;
   MPoly<3> eeg = e * e * g;
@@ -520,7 +614,7 @@ int main(int argc, char *argv[]) {
   Vector<3> s_gradient = random_vector<3>();
   Vector<3> t_gradient = random_vector<3>();
 
-  MPoly<3> cubic1 = linear1
+  MPoly<3> cubic1 = values1
     + dot_product(p_gradient, q - p) * vert_a_to_b
     + dot_product(p_gradient, r - p) * vert_a_to_c
     + dot_product(p_gradient, s - p) * vert_a_to_d
@@ -543,19 +637,19 @@ int main(int argc, char *argv[]) {
   should(vector_equal(gradient(cubic1, r), r_gradient));
   should(vector_equal(gradient(cubic1, s), s_gradient));
 
-  MPoly<3> cubic2 = linear2
-    + dot_product(t_gradient - gradient(linear2, t), q - t) * eef
-    + dot_product(t_gradient - gradient(linear2, t), r - t) * eeg
-    + dot_product(t_gradient - gradient(linear2, t), s - t) * eeh
-    + dot_product(q_gradient - gradient(linear2, q), t - q) * ffe
-    + dot_product(q_gradient - gradient(linear2, q), r - q) * ffg
-    + dot_product(q_gradient - gradient(linear2, q), s - q) * ffh
-    + dot_product(r_gradient - gradient(linear2, r), t - r) * gge
-    + dot_product(r_gradient - gradient(linear2, r), q - r) * ggf
-    + dot_product(r_gradient - gradient(linear2, r), s - r) * ggh
-    + dot_product(s_gradient - gradient(linear2, s), t - s) * hhe
-    + dot_product(s_gradient - gradient(linear2, s), q - s) * hhf
-    + dot_product(s_gradient - gradient(linear2, s), r - s) * hhg;
+  MPoly<3> cubic2 = values2
+    + dot_product(t_gradient - gradient(values2, t), q - t) * eef
+    + dot_product(t_gradient - gradient(values2, t), r - t) * eeg
+    + dot_product(t_gradient - gradient(values2, t), s - t) * eeh
+    + dot_product(q_gradient - gradient(values2, q), t - q) * ffe
+    + dot_product(q_gradient - gradient(values2, q), r - q) * ffg
+    + dot_product(q_gradient - gradient(values2, q), s - q) * ffh
+    + dot_product(r_gradient - gradient(values2, r), t - r) * gge
+    + dot_product(r_gradient - gradient(values2, r), q - r) * ggf
+    + dot_product(r_gradient - gradient(values2, r), s - r) * ggh
+    + dot_product(s_gradient - gradient(values2, s), t - s) * hhe
+    + dot_product(s_gradient - gradient(values2, s), q - s) * hhf
+    + dot_product(s_gradient - gradient(values2, s), r - s) * hhg;
 
   should(double_equal(cubic2(t), t_value));
   should(double_equal(cubic2(q), q_value));
