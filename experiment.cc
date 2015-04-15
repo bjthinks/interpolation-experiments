@@ -522,4 +522,138 @@ int main(int argc, char *argv[]) {
   should(vector_equal(gradient(egrads1, qr), gradient(egrads2, qr)));
   should(vector_equal(gradient(egrads1, qs), gradient(egrads2, qs)));
   should(vector_equal(gradient(egrads1, rs), gradient(egrads2, rs)));
+
+  // Now define the face centers, and make up gradients to approximate
+  // at each of them
+
+  // Shared face
+
+  Vector<3> qrs = (q + r + s) / 3.0;
+  Vector<3> qrs_gradient = random_vector<3>();
+
+  // Faces unique to first tetrahedron
+
+  Vector<3> pqr = (p + q + r) / 3.0;
+  Vector<3> pqs = (p + q + s) / 3.0;
+  Vector<3> prs = (p + r + s) / 3.0;
+
+  Vector<3> pqr_gradient = random_vector<3>();
+  Vector<3> pqs_gradient = random_vector<3>();
+  Vector<3> prs_gradient = random_vector<3>();
+
+  // Faces unique to second tetrahedron
+
+  Vector<3> tqr = (t + q + r) / 3.0;
+  Vector<3> tqs = (t + q + s) / 3.0;
+  Vector<3> trs = (t + r + s) / 3.0;
+
+  Vector<3> tqr_gradient = random_vector<3>();
+  Vector<3> tqs_gradient = random_vector<3>();
+  Vector<3> trs_gradient = random_vector<3>();
+#if 0
+  // Make interpolants that have these vertex gradients
+
+  MPoly<3> egrads1 = vgrads1
+    + dot_product(pq_gradient - gradient(vgrads1, pq),
+                  perp(r - pq, p - q)) * edgeGradient(a, b, c)
+    + dot_product(pq_gradient - gradient(vgrads1, pq),
+                  perp(s - pq, p - q)) * edgeGradient(a, b, d)
+    + dot_product(pr_gradient - gradient(vgrads1, pr),
+                  perp(q - pr, p - r)) * edgeGradient(a, c, b)
+    + dot_product(pr_gradient - gradient(vgrads1, pr),
+                  perp(s - pr, p - r)) * edgeGradient(a, c, d)
+    + dot_product(ps_gradient - gradient(vgrads1, ps),
+                  perp(q - ps, p - s)) * edgeGradient(a, d, b)
+    + dot_product(ps_gradient - gradient(vgrads1, ps),
+                  perp(r - ps, p - s)) * edgeGradient(a, d, c)
+    + dot_product(qr_gradient - gradient(vgrads1, qr),
+                  perp(p - qr, q - r)) * edgeGradient(b, c, a)
+    + dot_product(qr_gradient - gradient(vgrads1, qr),
+                  perp(s - qr, q - r)) * edgeGradient(b, c, d)
+    + dot_product(qs_gradient - gradient(vgrads1, qs),
+                  perp(p - qs, q - s)) * edgeGradient(b, d, a)
+    + dot_product(qs_gradient - gradient(vgrads1, qs),
+                  perp(r - qs, q - s)) * edgeGradient(b, d, c)
+    + dot_product(rs_gradient - gradient(vgrads1, rs),
+                  perp(p - rs, r - s)) * edgeGradient(c, d, a)
+    + dot_product(rs_gradient - gradient(vgrads1, rs),
+                  perp(q - rs, r - s)) * edgeGradient(c, d, b);
+
+  MPoly<3> egrads2 = vgrads2
+    + dot_product(tq_gradient - gradient(vgrads2, tq),
+                  perp(r - tq, t - q)) * edgeGradient(e, f, g)
+    + dot_product(tq_gradient - gradient(vgrads2, tq),
+                  perp(s - tq, t - q)) * edgeGradient(e, f, h)
+    + dot_product(tr_gradient - gradient(vgrads2, tr),
+                  perp(q - tr, t - r)) * edgeGradient(e, g, f)
+    + dot_product(tr_gradient - gradient(vgrads2, tr),
+                  perp(s - tr, t - r)) * edgeGradient(e, g, h)
+    + dot_product(ts_gradient - gradient(vgrads2, ts),
+                  perp(q - ts, t - s)) * edgeGradient(e, h, f)
+    + dot_product(ts_gradient - gradient(vgrads2, ts),
+                  perp(r - ts, t - s)) * edgeGradient(e, h, g)
+    + dot_product(qr_gradient - gradient(vgrads2, qr),
+                  perp(t - qr, q - r)) * edgeGradient(f, g, e)
+    + dot_product(qr_gradient - gradient(vgrads2, qr),
+                  perp(s - qr, q - r)) * edgeGradient(f, g, h)
+    + dot_product(qs_gradient - gradient(vgrads2, qs),
+                  perp(t - qs, q - s)) * edgeGradient(f, h, e)
+    + dot_product(qs_gradient - gradient(vgrads2, qs),
+                  perp(r - qs, q - s)) * edgeGradient(f, h, g)
+    + dot_product(rs_gradient - gradient(vgrads2, rs),
+                  perp(t - rs, r - s)) * edgeGradient(g, h, e)
+    + dot_product(rs_gradient - gradient(vgrads2, rs),
+                  perp(q - rs, r - s)) * edgeGradient(g, h, f);
+
+  // And check that they are correct
+
+  should(double_equal(egrads1(p), p_value));
+  should(double_equal(egrads1(q), q_value));
+  should(double_equal(egrads1(r), r_value));
+  should(double_equal(egrads1(s), s_value));
+  should(vector_equal(gradient(egrads1, p), p_gradient));
+  should(vector_equal(gradient(egrads1, q), q_gradient));
+  should(vector_equal(gradient(egrads1, r), r_gradient));
+  should(vector_equal(gradient(egrads1, s), s_gradient));
+  should(vector_equal(perp(pq_gradient, p - q),
+                      perp(gradient(egrads1, pq), p - q)));
+  should(vector_equal(perp(pr_gradient, p - r),
+                      perp(gradient(egrads1, pr), p - r)));
+  should(vector_equal(perp(ps_gradient, p - s),
+                      perp(gradient(egrads1, ps), p - s)));
+  should(vector_equal(perp(qr_gradient, q - r),
+                      perp(gradient(egrads1, qr), q - r)));
+  should(vector_equal(perp(qs_gradient, q - s),
+                      perp(gradient(egrads1, qs), q - s)));
+  should(vector_equal(perp(rs_gradient, r - s),
+                      perp(gradient(egrads1, rs), r - s)));
+
+  should(double_equal(egrads2(t), t_value));
+  should(double_equal(egrads2(q), q_value));
+  should(double_equal(egrads2(r), r_value));
+  should(double_equal(egrads2(s), s_value));
+  should(vector_equal(gradient(egrads2, t), t_gradient));
+  should(vector_equal(gradient(egrads2, q), q_gradient));
+  should(vector_equal(gradient(egrads2, r), r_gradient));
+  should(vector_equal(gradient(egrads2, s), s_gradient));
+  should(vector_equal(perp(tq_gradient, t - q),
+                      perp(gradient(egrads2, tq), t - q)));
+  should(vector_equal(perp(tr_gradient, t - r),
+                      perp(gradient(egrads2, tr), t - r)));
+  should(vector_equal(perp(ts_gradient, t - s),
+                      perp(gradient(egrads2, ts), t - s)));
+  should(vector_equal(perp(qr_gradient, q - r),
+                      perp(gradient(egrads2, qr), q - r)));
+  should(vector_equal(perp(qs_gradient, q - s),
+                      perp(gradient(egrads2, qs), q - s)));
+  should(vector_equal(perp(rs_gradient, r - s),
+                      perp(gradient(egrads2, rs), r - s)));
+
+  // In particular, edge gradients of the two interpolants
+  // should match exactly.
+
+  should(vector_equal(gradient(egrads1, qr), gradient(egrads2, qr)));
+  should(vector_equal(gradient(egrads1, qs), gradient(egrads2, qs)));
+  should(vector_equal(gradient(egrads1, rs), gradient(egrads2, rs)));
+#endif
 }
