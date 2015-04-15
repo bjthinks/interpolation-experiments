@@ -203,12 +203,12 @@ static Vector<N> random_on_segment(const Vector<N> &x, const Vector<N> &y) {
   double t = double(rand()) / double(RAND_MAX);
   return t * x + (1.0 - t) * y;
 }
-#if 0
+
 static MPoly<3> faceGradient(MPoly<3> &f1, MPoly<3> &f2, MPoly<3> &f3,
                              MPoly<3> &to) {
   return 27.0 * f1 * f2 * f3 * to * (1.0 - 3.0 * to);
 }
-#endif
+
 static MPoly<3> edgeGradient(MPoly<3> &e1, MPoly<3> &e2, MPoly<3> &to) {
   return 4.0 * e1 * e2 * to * (e1 + e2 - to);
 }
@@ -553,9 +553,10 @@ int main(int argc, char *argv[]) {
 
   // Make interpolants that approximate these face gradients
 
-  MPoly<3> fgrads1 = egrads1;
-  // + dot_product(pq_gradient - gradient(vgrads1, pq),
-  // perp(r - pq, p - q)) * edgeGradient(a, b, c);
+  MPoly<3> fgrads1 = egrads1
+    + dot_product(pqr_gradient - gradient(egrads1, pqr),
+                  project(s - pqr, cross_product(p - r, q - r))
+                  ) * faceGradient(a, b, c, d);
 
   MPoly<3> fgrads2 = egrads2;
 
@@ -581,6 +582,9 @@ int main(int argc, char *argv[]) {
                       perp(gradient(fgrads1, qs), q - s)));
   should(vector_equal(perp(rs_gradient, r - s),
                       perp(gradient(fgrads1, rs), r - s)));
+  should(vector_equal(project(pqr_gradient, cross_product(p - r, q - r)),
+                      project(gradient(fgrads1, pqr),
+                              cross_product(p - r, q - r))));
 
   should(double_equal(fgrads2(t), t_value));
   should(double_equal(fgrads2(q), q_value));
