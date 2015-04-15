@@ -4,6 +4,7 @@
 #include <cfloat>
 
 #include "mpoly.hh"
+#include "tetrahedron.hh"
 
 using namespace std;
 
