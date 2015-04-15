@@ -639,13 +639,13 @@ int main(int argc, char *argv[]) {
   // Shared edges
 
   Vector<3> qr = (q + r) / 2.0;
-  Vector<3> qs = (q + s) / 2.0;
-  Vector<3> rs = (r + s) / 2.0;
+  //Vector<3> qs = (q + s) / 2.0;
+  //Vector<3> rs = (r + s) / 2.0;
 
   Vector<3> qr_gradient = random_vector<3>();
-  Vector<3> qs_gradient = random_vector<3>();
-  Vector<3> rs_gradient = random_vector<3>();
-
+  //Vector<3> qs_gradient = random_vector<3>();
+  //Vector<3> rs_gradient = random_vector<3>();
+#if 0
   // Edges unique to first tetrahedron
 
   Vector<3> pq = (p + q) / 2.0;
@@ -665,7 +665,7 @@ int main(int argc, char *argv[]) {
   Vector<3> tq_gradient = random_vector<3>();
   Vector<3> tr_gradient = random_vector<3>();
   Vector<3> ts_gradient = random_vector<3>();
-
+#endif
   // And make interpolants that have these vertex gradients
 
   MPoly<3> egrads1 = vgrads1
