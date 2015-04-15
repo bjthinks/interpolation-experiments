@@ -365,15 +365,15 @@ int main(int argc, char *argv[]) {
   should(double_equal(d(r), 0.0));
   should(double_equal(d(s), 1.0));
 
-  MPoly<3> face_qrs = faceGradient(b, c, d, a);
-  MPoly<3> face_prs = faceGradient(a, c, d, b);
-  MPoly<3> face_pqs = faceGradient(a, b, d, c);
-  MPoly<3> face_pqr = faceGradient(a, b, c, d);
+  MPoly<3> face_bcd = faceGradient(b, c, d, a);
+  MPoly<3> face_acd = faceGradient(a, c, d, b);
+  MPoly<3> face_abd = faceGradient(a, b, d, c);
+  MPoly<3> face_abc = faceGradient(a, b, c, d);
 
-  diag(face_qrs, "face_qrs", p, "p", q, "q", r, "r", s, "s");
-  diag(face_prs, "face_prs", p, "p", q, "q", r, "r", s, "s");
-  diag(face_pqs, "face_pqs", p, "p", q, "q", r, "r", s, "s");
-  diag(face_pqr, "face_pqr", p, "p", q, "q", r, "r", s, "s");
+  diag(face_bcd, "face_bcd", p, "p", q, "q", r, "r", s, "s");
+  diag(face_acd, "face_acd", p, "p", q, "q", r, "r", s, "s");
+  diag(face_abd, "face_abd", p, "p", q, "q", r, "r", s, "s");
+  diag(face_abc, "face_abc", p, "p", q, "q", r, "r", s, "s");
 
   MPoly<3> edge_pq_to_r = edgeGradient(a, b, c, d);
   MPoly<3> edge_pq_to_s = edgeGradient(a, b, d, c);
