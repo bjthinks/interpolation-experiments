@@ -543,7 +543,7 @@ int main(int argc, char *argv[]) {
   diag(face_efh, "face_efh", t, "t", q, "q", r, "r", s, "s");
   diag(face_efg, "face_efg", t, "t", q, "q", r, "r", s, "s");
 
-  // Make up some values for the interpolant to have at the points
+  // Make up some values for the interpolant to have at the vertices
 
   double p_value = random_double();
   double q_value = random_double();
@@ -575,38 +575,7 @@ int main(int argc, char *argv[]) {
   should(double_equal(values2(r), r_value));
   should(double_equal(values2(s), s_value));
 
-  // Rest is un-refactored
-
-  MPoly<3> eef = e * e * f;
-  MPoly<3> eeg = e * e * g;
-  MPoly<3> eeh = e * e * h;
-  MPoly<3> ffe = f * f * e;
-  MPoly<3> ffg = f * f * g;
-  MPoly<3> ffh = f * f * h;
-  MPoly<3> gge = g * g * e;
-  MPoly<3> ggf = g * g * f;
-  MPoly<3> ggh = g * g * h;
-  MPoly<3> hhe = h * h * e;
-  MPoly<3> hhf = h * h * f;
-  MPoly<3> hhg = h * h * g;
-
-  test_zero_values(eef, t, q, r, s);
-  test_zero_values(eeg, t, q, r, s);
-  test_zero_values(eeh, t, q, r, s);
-  test_zero_values(ffe, t, q, r, s);
-  test_zero_values(ffg, t, q, r, s);
-  test_zero_values(ffh, t, q, r, s);
-  test_zero_values(gge, t, q, r, s);
-  test_zero_values(ggf, t, q, r, s);
-  test_zero_values(ggh, t, q, r, s);
-  test_zero_values(hhe, t, q, r, s);
-  test_zero_values(hhf, t, q, r, s);
-  test_zero_values(hhg, t, q, r, s);
-
-  test_cubic_gradients(t, eef, eeg, eeh, q, r, s);
-  test_cubic_gradients(q, ffe, ffg, ffh, t, r, s);
-  test_cubic_gradients(r, gge, ggf, ggh, t, q, s);
-  test_cubic_gradients(s, hhe, hhf, hhg, t, q, r);
+  // Now make up some gradients at each vertex
 
   Vector<3> p_gradient = random_vector<3>();
   Vector<3> q_gradient = random_vector<3>();
@@ -614,7 +583,9 @@ int main(int argc, char *argv[]) {
   Vector<3> s_gradient = random_vector<3>();
   Vector<3> t_gradient = random_vector<3>();
 
-  MPoly<3> cubic1 = values1
+  // And make interpolants that have these vertex gradients
+
+  MPoly<3> vgrads1 = values1
     + dot_product(p_gradient, q - p) * vert_a_to_b
     + dot_product(p_gradient, r - p) * vert_a_to_c
     + dot_product(p_gradient, s - p) * vert_a_to_d
@@ -628,37 +599,39 @@ int main(int argc, char *argv[]) {
     + dot_product(s_gradient, q - s) * vert_d_to_b
     + dot_product(s_gradient, r - s) * vert_d_to_c;
 
-  should(double_equal(cubic1(p), p_value));
-  should(double_equal(cubic1(q), q_value));
-  should(double_equal(cubic1(r), r_value));
-  should(double_equal(cubic1(s), s_value));
-  should(vector_equal(gradient(cubic1, p), p_gradient));
-  should(vector_equal(gradient(cubic1, q), q_gradient));
-  should(vector_equal(gradient(cubic1, r), r_gradient));
-  should(vector_equal(gradient(cubic1, s), s_gradient));
+  MPoly<3> vgrads2 = values2
+    + dot_product(t_gradient, q - t) * vert_e_to_f
+    + dot_product(t_gradient, r - t) * vert_e_to_g
+    + dot_product(t_gradient, s - t) * vert_e_to_h
+    + dot_product(q_gradient, t - q) * vert_f_to_e
+    + dot_product(q_gradient, r - q) * vert_f_to_g
+    + dot_product(q_gradient, s - q) * vert_f_to_h
+    + dot_product(r_gradient, t - r) * vert_g_to_e
+    + dot_product(r_gradient, q - r) * vert_g_to_f
+    + dot_product(r_gradient, s - r) * vert_g_to_h
+    + dot_product(s_gradient, t - s) * vert_h_to_e
+    + dot_product(s_gradient, q - s) * vert_h_to_f
+    + dot_product(s_gradient, r - s) * vert_h_to_g;
 
-  MPoly<3> cubic2 = values2
-    + dot_product(t_gradient - gradient(values2, t), q - t) * eef
-    + dot_product(t_gradient - gradient(values2, t), r - t) * eeg
-    + dot_product(t_gradient - gradient(values2, t), s - t) * eeh
-    + dot_product(q_gradient - gradient(values2, q), t - q) * ffe
-    + dot_product(q_gradient - gradient(values2, q), r - q) * ffg
-    + dot_product(q_gradient - gradient(values2, q), s - q) * ffh
-    + dot_product(r_gradient - gradient(values2, r), t - r) * gge
-    + dot_product(r_gradient - gradient(values2, r), q - r) * ggf
-    + dot_product(r_gradient - gradient(values2, r), s - r) * ggh
-    + dot_product(s_gradient - gradient(values2, s), t - s) * hhe
-    + dot_product(s_gradient - gradient(values2, s), q - s) * hhf
-    + dot_product(s_gradient - gradient(values2, s), r - s) * hhg;
+  // And check that they are correct
 
-  should(double_equal(cubic2(t), t_value));
-  should(double_equal(cubic2(q), q_value));
-  should(double_equal(cubic2(r), r_value));
-  should(double_equal(cubic2(s), s_value));
-  should(vector_equal(gradient(cubic2, t), t_gradient));
-  should(vector_equal(gradient(cubic2, q), q_gradient));
-  should(vector_equal(gradient(cubic2, r), r_gradient));
-  should(vector_equal(gradient(cubic2, s), s_gradient));
+  should(double_equal(vgrads1(p), p_value));
+  should(double_equal(vgrads1(q), q_value));
+  should(double_equal(vgrads1(r), r_value));
+  should(double_equal(vgrads1(s), s_value));
+  should(vector_equal(gradient(vgrads1, p), p_gradient));
+  should(vector_equal(gradient(vgrads1, q), q_gradient));
+  should(vector_equal(gradient(vgrads1, r), r_gradient));
+  should(vector_equal(gradient(vgrads1, s), s_gradient));
+
+  should(double_equal(vgrads2(t), t_value));
+  should(double_equal(vgrads2(q), q_value));
+  should(double_equal(vgrads2(r), r_value));
+  should(double_equal(vgrads2(s), s_value));
+  should(vector_equal(gradient(vgrads2, t), t_gradient));
+  should(vector_equal(gradient(vgrads2, q), q_gradient));
+  should(vector_equal(gradient(vgrads2, r), r_gradient));
+  should(vector_equal(gradient(vgrads2, s), s_gradient));
 
 #if 0
   Vector<3> qr = (q + r) / 2.0;
@@ -672,7 +645,7 @@ int main(int argc, char *argv[]) {
   Vector<3> ts = (t + s) / 2.0;
 #endif
 
-  MPoly<3> quartic1 = cubic1
+  MPoly<3> quartic1 = vgrads1
     + 0.0;
 
   should(double_equal(quartic1(p), p_value));
@@ -684,7 +657,7 @@ int main(int argc, char *argv[]) {
   should(vector_equal(gradient(quartic1, r), r_gradient));
   should(vector_equal(gradient(quartic1, s), s_gradient));
 
-  MPoly<3> quartic2 = cubic2
+  MPoly<3> quartic2 = vgrads2
     + 0.0;
 
   should(double_equal(quartic2(t), t_value));
