@@ -391,12 +391,12 @@ int main(int argc, char *argv[]) {
   // Shared edges
 
   Vector<3> qr = (q + r) / 2.0;
-  //Vector<3> qs = (q + s) / 2.0;
-  //Vector<3> rs = (r + s) / 2.0;
+  Vector<3> qs = (q + s) / 2.0;
+  Vector<3> rs = (r + s) / 2.0;
 
   Vector<3> qr_gradient = random_vector<3>();
-  //Vector<3> qs_gradient = random_vector<3>();
-  //Vector<3> rs_gradient = random_vector<3>();
+  Vector<3> qs_gradient = random_vector<3>();
+  Vector<3> rs_gradient = random_vector<3>();
 #if 0
   // Edges unique to first tetrahedron
 
@@ -424,7 +424,15 @@ int main(int argc, char *argv[]) {
     + dot_product(qr_gradient - gradient(vgrads1, qr),
                   perp(p - qr, q - r)) * edgeGradient(b, c, a)
     + dot_product(qr_gradient - gradient(vgrads1, qr),
-                  perp(s - qr, q - r)) * edgeGradient(b, c, d);
+                  perp(s - qr, q - r)) * edgeGradient(b, c, d)
+    + dot_product(qs_gradient - gradient(vgrads1, qs),
+                  perp(p - qs, q - s)) * edgeGradient(b, d, a)
+    + dot_product(qs_gradient - gradient(vgrads1, qs),
+                  perp(r - qs, q - s)) * edgeGradient(b, d, c)
+    + dot_product(rs_gradient - gradient(vgrads1, rs),
+                  perp(p - rs, r - s)) * edgeGradient(c, d, a)
+    + dot_product(rs_gradient - gradient(vgrads1, rs),
+                  perp(q - rs, r - s)) * edgeGradient(c, d, b);
 
   should(double_equal(egrads1(p), p_value));
   should(double_equal(egrads1(q), q_value));
@@ -439,7 +447,15 @@ int main(int argc, char *argv[]) {
     + dot_product(qr_gradient - gradient(vgrads2, qr),
                   perp(t - qr, q - r)) * edgeGradient(f, g, e)
     + dot_product(qr_gradient - gradient(vgrads2, qr),
-                  perp(s - qr, q - r)) * edgeGradient(f, g, h);
+                  perp(s - qr, q - r)) * edgeGradient(f, g, h)
+    + dot_product(qs_gradient - gradient(vgrads2, qs),
+                  perp(t - qs, q - s)) * edgeGradient(f, h, e)
+    + dot_product(qs_gradient - gradient(vgrads2, qs),
+                  perp(r - qs, q - s)) * edgeGradient(f, h, g)
+    + dot_product(rs_gradient - gradient(vgrads2, rs),
+                  perp(t - rs, r - s)) * edgeGradient(g, h, e)
+    + dot_product(rs_gradient - gradient(vgrads2, rs),
+                  perp(q - rs, r - s)) * edgeGradient(g, h, f);
 
   should(double_equal(egrads2(t), t_value));
   should(double_equal(egrads2(q), q_value));
@@ -451,6 +467,6 @@ int main(int argc, char *argv[]) {
   should(vector_equal(gradient(egrads2, s), s_gradient));
 
   should(vector_equal(gradient(egrads1, qr), gradient(egrads2, qr)));
-  //should(vector_equal(gradient(egrads1, qs), gradient(egrads2, qs)));
-  //should(vector_equal(gradient(egrads1, rs), gradient(egrads2, rs)));
+  should(vector_equal(gradient(egrads1, qs), gradient(egrads2, qs)));
+  should(vector_equal(gradient(egrads1, rs), gradient(egrads2, rs)));
 }
