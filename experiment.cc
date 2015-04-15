@@ -418,7 +418,7 @@ int main(int argc, char *argv[]) {
   Vector<3> tr_gradient = random_vector<3>();
   Vector<3> ts_gradient = random_vector<3>();
 
-  // Make interpolants that have these vertex gradients
+  // Make interpolants that approximate these edge gradients
 
   MPoly<3> egrads1 = vgrads1
     + dot_product(pq_gradient - gradient(vgrads1, pq),
@@ -550,9 +550,9 @@ int main(int argc, char *argv[]) {
   Vector<3> tqr_gradient = random_vector<3>();
   Vector<3> tqs_gradient = random_vector<3>();
   Vector<3> trs_gradient = random_vector<3>();
-#if 0
-  // Make interpolants that have these vertex gradients
 
+  // Make interpolants that approximate these face gradients
+#if 0
   MPoly<3> egrads1 = vgrads1
     + dot_product(pq_gradient - gradient(vgrads1, pq),
                   perp(r - pq, p - q)) * edgeGradient(a, b, c)
