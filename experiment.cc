@@ -442,6 +442,12 @@ int main(int argc, char *argv[]) {
   should(vector_equal(gradient(egrads1, q), q_gradient));
   should(vector_equal(gradient(egrads1, r), r_gradient));
   should(vector_equal(gradient(egrads1, s), s_gradient));
+  should(vector_equal(perp(qr_gradient, q - r),
+                      perp(gradient(egrads1, qr), q - r)));
+  should(vector_equal(perp(qs_gradient, q - s),
+                      perp(gradient(egrads1, qs), q - s)));
+  should(vector_equal(perp(rs_gradient, r - s),
+                      perp(gradient(egrads1, rs), r - s)));
 
   MPoly<3> egrads2 = vgrads2
     + dot_product(qr_gradient - gradient(vgrads2, qr),
@@ -465,6 +471,12 @@ int main(int argc, char *argv[]) {
   should(vector_equal(gradient(egrads2, q), q_gradient));
   should(vector_equal(gradient(egrads2, r), r_gradient));
   should(vector_equal(gradient(egrads2, s), s_gradient));
+  should(vector_equal(perp(qr_gradient, q - r),
+                      perp(gradient(egrads2, qr), q - r)));
+  should(vector_equal(perp(qs_gradient, q - s),
+                      perp(gradient(egrads2, qs), q - s)));
+  should(vector_equal(perp(rs_gradient, r - s),
+                      perp(gradient(egrads2, rs), r - s)));
 
   should(vector_equal(gradient(egrads1, qr), gradient(egrads2, qr)));
   should(vector_equal(gradient(egrads1, qs), gradient(egrads2, qs)));
