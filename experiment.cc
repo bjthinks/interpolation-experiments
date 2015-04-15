@@ -649,9 +649,13 @@ int main(int argc, char *argv[]) {
                       project(gradient(fgrads2, qrs),
                               cross_product(q - s, r - s))));
 
-  // Edge gradients of the two interpolants should still match exactly.
+  // Edge gradients of the two interpolants should still match exactly,
 
   should(vector_equal(gradient(fgrads1, qr), gradient(fgrads2, qr)));
   should(vector_equal(gradient(fgrads1, qs), gradient(fgrads2, qs)));
   should(vector_equal(gradient(fgrads1, rs), gradient(fgrads2, rs)));
+
+  // And so should the face gradient
+
+  should(vector_equal(gradient(fgrads1, qrs), gradient(fgrads2, qrs)));
 }
