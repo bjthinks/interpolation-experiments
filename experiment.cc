@@ -189,7 +189,7 @@ static bool vector_equal(const Vector<N> &x, const Vector<N> &y) {
       return false;
   return true;
 }
-#if 0
+
 static Vector<3> project(const Vector<3> &vec, const Vector<3> &onto) {
   return dot_product(vec, onto) / dot_product(onto, onto) * onto;
 }
@@ -197,7 +197,7 @@ static Vector<3> project(const Vector<3> &vec, const Vector<3> &onto) {
 static Vector<3> perp(const Vector<3> &vec, const Vector<3> &away) {
   return vec - project(vec, away);
 }
-#endif
+
 template <int N>
 static Vector<N> random_on_segment(const Vector<N> &x, const Vector<N> &y) {
   double t = double(rand()) / double(RAND_MAX);
@@ -208,11 +208,11 @@ static MPoly<3> faceGradient(MPoly<3> &f1, MPoly<3> &f2, MPoly<3> &f3,
                              MPoly<3> &to) {
   return 27.0 * f1 * f2 * f3 * to * (1.0 - 3.0 * to);
 }
-
+#endif
 static MPoly<3> edgeGradient(MPoly<3> &e1, MPoly<3> &e2, MPoly<3> &to) {
   return 4.0 * e1 * e2 * to * (e1 + e2 - to);
 }
-#endif
+
 static MPoly<3> vertexGradient(MPoly<3> &v, MPoly<3> &to) {
   return v * v * to;
 }
@@ -384,7 +384,7 @@ int main(int argc, char *argv[]) {
   should(vector_equal(gradient(vgrads2, q), q_gradient));
   should(vector_equal(gradient(vgrads2, r), r_gradient));
   should(vector_equal(gradient(vgrads2, s), s_gradient));
-#if 0
+
   // Now define the edge midpoints, and make up gradients to approximate
   // at each of them
 
@@ -421,8 +421,10 @@ int main(int argc, char *argv[]) {
   // And make interpolants that have these vertex gradients
 
   MPoly<3> egrads1 = vgrads1
-    + dot_product(qr_gradient, p - qr) * edge_bc_to_a
-    + dot_product(qr_gradient, s - qr) * edge_bc_to_d;
+    + dot_product(qr_gradient - gradient(vgrads1, qr),
+                  perp(p - qr, q - r)) * edgeGradient(b, c, a)
+    + dot_product(qr_gradient - gradient(vgrads1, qr),
+                  perp(s - qr, q - r)) * edgeGradient(b, c, d);
 
   should(double_equal(egrads1(p), p_value));
   should(double_equal(egrads1(q), q_value));
@@ -434,8 +436,10 @@ int main(int argc, char *argv[]) {
   should(vector_equal(gradient(egrads1, s), s_gradient));
 
   MPoly<3> egrads2 = vgrads2
-    + dot_product(qr_gradient, t - qr) * edge_fg_to_e
-    + dot_product(qr_gradient, s - qr) * edge_fg_to_h;
+    + dot_product(qr_gradient - gradient(vgrads2, qr),
+                  perp(t - qr, q - r)) * edgeGradient(f, g, e)
+    + dot_product(qr_gradient - gradient(vgrads2, qr),
+                  perp(s - qr, q - r)) * edgeGradient(f, g, h);
 
   should(double_equal(egrads2(t), t_value));
   should(double_equal(egrads2(q), q_value));
@@ -449,5 +453,4 @@ int main(int argc, char *argv[]) {
   should(vector_equal(gradient(egrads1, qr), gradient(egrads2, qr)));
   //should(vector_equal(gradient(egrads1, qs), gradient(egrads2, qs)));
   //should(vector_equal(gradient(egrads1, rs), gradient(egrads2, rs)));
-#endif
 }
