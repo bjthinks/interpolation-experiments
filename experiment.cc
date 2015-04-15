@@ -401,41 +401,41 @@ int main(int argc, char *argv[]) {
   diag(edge_cd_to_a, "edge_cd_to_a", p, "p", q, "q", r, "r", s, "s");
   diag(edge_cd_to_b, "edge_cd_to_b", p, "p", q, "q", r, "r", s, "s");
 
-  MPoly<3> vert_p_to_q = vertexGradient(a, b, c, d);
-  MPoly<3> vert_p_to_r = vertexGradient(a, c, b, d);
-  MPoly<3> vert_p_to_s = vertexGradient(a, d, b, c);
-  MPoly<3> vert_q_to_p = vertexGradient(b, a, c, d);
-  MPoly<3> vert_q_to_r = vertexGradient(b, c, a, d);
-  MPoly<3> vert_q_to_s = vertexGradient(b, d, a, c);
-  MPoly<3> vert_r_to_p = vertexGradient(c, a, b, d);
-  MPoly<3> vert_r_to_q = vertexGradient(c, b, a, d);
-  MPoly<3> vert_r_to_s = vertexGradient(c, d, a, b);
-  MPoly<3> vert_s_to_p = vertexGradient(d, a, b, c);
-  MPoly<3> vert_s_to_q = vertexGradient(d, b, a, c);
-  MPoly<3> vert_s_to_r = vertexGradient(d, c, a, b);
+  MPoly<3> vert_a_to_b = vertexGradient(a, b, c, d);
+  MPoly<3> vert_a_to_c = vertexGradient(a, c, b, d);
+  MPoly<3> vert_a_to_d = vertexGradient(a, d, b, c);
+  MPoly<3> vert_b_to_a = vertexGradient(b, a, c, d);
+  MPoly<3> vert_b_to_c = vertexGradient(b, c, a, d);
+  MPoly<3> vert_b_to_d = vertexGradient(b, d, a, c);
+  MPoly<3> vert_c_to_a = vertexGradient(c, a, b, d);
+  MPoly<3> vert_c_to_b = vertexGradient(c, b, a, d);
+  MPoly<3> vert_c_to_d = vertexGradient(c, d, a, b);
+  MPoly<3> vert_d_to_a = vertexGradient(d, a, b, c);
+  MPoly<3> vert_d_to_b = vertexGradient(d, b, a, c);
+  MPoly<3> vert_d_to_c = vertexGradient(d, c, a, b);
 
-  diag(vert_p_to_q, "vert_p_to_q", p, "p", q, "q", r, "r", s, "s");
-  diag(vert_p_to_r, "vert_p_to_r", p, "p", q, "q", r, "r", s, "s");
-  diag(vert_p_to_s, "vert_p_to_s", p, "p", q, "q", r, "r", s, "s");
-  diag(vert_q_to_p, "vert_q_to_p", p, "p", q, "q", r, "r", s, "s");
-  diag(vert_q_to_r, "vert_q_to_r", p, "p", q, "q", r, "r", s, "s");
-  diag(vert_q_to_s, "vert_q_to_s", p, "p", q, "q", r, "r", s, "s");
-  diag(vert_r_to_p, "vert_r_to_p", p, "p", q, "q", r, "r", s, "s");
-  diag(vert_r_to_q, "vert_r_to_q", p, "p", q, "q", r, "r", s, "s");
-  diag(vert_r_to_s, "vert_r_to_s", p, "p", q, "q", r, "r", s, "s");
-  diag(vert_s_to_p, "vert_s_to_p", p, "p", q, "q", r, "r", s, "s");
-  diag(vert_s_to_q, "vert_s_to_q", p, "p", q, "q", r, "r", s, "s");
-  diag(vert_s_to_r, "vert_s_to_r", p, "p", q, "q", r, "r", s, "s");
+  diag(vert_a_to_b, "vert_a_to_b", p, "p", q, "q", r, "r", s, "s");
+  diag(vert_a_to_c, "vert_a_to_c", p, "p", q, "q", r, "r", s, "s");
+  diag(vert_a_to_d, "vert_a_to_d", p, "p", q, "q", r, "r", s, "s");
+  diag(vert_b_to_a, "vert_b_to_a", p, "p", q, "q", r, "r", s, "s");
+  diag(vert_b_to_c, "vert_b_to_c", p, "p", q, "q", r, "r", s, "s");
+  diag(vert_b_to_d, "vert_b_to_d", p, "p", q, "q", r, "r", s, "s");
+  diag(vert_c_to_a, "vert_c_to_a", p, "p", q, "q", r, "r", s, "s");
+  diag(vert_c_to_b, "vert_c_to_b", p, "p", q, "q", r, "r", s, "s");
+  diag(vert_c_to_d, "vert_c_to_d", p, "p", q, "q", r, "r", s, "s");
+  diag(vert_d_to_a, "vert_d_to_a", p, "p", q, "q", r, "r", s, "s");
+  diag(vert_d_to_b, "vert_d_to_b", p, "p", q, "q", r, "r", s, "s");
+  diag(vert_d_to_c, "vert_d_to_c", p, "p", q, "q", r, "r", s, "s");
 
-  MPoly<3> vert_p = vertexValue(a, b, c, d);
-  MPoly<3> vert_q = vertexValue(b, a, c, d);
-  MPoly<3> vert_r = vertexValue(c, a, b, d);
-  MPoly<3> vert_s = vertexValue(d, a, b, c);
+  MPoly<3> vert_a = vertexValue(a, b, c, d);
+  MPoly<3> vert_b = vertexValue(b, a, c, d);
+  MPoly<3> vert_c = vertexValue(c, a, b, d);
+  MPoly<3> vert_d = vertexValue(d, a, b, c);
 
-  diag(vert_p, "vert_p", p, "p", q, "q", r, "r", s, "s");
-  diag(vert_q, "vert_q", p, "p", q, "q", r, "r", s, "s");
-  diag(vert_r, "vert_r", p, "p", q, "q", r, "r", s, "s");
-  diag(vert_s, "vert_s", p, "p", q, "q", r, "r", s, "s");
+  diag(vert_a, "vert_a", p, "p", q, "q", r, "r", s, "s");
+  diag(vert_b, "vert_b", p, "p", q, "q", r, "r", s, "s");
+  diag(vert_c, "vert_c", p, "p", q, "q", r, "r", s, "s");
+  diag(vert_d, "vert_d", p, "p", q, "q", r, "r", s, "s");
 
   MPoly<3> e = linear_indicator(t, q, r, s);
   MPoly<3> f = linear_indicator(q, t, r, s);
@@ -466,10 +466,10 @@ int main(int argc, char *argv[]) {
   double t_value = random_double();
 
   MPoly<3> linear1 =
-    p_value * vert_p +
-    q_value * vert_q +
-    r_value * vert_r +
-    s_value * vert_s;
+    p_value * vert_a +
+    q_value * vert_b +
+    r_value * vert_c +
+    s_value * vert_d;
   MPoly<3> linear2 = t_value * e + q_value * f + r_value * g + s_value * h;
 
   should(double_equal(linear1(p), p_value));
@@ -521,18 +521,18 @@ int main(int argc, char *argv[]) {
   Vector<3> t_gradient = random_vector<3>();
 
   MPoly<3> cubic1 = linear1
-    + dot_product(p_gradient, q - p) * vert_p_to_q
-    + dot_product(p_gradient, r - p) * vert_p_to_r
-    + dot_product(p_gradient, s - p) * vert_p_to_s
-    + dot_product(q_gradient, p - q) * vert_q_to_p
-    + dot_product(q_gradient, r - q) * vert_q_to_r
-    + dot_product(q_gradient, s - q) * vert_q_to_s
-    + dot_product(r_gradient, p - r) * vert_r_to_p
-    + dot_product(r_gradient, q - r) * vert_r_to_q
-    + dot_product(r_gradient, s - r) * vert_r_to_s
-    + dot_product(s_gradient, p - s) * vert_s_to_p
-    + dot_product(s_gradient, q - s) * vert_s_to_q
-    + dot_product(s_gradient, r - s) * vert_s_to_r;
+    + dot_product(p_gradient, q - p) * vert_a_to_b
+    + dot_product(p_gradient, r - p) * vert_a_to_c
+    + dot_product(p_gradient, s - p) * vert_a_to_d
+    + dot_product(q_gradient, p - q) * vert_b_to_a
+    + dot_product(q_gradient, r - q) * vert_b_to_c
+    + dot_product(q_gradient, s - q) * vert_b_to_d
+    + dot_product(r_gradient, p - r) * vert_c_to_a
+    + dot_product(r_gradient, q - r) * vert_c_to_b
+    + dot_product(r_gradient, s - r) * vert_c_to_d
+    + dot_product(s_gradient, p - s) * vert_d_to_a
+    + dot_product(s_gradient, q - s) * vert_d_to_b
+    + dot_product(s_gradient, r - s) * vert_d_to_c;
 
   should(double_equal(cubic1(p), p_value));
   should(double_equal(cubic1(q), q_value));
