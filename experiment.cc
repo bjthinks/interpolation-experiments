@@ -556,7 +556,16 @@ int main(int argc, char *argv[]) {
   MPoly<3> fgrads1 = egrads1
     + dot_product(pqr_gradient - gradient(egrads1, pqr),
                   project(s - pqr, cross_product(p - r, q - r))
-                  ) * faceGradient(a, b, c, d);
+                  ) * faceGradient(a, b, c, d)
+    + dot_product(pqs_gradient - gradient(egrads1, pqs),
+                  project(r - pqs, cross_product(p - s, q - s))
+                  ) * faceGradient(a, b, d, c)
+    + dot_product(prs_gradient - gradient(egrads1, prs),
+                  project(q - prs, cross_product(p - s, r - s))
+                  ) * faceGradient(a, c, d, b)
+    + dot_product(qrs_gradient - gradient(egrads1, qrs),
+                  project(p - qrs, cross_product(q - s, r - s))
+                  ) * faceGradient(b, c, d, a);
 
   MPoly<3> fgrads2 = egrads2;
 
@@ -585,6 +594,15 @@ int main(int argc, char *argv[]) {
   should(vector_equal(project(pqr_gradient, cross_product(p - r, q - r)),
                       project(gradient(fgrads1, pqr),
                               cross_product(p - r, q - r))));
+  should(vector_equal(project(pqs_gradient, cross_product(p - s, q - s)),
+                      project(gradient(fgrads1, pqs),
+                              cross_product(p - s, q - s))));
+  should(vector_equal(project(prs_gradient, cross_product(p - s, r - s)),
+                      project(gradient(fgrads1, prs),
+                              cross_product(p - s, r - s))));
+  should(vector_equal(project(qrs_gradient, cross_product(q - s, r - s)),
+                      project(gradient(fgrads1, qrs),
+                              cross_product(q - s, r - s))));
 
   should(double_equal(fgrads2(t), t_value));
   should(double_equal(fgrads2(q), q_value));
