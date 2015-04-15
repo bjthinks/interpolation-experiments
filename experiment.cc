@@ -567,7 +567,19 @@ int main(int argc, char *argv[]) {
                   project(p - qrs, cross_product(q - s, r - s))
                   ) * faceGradient(b, c, d, a);
 
-  MPoly<3> fgrads2 = egrads2;
+  MPoly<3> fgrads2 = egrads2
+    + dot_product(tqr_gradient - gradient(egrads2, tqr),
+                  project(s - tqr, cross_product(t - r, q - r))
+                  ) * faceGradient(e, f, g, h)
+    + dot_product(tqs_gradient - gradient(egrads2, tqs),
+                  project(r - tqs, cross_product(t - s, q - s))
+                  ) * faceGradient(e, f, h, g)
+    + dot_product(trs_gradient - gradient(egrads2, trs),
+                  project(q - trs, cross_product(t - s, r - s))
+                  ) * faceGradient(e, g, h, f)
+    + dot_product(qrs_gradient - gradient(egrads2, qrs),
+                  project(t - qrs, cross_product(q - s, r - s))
+                  ) * faceGradient(f, g, h, e);
 
   // And check that they are correct
 
@@ -624,6 +636,18 @@ int main(int argc, char *argv[]) {
                       perp(gradient(fgrads2, qs), q - s)));
   should(vector_equal(perp(rs_gradient, r - s),
                       perp(gradient(fgrads2, rs), r - s)));
+  should(vector_equal(project(tqr_gradient, cross_product(t - r, q - r)),
+                      project(gradient(fgrads2, tqr),
+                              cross_product(t - r, q - r))));
+  should(vector_equal(project(tqs_gradient, cross_product(t - s, q - s)),
+                      project(gradient(fgrads2, tqs),
+                              cross_product(t - s, q - s))));
+  should(vector_equal(project(trs_gradient, cross_product(t - s, r - s)),
+                      project(gradient(fgrads2, trs),
+                              cross_product(t - s, r - s))));
+  should(vector_equal(project(qrs_gradient, cross_product(q - s, r - s)),
+                      project(gradient(fgrads2, qrs),
+                              cross_product(q - s, r - s))));
 
   // Edge gradients of the two interpolants should still match exactly.
 
