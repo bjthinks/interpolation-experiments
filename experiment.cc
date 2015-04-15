@@ -633,43 +633,68 @@ int main(int argc, char *argv[]) {
   should(vector_equal(gradient(vgrads2, r), r_gradient));
   should(vector_equal(gradient(vgrads2, s), s_gradient));
 
-#if 0
+  // Now define the edge midpoints, and make up gradients to approximate
+  // at each of them
+
+  // Shared edges
+
   Vector<3> qr = (q + r) / 2.0;
   Vector<3> qs = (q + s) / 2.0;
   Vector<3> rs = (r + s) / 2.0;
+
+  Vector<3> qr_gradient = random_vector<3>();
+  Vector<3> qs_gradient = random_vector<3>();
+  Vector<3> rs_gradient = random_vector<3>();
+
+  // Edges unique to first tetrahedron
+
   Vector<3> pq = (p + q) / 2.0;
   Vector<3> pr = (p + r) / 2.0;
   Vector<3> ps = (p + s) / 2.0;
+
+  Vector<3> pq_gradient = random_vector<3>();
+  Vector<3> pr_gradient = random_vector<3>();
+  Vector<3> ps_gradient = random_vector<3>();
+
+  // Edges unique to second tetrahedron
+
   Vector<3> tq = (t + q) / 2.0;
   Vector<3> tr = (t + r) / 2.0;
   Vector<3> ts = (t + s) / 2.0;
-#endif
 
-  MPoly<3> quartic1 = vgrads1
-    + 0.0;
+  Vector<3> tq_gradient = random_vector<3>();
+  Vector<3> tr_gradient = random_vector<3>();
+  Vector<3> ts_gradient = random_vector<3>();
 
-  should(double_equal(quartic1(p), p_value));
-  should(double_equal(quartic1(q), q_value));
-  should(double_equal(quartic1(r), r_value));
-  should(double_equal(quartic1(s), s_value));
-  should(vector_equal(gradient(quartic1, p), p_gradient));
-  should(vector_equal(gradient(quartic1, q), q_gradient));
-  should(vector_equal(gradient(quartic1, r), r_gradient));
-  should(vector_equal(gradient(quartic1, s), s_gradient));
+  // And make interpolants that have these vertex gradients
 
-  MPoly<3> quartic2 = vgrads2
-    + 0.0;
+  MPoly<3> egrads1 = vgrads1
+    + dot_product(qr_gradient, p - qr) * edge_bc_to_a
+    + dot_product(qr_gradient, s - qr) * edge_bc_to_d;
 
-  should(double_equal(quartic2(t), t_value));
-  should(double_equal(quartic2(q), q_value));
-  should(double_equal(quartic2(r), r_value));
-  should(double_equal(quartic2(s), s_value));
-  should(vector_equal(gradient(quartic2, t), t_gradient));
-  should(vector_equal(gradient(quartic2, q), q_gradient));
-  should(vector_equal(gradient(quartic2, r), r_gradient));
-  should(vector_equal(gradient(quartic2, s), s_gradient));
+  should(double_equal(egrads1(p), p_value));
+  should(double_equal(egrads1(q), q_value));
+  should(double_equal(egrads1(r), r_value));
+  should(double_equal(egrads1(s), s_value));
+  should(vector_equal(gradient(egrads1, p), p_gradient));
+  should(vector_equal(gradient(egrads1, q), q_gradient));
+  should(vector_equal(gradient(egrads1, r), r_gradient));
+  should(vector_equal(gradient(egrads1, s), s_gradient));
 
-  //should(vector_equal(gradient(quartic1, qr), gradient(quartic2, qr)));
-  //should(vector_equal(gradient(quartic1, qs), gradient(quartic2, qs)));
-  //should(vector_equal(gradient(quartic1, rs), gradient(quartic2, rs)));
+  MPoly<3> egrads2 = vgrads2
+    + dot_product(qr_gradient, t - qr) * edge_fg_to_e
+    + dot_product(qr_gradient, s - qr) * edge_fg_to_h;
+
+  should(double_equal(egrads2(t), t_value));
+  should(double_equal(egrads2(q), q_value));
+  should(double_equal(egrads2(r), r_value));
+  should(double_equal(egrads2(s), s_value));
+  should(vector_equal(gradient(egrads2, t), t_gradient));
+  should(vector_equal(gradient(egrads2, q), q_gradient));
+  should(vector_equal(gradient(egrads2, r), r_gradient));
+  should(vector_equal(gradient(egrads2, s), s_gradient));
+
+  should(vector_equal(gradient(egrads1, qr), gradient(egrads2, qr)));
+  //should(vector_equal(gradient(egrads1, qs), gradient(egrads2, qs)));
+  //should(vector_equal(gradient(egrads1, rs), gradient(egrads2, rs)));
 }
