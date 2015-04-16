@@ -14,22 +14,32 @@ public:
   }
   const Vector<3> &vertex(int v) const
   {
-    if (v < 0 || v >= 4)
-      throw 0;
     return vertex_data[v];
   }
-  Vector<3> faceNormal(int v) const
+  Vector<3> faceCenter(int f) const
   {
-    int p = (v + 1) % 4;
-    int q = (v + 2) % 4;
-    int r = (v + 3) % 4;
-    return project(vertex(v) - (vertex(p) + vertex(q) + vertex(r)) / 3.0,
-                   cross_product(vertex(p) - vertex(r), vertex(q) - vertex(r)));
+    int p = (f + 1) % 4;
+    int q = (f + 2) % 4;
+    int r = (f + 3) % 4;
+    return (vertex(p) + vertex(q) + vertex(r)) / 3.0;
+  }
+  Vector<3> faceNormalUnscaled(int f) const
+  {
+    int p = (f + 1) % 4;
+    int q = (f + 2) % 4;
+    int r = (f + 3) % 4;
+    return cross_product(vertex(p) - vertex(r), vertex(q) - vertex(r));
+  }
+  Vector<3> faceNormal(int f) const
+  {
+    return projection(vertex(f) - faceCenter(f), faceNormalUnscaled(f));
   }
 
 private:
   Vector<3> vertex_data[4];
-  static Vector<3> project(const Vector<3> &vec, const Vector<3> &onto) {
+
+  static Vector<3> projection(const Vector<3> &vec, const Vector<3> &onto)
+  {
     return dot_product(vec, onto) / dot_product(onto, onto) * onto;
   }
 };
