@@ -561,28 +561,21 @@ int main(int argc, char *argv[]) {
     + dot_product(pqr_gradient - gradient(egrads1, pqr),
                   t0.faceNormal(3)) * faceGradient(a, b, c, d)
     + dot_product(pqs_gradient - gradient(egrads1, pqs),
-                  project(r - pqs, cross_product(p - s, q - s))
-                  ) * faceGradient(a, b, d, c)
+                  t0.faceNormal(2)) * faceGradient(a, b, d, c)
     + dot_product(prs_gradient - gradient(egrads1, prs),
-                  project(q - prs, cross_product(p - s, r - s))
-                  ) * faceGradient(a, c, d, b)
+                  t0.faceNormal(1)) * faceGradient(a, c, d, b)
     + dot_product(qrs_gradient - gradient(egrads1, qrs),
-                  project(p - qrs, cross_product(q - s, r - s))
-                  ) * faceGradient(b, c, d, a);
+                  t0.faceNormal(0)) * faceGradient(b, c, d, a);
 
   MPoly<3> fgrads2 = egrads2
     + dot_product(tqr_gradient - gradient(egrads2, tqr),
-                  project(s - tqr, cross_product(t - r, q - r))
-                  ) * faceGradient(e, f, g, h)
+                  t1.faceNormal(3)) * faceGradient(e, f, g, h)
     + dot_product(tqs_gradient - gradient(egrads2, tqs),
-                  project(r - tqs, cross_product(t - s, q - s))
-                  ) * faceGradient(e, f, h, g)
+                  t1.faceNormal(2)) * faceGradient(e, f, h, g)
     + dot_product(trs_gradient - gradient(egrads2, trs),
-                  project(q - trs, cross_product(t - s, r - s))
-                  ) * faceGradient(e, g, h, f)
+                  t1.faceNormal(1)) * faceGradient(e, g, h, f)
     + dot_product(qrs_gradient - gradient(egrads2, qrs),
-                  project(t - qrs, cross_product(q - s, r - s))
-                  ) * faceGradient(f, g, h, e);
+                  t1.faceNormal(0)) * faceGradient(f, g, h, e);
 
   // And check that they are correct
 
