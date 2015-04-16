@@ -16,6 +16,10 @@ public:
   {
     return vertex_data[v];
   }
+  Vector<3> edge(int from, int to) const
+  {
+    return vertex(to) - vertex(from);
+  }
   Vector<3> faceCenter(int f) const
   {
     int p = (f + 1) % 4;
@@ -28,7 +32,7 @@ public:
     int p = (f + 1) % 4;
     int q = (f + 2) % 4;
     int r = (f + 3) % 4;
-    return cross_product(vertex(p) - vertex(r), vertex(q) - vertex(r));
+    return cross_product(edge(r, p), edge(r, q));
   }
   Vector<3> faceNormal(int f) const
   {
