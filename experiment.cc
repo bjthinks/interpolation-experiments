@@ -232,6 +232,9 @@ int main(int argc, char *argv[]) {
   Vector<3> s = random_vector<3>();
   Vector<3> t = random_vector<3>();
 
+  Tetrahedron t0(p, q, r, s);
+  Tetrahedron t1(t, q, r, s);
+
   // Define some linear functions on the tetrahedra
 
   MPoly<3> a = linear_indicator(p, q, r, s);
@@ -556,8 +559,7 @@ int main(int argc, char *argv[]) {
 
   MPoly<3> fgrads1 = egrads1
     + dot_product(pqr_gradient - gradient(egrads1, pqr),
-                  project(s - pqr, cross_product(p - r, q - r))
-                  ) * faceGradient(a, b, c, d)
+                  t0.faceNormal(3)) * faceGradient(a, b, c, d)
     + dot_product(pqs_gradient - gradient(egrads1, pqs),
                   project(r - pqs, cross_product(p - s, q - s))
                   ) * faceGradient(a, b, d, c)
