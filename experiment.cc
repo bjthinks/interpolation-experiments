@@ -218,11 +218,12 @@ static MPoly<3> vertexGradient(MPoly<3> &v, MPoly<3> &to) {
   return v * v * to;
 }
 
-double f(const Vector<3> &x) {
-  return x[0] * x[0] + sin(x[1]) + exp(x[2]);
+double ff(const Vector<3> &x) {
+  double value = x[0] * x[0] + sin(x[1]) + exp(x[2]);
+  return value;
 }
 
-Vector<3> df(const Vector<3> &x) {
+Vector<3> dff(const Vector<3> &x) {
   Vector<3> d;
   d[0] = 2 * x[0];
   d[1] = cos(x[1]);
@@ -297,11 +298,11 @@ int main(int argc, char *argv[]) {
 
   // Make up some values for the interpolant to have at the vertices
 
-  double p_value = f(p);
-  double q_value = f(q);
-  double r_value = f(r);
-  double s_value = f(s);
-  double t_value = f(t);
+  double p_value = ff(p);
+  double q_value = ff(q);
+  double r_value = ff(r);
+  double s_value = ff(s);
+  double t_value = ff(t);
 
   // Make interpolants that have these values
 
@@ -321,11 +322,11 @@ int main(int argc, char *argv[]) {
 
   // Now make up some gradients at each vertex
 
-  Vector<3> p_gradient = df(p);
-  Vector<3> q_gradient = df(q);
-  Vector<3> r_gradient = df(r);
-  Vector<3> s_gradient = df(s);
-  Vector<3> t_gradient = df(t);
+  Vector<3> p_gradient = dff(p);
+  Vector<3> q_gradient = dff(q);
+  Vector<3> r_gradient = dff(r);
+  Vector<3> s_gradient = dff(s);
+  Vector<3> t_gradient = dff(t);
 
   // And make interpolants that have these vertex gradients
 
@@ -410,9 +411,9 @@ int main(int argc, char *argv[]) {
   Vector<3> qs = t1.edgeMidpoint(1, 3); // == t2.edgeMidpoint(1, 3);
   Vector<3> rs = t1.edgeMidpoint(2, 3); // == t2.edgeMidpoint(2, 3);
 
-  Vector<3> qr_gradient = df(qr);
-  Vector<3> qs_gradient = df(qs);
-  Vector<3> rs_gradient = df(rs);
+  Vector<3> qr_gradient = dff(qr);
+  Vector<3> qs_gradient = dff(qs);
+  Vector<3> rs_gradient = dff(rs);
 
   // Edges unique to first tetrahedron
 
@@ -420,9 +421,9 @@ int main(int argc, char *argv[]) {
   Vector<3> pr = t1.edgeMidpoint(0, 2);
   Vector<3> ps = t1.edgeMidpoint(0, 3);
 
-  Vector<3> pq_gradient = df(pq);
-  Vector<3> pr_gradient = df(pr);
-  Vector<3> ps_gradient = df(ps);
+  Vector<3> pq_gradient = dff(pq);
+  Vector<3> pr_gradient = dff(pr);
+  Vector<3> ps_gradient = dff(ps);
 
   // Edges unique to second tetrahedron
 
@@ -430,9 +431,9 @@ int main(int argc, char *argv[]) {
   Vector<3> tr = t2.edgeMidpoint(0, 2);
   Vector<3> ts = t2.edgeMidpoint(0, 3);
 
-  Vector<3> tq_gradient = df(tq);
-  Vector<3> tr_gradient = df(tr);
-  Vector<3> ts_gradient = df(ts);
+  Vector<3> tq_gradient = dff(tq);
+  Vector<3> tr_gradient = dff(tr);
+  Vector<3> ts_gradient = dff(ts);
 
   // Make interpolants that approximate these edge gradients
 
@@ -545,7 +546,7 @@ int main(int argc, char *argv[]) {
   // Shared face
 
   Vector<3> qrs = t1.faceCenter(0);
-  Vector<3> qrs_gradient = df(qrs);
+  Vector<3> qrs_gradient = dff(qrs);
 
   // Faces unique to first tetrahedron
 
@@ -553,9 +554,9 @@ int main(int argc, char *argv[]) {
   Vector<3> pqs = t1.faceCenter(2);
   Vector<3> prs = t1.faceCenter(1);
 
-  Vector<3> pqr_gradient = df(pqr);
-  Vector<3> pqs_gradient = df(pqs);
-  Vector<3> prs_gradient = df(prs);
+  Vector<3> pqr_gradient = dff(pqr);
+  Vector<3> pqs_gradient = dff(pqs);
+  Vector<3> prs_gradient = dff(prs);
 
   // Faces unique to second tetrahedron
 
@@ -563,9 +564,9 @@ int main(int argc, char *argv[]) {
   Vector<3> tqs = t2.faceCenter(2);
   Vector<3> trs = t2.faceCenter(1);
 
-  Vector<3> tqr_gradient = df(tqr);
-  Vector<3> tqs_gradient = df(tqs);
-  Vector<3> trs_gradient = df(trs);
+  Vector<3> tqr_gradient = dff(tqr);
+  Vector<3> tqs_gradient = dff(tqs);
+  Vector<3> trs_gradient = dff(trs);
 
   // Make interpolants that approximate these face gradients
 
@@ -666,4 +667,27 @@ int main(int argc, char *argv[]) {
   // And so should the face gradient
 
   should(vector_equal(gradient(fgrads1, qrs), gradient(fgrads2, qrs)));
+
+  // Now, test the various interpolants for accuracy
+
+  const int N = 5;
+  double squared_error = 0.0;
+  int num = 0;
+  for (int b0 = 0; b0 <= N; ++b0) {
+    for (int b1 = 0; b1 <= N - b0; ++b1) {
+      for (int b2 = 0; b2 <= N - b0 - b1; ++b2) {
+        int b3 = N - b0 - b1 - b2;
+        Vector<3> x =
+          double(b0) / double(N) * t1.vertex(0) +
+          double(b1) / double(N) * t1.vertex(1) +
+          double(b2) / double(N) * t1.vertex(2) +
+          double(b3) / double(N) * t1.vertex(3);
+        double actual_value = ff(x);
+        double interpolated_value = values1(x);
+        squared_error += pow(actual_value - interpolated_value, 2.0);
+        ++num;
+      }
+    }
+  }
+  printf("RMS error: %f\n", sqrt(squared_error / double(num)));
 }
