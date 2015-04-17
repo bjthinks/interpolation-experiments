@@ -218,6 +218,18 @@ static MPoly<3> vertexGradient(MPoly<3> &v, MPoly<3> &to) {
   return v * v * to;
 }
 
+double f(const Vector<3> &x) {
+  return x[0] * x[0] + sin(x[1]) + exp(x[2]);
+}
+
+Vector<3> df(const Vector<3> &x) {
+  Vector<3> d;
+  d[0] = 2 * x[0];
+  d[1] = cos(x[1]);
+  d[2] = exp(x[2]);
+  return d;
+}
+
 int main(int argc, char *argv[]) {
   srand(345987);
 
@@ -285,11 +297,11 @@ int main(int argc, char *argv[]) {
 
   // Make up some values for the interpolant to have at the vertices
 
-  double p_value = random_double();
-  double q_value = random_double();
-  double r_value = random_double();
-  double s_value = random_double();
-  double t_value = random_double();
+  double p_value = f(p);
+  double q_value = f(q);
+  double r_value = f(r);
+  double s_value = f(s);
+  double t_value = f(t);
 
   // Make interpolants that have these values
 
@@ -309,11 +321,11 @@ int main(int argc, char *argv[]) {
 
   // Now make up some gradients at each vertex
 
-  Vector<3> p_gradient = random_vector<3>();
-  Vector<3> q_gradient = random_vector<3>();
-  Vector<3> r_gradient = random_vector<3>();
-  Vector<3> s_gradient = random_vector<3>();
-  Vector<3> t_gradient = random_vector<3>();
+  Vector<3> p_gradient = df(p);
+  Vector<3> q_gradient = df(q);
+  Vector<3> r_gradient = df(r);
+  Vector<3> s_gradient = df(s);
+  Vector<3> t_gradient = df(t);
 
   // And make interpolants that have these vertex gradients
 
@@ -398,9 +410,9 @@ int main(int argc, char *argv[]) {
   Vector<3> qs = t1.edgeMidpoint(1, 3); // == t2.edgeMidpoint(1, 3);
   Vector<3> rs = t1.edgeMidpoint(2, 3); // == t2.edgeMidpoint(2, 3);
 
-  Vector<3> qr_gradient = random_vector<3>();
-  Vector<3> qs_gradient = random_vector<3>();
-  Vector<3> rs_gradient = random_vector<3>();
+  Vector<3> qr_gradient = df(qr);
+  Vector<3> qs_gradient = df(qs);
+  Vector<3> rs_gradient = df(rs);
 
   // Edges unique to first tetrahedron
 
@@ -408,9 +420,9 @@ int main(int argc, char *argv[]) {
   Vector<3> pr = t1.edgeMidpoint(0, 2);
   Vector<3> ps = t1.edgeMidpoint(0, 3);
 
-  Vector<3> pq_gradient = random_vector<3>();
-  Vector<3> pr_gradient = random_vector<3>();
-  Vector<3> ps_gradient = random_vector<3>();
+  Vector<3> pq_gradient = df(pq);
+  Vector<3> pr_gradient = df(pr);
+  Vector<3> ps_gradient = df(ps);
 
   // Edges unique to second tetrahedron
 
@@ -418,9 +430,9 @@ int main(int argc, char *argv[]) {
   Vector<3> tr = t2.edgeMidpoint(0, 2);
   Vector<3> ts = t2.edgeMidpoint(0, 3);
 
-  Vector<3> tq_gradient = random_vector<3>();
-  Vector<3> tr_gradient = random_vector<3>();
-  Vector<3> ts_gradient = random_vector<3>();
+  Vector<3> tq_gradient = df(tq);
+  Vector<3> tr_gradient = df(tr);
+  Vector<3> ts_gradient = df(ts);
 
   // Make interpolants that approximate these edge gradients
 
@@ -533,7 +545,7 @@ int main(int argc, char *argv[]) {
   // Shared face
 
   Vector<3> qrs = t1.faceCenter(0);
-  Vector<3> qrs_gradient = random_vector<3>();
+  Vector<3> qrs_gradient = df(qrs);
 
   // Faces unique to first tetrahedron
 
@@ -541,9 +553,9 @@ int main(int argc, char *argv[]) {
   Vector<3> pqs = t1.faceCenter(2);
   Vector<3> prs = t1.faceCenter(1);
 
-  Vector<3> pqr_gradient = random_vector<3>();
-  Vector<3> pqs_gradient = random_vector<3>();
-  Vector<3> prs_gradient = random_vector<3>();
+  Vector<3> pqr_gradient = df(pqr);
+  Vector<3> pqs_gradient = df(pqs);
+  Vector<3> prs_gradient = df(prs);
 
   // Faces unique to second tetrahedron
 
@@ -551,9 +563,9 @@ int main(int argc, char *argv[]) {
   Vector<3> tqs = t2.faceCenter(2);
   Vector<3> trs = t2.faceCenter(1);
 
-  Vector<3> tqr_gradient = random_vector<3>();
-  Vector<3> tqs_gradient = random_vector<3>();
-  Vector<3> trs_gradient = random_vector<3>();
+  Vector<3> tqr_gradient = df(tqr);
+  Vector<3> tqs_gradient = df(tqs);
+  Vector<3> trs_gradient = df(trs);
 
   // Make interpolants that approximate these face gradients
 
