@@ -20,6 +20,14 @@ public:
   {
     return vertex(to) - vertex(from);
   }
+  Vector<3> edgeMidpoint(int from, int to) const
+  {
+    return (vertex(from) + vertex(to)) / 2.0;
+  }
+  Vector<3> edgeNormal(int p, int q, int r) const
+  {
+    return perp(vertex(r) - edgeMidpoint(p, q), edge(q, p));
+  }
   Vector<3> faceCenter(int f) const
   {
     int p = (f + 1) % 4;
@@ -45,6 +53,9 @@ private:
   static Vector<3> projection(const Vector<3> &vec, const Vector<3> &onto)
   {
     return dot_product(vec, onto) / dot_product(onto, onto) * onto;
+  }
+  static Vector<3> perp(const Vector<3> &vec, const Vector<3> &away) {
+    return vec - projection(vec, away);
   }
 };
 

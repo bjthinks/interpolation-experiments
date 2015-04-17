@@ -426,29 +426,29 @@ int main(int argc, char *argv[]) {
 
   MPoly<3> egrads1 = vgrads1
     + dot_product(pq_gradient - gradient(vgrads1, pq),
-                  perp(r - pq, p - q)) * edgeGradient(a, b, c)
+                  t0.edgeNormal(0, 1, 2)) * edgeGradient(a, b, c)
     + dot_product(pq_gradient - gradient(vgrads1, pq),
-                  perp(s - pq, p - q)) * edgeGradient(a, b, d)
+                  t0.edgeNormal(0, 1, 3)) * edgeGradient(a, b, d)
     + dot_product(pr_gradient - gradient(vgrads1, pr),
-                  perp(q - pr, p - r)) * edgeGradient(a, c, b)
+                  t0.edgeNormal(0, 2, 1)) * edgeGradient(a, c, b)
     + dot_product(pr_gradient - gradient(vgrads1, pr),
-                  perp(s - pr, p - r)) * edgeGradient(a, c, d)
+                  t0.edgeNormal(0, 2, 3)) * edgeGradient(a, c, d)
     + dot_product(ps_gradient - gradient(vgrads1, ps),
-                  perp(q - ps, p - s)) * edgeGradient(a, d, b)
+                  t0.edgeNormal(0, 3, 1)) * edgeGradient(a, d, b)
     + dot_product(ps_gradient - gradient(vgrads1, ps),
-                  perp(r - ps, p - s)) * edgeGradient(a, d, c)
+                  t0.edgeNormal(0, 3, 2)) * edgeGradient(a, d, c)
     + dot_product(qr_gradient - gradient(vgrads1, qr),
-                  perp(p - qr, q - r)) * edgeGradient(b, c, a)
+                  t0.edgeNormal(1, 2, 0)) * edgeGradient(b, c, a)
     + dot_product(qr_gradient - gradient(vgrads1, qr),
-                  perp(s - qr, q - r)) * edgeGradient(b, c, d)
+                  t0.edgeNormal(1, 2, 3)) * edgeGradient(b, c, d)
     + dot_product(qs_gradient - gradient(vgrads1, qs),
-                  perp(p - qs, q - s)) * edgeGradient(b, d, a)
+                  t0.edgeNormal(1, 3, 0)) * edgeGradient(b, d, a)
     + dot_product(qs_gradient - gradient(vgrads1, qs),
-                  perp(r - qs, q - s)) * edgeGradient(b, d, c)
+                  t0.edgeNormal(1, 3, 2)) * edgeGradient(b, d, c)
     + dot_product(rs_gradient - gradient(vgrads1, rs),
-                  perp(p - rs, r - s)) * edgeGradient(c, d, a)
+                  t0.edgeNormal(2, 3, 0)) * edgeGradient(c, d, a)
     + dot_product(rs_gradient - gradient(vgrads1, rs),
-                  perp(q - rs, r - s)) * edgeGradient(c, d, b);
+                  t0.edgeNormal(2, 3, 1)) * edgeGradient(c, d, b);
 
   MPoly<3> egrads2 = vgrads2
     + dot_product(tq_gradient - gradient(vgrads2, tq),
