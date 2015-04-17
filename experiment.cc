@@ -232,7 +232,7 @@ Vector<3> dff(const Vector<3> &x) {
 }
 
 double test_error(const Tetrahedron &t, const MPoly<3> &interp) {
-  const int N = 5;
+  const int N = 20;
   double squared_error = 0.0;
   int num = 0;
   for (int b0 = 0; b0 <= N; ++b0) {
