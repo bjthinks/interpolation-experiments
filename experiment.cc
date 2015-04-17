@@ -599,18 +599,18 @@ int main(int argc, char *argv[]) {
                       perp(gradient(fgrads1, qs), q - s)));
   should(vector_equal(perp(rs_gradient, r - s),
                       perp(gradient(fgrads1, rs), r - s)));
-  should(vector_equal(project(pqr_gradient, cross_product(p - r, q - r)),
+  should(vector_equal(project(pqr_gradient, t1.faceNormalUnscaled(3)),
                       project(gradient(fgrads1, pqr),
-                              cross_product(p - r, q - r))));
-  should(vector_equal(project(pqs_gradient, cross_product(p - s, q - s)),
+                              t1.faceNormalUnscaled(3))));
+  should(vector_equal(project(pqs_gradient, t1.faceNormalUnscaled(2)),
                       project(gradient(fgrads1, pqs),
-                              cross_product(p - s, q - s))));
-  should(vector_equal(project(prs_gradient, cross_product(p - s, r - s)),
+                              t1.faceNormalUnscaled(2))));
+  should(vector_equal(project(prs_gradient, t1.faceNormalUnscaled(1)),
                       project(gradient(fgrads1, prs),
-                              cross_product(p - s, r - s))));
-  should(vector_equal(project(qrs_gradient, cross_product(q - s, r - s)),
+                              t1.faceNormalUnscaled(1))));
+  should(vector_equal(project(qrs_gradient, t1.faceNormalUnscaled(0)),
                       project(gradient(fgrads1, qrs),
-                              cross_product(q - s, r - s))));
+                              t1.faceNormalUnscaled(0))));
 
   should(double_equal(fgrads2(t), t_value));
   should(double_equal(fgrads2(q), q_value));
@@ -632,18 +632,18 @@ int main(int argc, char *argv[]) {
                       perp(gradient(fgrads2, qs), q - s)));
   should(vector_equal(perp(rs_gradient, r - s),
                       perp(gradient(fgrads2, rs), r - s)));
-  should(vector_equal(project(tqr_gradient, cross_product(t - r, q - r)),
+  should(vector_equal(project(tqr_gradient, t2.faceNormalUnscaled(3)),
                       project(gradient(fgrads2, tqr),
-                              cross_product(t - r, q - r))));
-  should(vector_equal(project(tqs_gradient, cross_product(t - s, q - s)),
+                              t2.faceNormalUnscaled(3))));
+  should(vector_equal(project(tqs_gradient, t2.faceNormalUnscaled(2)),
                       project(gradient(fgrads2, tqs),
-                              cross_product(t - s, q - s))));
-  should(vector_equal(project(trs_gradient, cross_product(t - s, r - s)),
+                              t2.faceNormalUnscaled(2))));
+  should(vector_equal(project(trs_gradient, t2.faceNormalUnscaled(1)),
                       project(gradient(fgrads2, trs),
-                              cross_product(t - s, r - s))));
-  should(vector_equal(project(qrs_gradient, cross_product(q - s, r - s)),
+                              t2.faceNormalUnscaled(1))));
+  should(vector_equal(project(qrs_gradient, t2.faceNormalUnscaled(0)),
                       project(gradient(fgrads2, qrs),
-                              cross_product(q - s, r - s))));
+                              t2.faceNormalUnscaled(0))));
 
   // Edge gradients of the two interpolants should still match exactly,
 
