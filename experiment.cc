@@ -532,14 +532,14 @@ int main(int argc, char *argv[]) {
 
   // Shared face
 
-  Vector<3> qrs = (q + r + s) / 3.0;
+  Vector<3> qrs = t1.faceCenter(0);
   Vector<3> qrs_gradient = random_vector<3>();
 
   // Faces unique to first tetrahedron
 
-  Vector<3> pqr = (p + q + r) / 3.0;
-  Vector<3> pqs = (p + q + s) / 3.0;
-  Vector<3> prs = (p + r + s) / 3.0;
+  Vector<3> pqr = t1.faceCenter(3);
+  Vector<3> pqs = t1.faceCenter(2);
+  Vector<3> prs = t1.faceCenter(1);
 
   Vector<3> pqr_gradient = random_vector<3>();
   Vector<3> pqs_gradient = random_vector<3>();
@@ -547,9 +547,9 @@ int main(int argc, char *argv[]) {
 
   // Faces unique to second tetrahedron
 
-  Vector<3> tqr = (t + q + r) / 3.0;
-  Vector<3> tqs = (t + q + s) / 3.0;
-  Vector<3> trs = (t + r + s) / 3.0;
+  Vector<3> tqr = t2.faceCenter(3);
+  Vector<3> tqs = t2.faceCenter(2);
+  Vector<3> trs = t2.faceCenter(1);
 
   Vector<3> tqr_gradient = random_vector<3>();
   Vector<3> tqs_gradient = random_vector<3>();
