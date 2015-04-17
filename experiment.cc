@@ -394,9 +394,9 @@ int main(int argc, char *argv[]) {
 
   // Shared edges
 
-  Vector<3> qr = (q + r) / 2.0;
-  Vector<3> qs = (q + s) / 2.0;
-  Vector<3> rs = (r + s) / 2.0;
+  Vector<3> qr = t1.edgeMidpoint(1, 2); // == t2.edgeMidpoint(1, 2);
+  Vector<3> qs = t1.edgeMidpoint(1, 3); // == t2.edgeMidpoint(1, 3);
+  Vector<3> rs = t1.edgeMidpoint(2, 3); // == t2.edgeMidpoint(2, 3);
 
   Vector<3> qr_gradient = random_vector<3>();
   Vector<3> qs_gradient = random_vector<3>();
@@ -404,9 +404,9 @@ int main(int argc, char *argv[]) {
 
   // Edges unique to first tetrahedron
 
-  Vector<3> pq = (p + q) / 2.0;
-  Vector<3> pr = (p + r) / 2.0;
-  Vector<3> ps = (p + s) / 2.0;
+  Vector<3> pq = t1.edgeMidpoint(0, 1);
+  Vector<3> pr = t1.edgeMidpoint(0, 2);
+  Vector<3> ps = t1.edgeMidpoint(0, 3);
 
   Vector<3> pq_gradient = random_vector<3>();
   Vector<3> pr_gradient = random_vector<3>();
@@ -414,9 +414,9 @@ int main(int argc, char *argv[]) {
 
   // Edges unique to second tetrahedron
 
-  Vector<3> tq = (t + q) / 2.0;
-  Vector<3> tr = (t + r) / 2.0;
-  Vector<3> ts = (t + s) / 2.0;
+  Vector<3> tq = t2.edgeMidpoint(0, 1);
+  Vector<3> tr = t2.edgeMidpoint(0, 2);
+  Vector<3> ts = t2.edgeMidpoint(0, 3);
 
   Vector<3> tq_gradient = random_vector<3>();
   Vector<3> tr_gradient = random_vector<3>();
