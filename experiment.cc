@@ -231,6 +231,29 @@ Vector<3> dff(const Vector<3> &x) {
   return d;
 }
 
+double test_error(const Tetrahedron &t, const MPoly<3> &interp) {
+  const int N = 5;
+  double squared_error = 0.0;
+  int num = 0;
+  for (int b0 = 0; b0 <= N; ++b0) {
+    for (int b1 = 0; b1 <= N - b0; ++b1) {
+      for (int b2 = 0; b2 <= N - b0 - b1; ++b2) {
+        int b3 = N - b0 - b1 - b2;
+        Vector<3> x =
+          double(b0) / double(N) * t.vertex(0) +
+          double(b1) / double(N) * t.vertex(1) +
+          double(b2) / double(N) * t.vertex(2) +
+          double(b3) / double(N) * t.vertex(3);
+        double actual_value = ff(x);
+        double interpolated_value = interp(x);
+        squared_error += pow(actual_value - interpolated_value, 2.0);
+        ++num;
+      }
+    }
+  }
+  return sqrt(squared_error / double(num));
+}
+
 int main(int argc, char *argv[]) {
   srand(345987);
 
@@ -670,24 +693,5 @@ int main(int argc, char *argv[]) {
 
   // Now, test the various interpolants for accuracy
 
-  const int N = 5;
-  double squared_error = 0.0;
-  int num = 0;
-  for (int b0 = 0; b0 <= N; ++b0) {
-    for (int b1 = 0; b1 <= N - b0; ++b1) {
-      for (int b2 = 0; b2 <= N - b0 - b1; ++b2) {
-        int b3 = N - b0 - b1 - b2;
-        Vector<3> x =
-          double(b0) / double(N) * t1.vertex(0) +
-          double(b1) / double(N) * t1.vertex(1) +
-          double(b2) / double(N) * t1.vertex(2) +
-          double(b3) / double(N) * t1.vertex(3);
-        double actual_value = ff(x);
-        double interpolated_value = values1(x);
-        squared_error += pow(actual_value - interpolated_value, 2.0);
-        ++num;
-      }
-    }
-  }
-  printf("RMS error: %f\n", sqrt(squared_error / double(num)));
+  printf("RMS error: %f\n", test_error(t1, values1));
 }
