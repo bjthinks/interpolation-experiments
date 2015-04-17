@@ -232,8 +232,8 @@ int main(int argc, char *argv[]) {
   Vector<3> s = random_vector<3>();
   Vector<3> t = random_vector<3>();
 
-  Tetrahedron t0(p, q, r, s);
-  Tetrahedron t1(t, q, r, s);
+  Tetrahedron t1(p, q, r, s);
+  Tetrahedron t2(t, q, r, s);
 
   // Define some linear functions on the tetrahedra
 
@@ -319,55 +319,55 @@ int main(int argc, char *argv[]) {
 
   MPoly<3> vgrads1 = values1
     + dot_product(p_gradient - gradient(values1, p),
-                  t0.edge(0, 1)) * vertexGradient(a, b)
+                  t1.edge(0, 1)) * vertexGradient(a, b)
     + dot_product(p_gradient - gradient(values1, p),
-                  t0.edge(0, 2)) * vertexGradient(a, c)
+                  t1.edge(0, 2)) * vertexGradient(a, c)
     + dot_product(p_gradient - gradient(values1, p),
-                  t0.edge(0, 3)) * vertexGradient(a, d)
+                  t1.edge(0, 3)) * vertexGradient(a, d)
     + dot_product(q_gradient - gradient(values1, q),
-                  t0.edge(1, 0)) * vertexGradient(b, a)
+                  t1.edge(1, 0)) * vertexGradient(b, a)
     + dot_product(q_gradient - gradient(values1, q),
-                  t0.edge(1, 2)) * vertexGradient(b, c)
+                  t1.edge(1, 2)) * vertexGradient(b, c)
     + dot_product(q_gradient - gradient(values1, q),
-                  t0.edge(1, 3)) * vertexGradient(b, d)
+                  t1.edge(1, 3)) * vertexGradient(b, d)
     + dot_product(r_gradient - gradient(values1, r),
-                  t0.edge(2, 0)) * vertexGradient(c, a)
+                  t1.edge(2, 0)) * vertexGradient(c, a)
     + dot_product(r_gradient - gradient(values1, r),
-                  t0.edge(2, 1)) * vertexGradient(c, b)
+                  t1.edge(2, 1)) * vertexGradient(c, b)
     + dot_product(r_gradient - gradient(values1, r),
-                  t0.edge(2, 3)) * vertexGradient(c, d)
+                  t1.edge(2, 3)) * vertexGradient(c, d)
     + dot_product(s_gradient - gradient(values1, s),
-                  t0.edge(3, 0)) * vertexGradient(d, a)
+                  t1.edge(3, 0)) * vertexGradient(d, a)
     + dot_product(s_gradient - gradient(values1, s),
-                  t0.edge(3, 1)) * vertexGradient(d, b)
+                  t1.edge(3, 1)) * vertexGradient(d, b)
     + dot_product(s_gradient - gradient(values1, s),
-                  t0.edge(3, 2)) * vertexGradient(d, c);
+                  t1.edge(3, 2)) * vertexGradient(d, c);
 
   MPoly<3> vgrads2 = values2
     + dot_product(t_gradient - gradient(values2, t),
-                  t1.edge(0, 1)) * vertexGradient(e, f)
+                  t2.edge(0, 1)) * vertexGradient(e, f)
     + dot_product(t_gradient - gradient(values2, t),
-                  t1.edge(0, 2)) * vertexGradient(e, g)
+                  t2.edge(0, 2)) * vertexGradient(e, g)
     + dot_product(t_gradient - gradient(values2, t),
-                  t1.edge(0, 3)) * vertexGradient(e, h)
+                  t2.edge(0, 3)) * vertexGradient(e, h)
     + dot_product(q_gradient - gradient(values2, q),
-                  t1.edge(1, 0)) * vertexGradient(f, e)
+                  t2.edge(1, 0)) * vertexGradient(f, e)
     + dot_product(q_gradient - gradient(values2, q),
-                  t1.edge(1, 2)) * vertexGradient(f, g)
+                  t2.edge(1, 2)) * vertexGradient(f, g)
     + dot_product(q_gradient - gradient(values2, q),
-                  t1.edge(1, 3)) * vertexGradient(f, h)
+                  t2.edge(1, 3)) * vertexGradient(f, h)
     + dot_product(r_gradient - gradient(values2, r),
-                  t1.edge(2, 0)) * vertexGradient(g, e)
+                  t2.edge(2, 0)) * vertexGradient(g, e)
     + dot_product(r_gradient - gradient(values2, r),
-                  t1.edge(2, 1)) * vertexGradient(g, f)
+                  t2.edge(2, 1)) * vertexGradient(g, f)
     + dot_product(r_gradient - gradient(values2, r),
-                  t1.edge(2, 3)) * vertexGradient(g, h)
+                  t2.edge(2, 3)) * vertexGradient(g, h)
     + dot_product(s_gradient - gradient(values2, s),
-                  t1.edge(3, 0)) * vertexGradient(h, e)
+                  t2.edge(3, 0)) * vertexGradient(h, e)
     + dot_product(s_gradient - gradient(values2, s),
-                  t1.edge(3, 1)) * vertexGradient(h, f)
+                  t2.edge(3, 1)) * vertexGradient(h, f)
     + dot_product(s_gradient - gradient(values2, s),
-                  t1.edge(3, 2)) * vertexGradient(h, g);
+                  t2.edge(3, 2)) * vertexGradient(h, g);
 
   // And check that they are correct
 
@@ -426,55 +426,55 @@ int main(int argc, char *argv[]) {
 
   MPoly<3> egrads1 = vgrads1
     + dot_product(pq_gradient - gradient(vgrads1, pq),
-                  t0.edgeNormal(0, 1, 2)) * edgeGradient(a, b, c)
+                  t1.edgeNormal(0, 1, 2)) * edgeGradient(a, b, c)
     + dot_product(pq_gradient - gradient(vgrads1, pq),
-                  t0.edgeNormal(0, 1, 3)) * edgeGradient(a, b, d)
+                  t1.edgeNormal(0, 1, 3)) * edgeGradient(a, b, d)
     + dot_product(pr_gradient - gradient(vgrads1, pr),
-                  t0.edgeNormal(0, 2, 1)) * edgeGradient(a, c, b)
+                  t1.edgeNormal(0, 2, 1)) * edgeGradient(a, c, b)
     + dot_product(pr_gradient - gradient(vgrads1, pr),
-                  t0.edgeNormal(0, 2, 3)) * edgeGradient(a, c, d)
+                  t1.edgeNormal(0, 2, 3)) * edgeGradient(a, c, d)
     + dot_product(ps_gradient - gradient(vgrads1, ps),
-                  t0.edgeNormal(0, 3, 1)) * edgeGradient(a, d, b)
+                  t1.edgeNormal(0, 3, 1)) * edgeGradient(a, d, b)
     + dot_product(ps_gradient - gradient(vgrads1, ps),
-                  t0.edgeNormal(0, 3, 2)) * edgeGradient(a, d, c)
+                  t1.edgeNormal(0, 3, 2)) * edgeGradient(a, d, c)
     + dot_product(qr_gradient - gradient(vgrads1, qr),
-                  t0.edgeNormal(1, 2, 0)) * edgeGradient(b, c, a)
+                  t1.edgeNormal(1, 2, 0)) * edgeGradient(b, c, a)
     + dot_product(qr_gradient - gradient(vgrads1, qr),
-                  t0.edgeNormal(1, 2, 3)) * edgeGradient(b, c, d)
+                  t1.edgeNormal(1, 2, 3)) * edgeGradient(b, c, d)
     + dot_product(qs_gradient - gradient(vgrads1, qs),
-                  t0.edgeNormal(1, 3, 0)) * edgeGradient(b, d, a)
+                  t1.edgeNormal(1, 3, 0)) * edgeGradient(b, d, a)
     + dot_product(qs_gradient - gradient(vgrads1, qs),
-                  t0.edgeNormal(1, 3, 2)) * edgeGradient(b, d, c)
+                  t1.edgeNormal(1, 3, 2)) * edgeGradient(b, d, c)
     + dot_product(rs_gradient - gradient(vgrads1, rs),
-                  t0.edgeNormal(2, 3, 0)) * edgeGradient(c, d, a)
+                  t1.edgeNormal(2, 3, 0)) * edgeGradient(c, d, a)
     + dot_product(rs_gradient - gradient(vgrads1, rs),
-                  t0.edgeNormal(2, 3, 1)) * edgeGradient(c, d, b);
+                  t1.edgeNormal(2, 3, 1)) * edgeGradient(c, d, b);
 
   MPoly<3> egrads2 = vgrads2
     + dot_product(tq_gradient - gradient(vgrads2, tq),
-                  t1.edgeNormal(0, 1, 2)) * edgeGradient(e, f, g)
+                  t2.edgeNormal(0, 1, 2)) * edgeGradient(e, f, g)
     + dot_product(tq_gradient - gradient(vgrads2, tq),
-                  t1.edgeNormal(0, 1, 3)) * edgeGradient(e, f, h)
+                  t2.edgeNormal(0, 1, 3)) * edgeGradient(e, f, h)
     + dot_product(tr_gradient - gradient(vgrads2, tr),
-                  t1.edgeNormal(0, 2, 1)) * edgeGradient(e, g, f)
+                  t2.edgeNormal(0, 2, 1)) * edgeGradient(e, g, f)
     + dot_product(tr_gradient - gradient(vgrads2, tr),
-                  t1.edgeNormal(0, 2, 3)) * edgeGradient(e, g, h)
+                  t2.edgeNormal(0, 2, 3)) * edgeGradient(e, g, h)
     + dot_product(ts_gradient - gradient(vgrads2, ts),
-                  t1.edgeNormal(0, 3, 1)) * edgeGradient(e, h, f)
+                  t2.edgeNormal(0, 3, 1)) * edgeGradient(e, h, f)
     + dot_product(ts_gradient - gradient(vgrads2, ts),
-                  t1.edgeNormal(0, 3, 2)) * edgeGradient(e, h, g)
+                  t2.edgeNormal(0, 3, 2)) * edgeGradient(e, h, g)
     + dot_product(qr_gradient - gradient(vgrads2, qr),
-                  t1.edgeNormal(1, 2, 0)) * edgeGradient(f, g, e)
+                  t2.edgeNormal(1, 2, 0)) * edgeGradient(f, g, e)
     + dot_product(qr_gradient - gradient(vgrads2, qr),
-                  t1.edgeNormal(1, 2, 3)) * edgeGradient(f, g, h)
+                  t2.edgeNormal(1, 2, 3)) * edgeGradient(f, g, h)
     + dot_product(qs_gradient - gradient(vgrads2, qs),
-                  t1.edgeNormal(1, 3, 0)) * edgeGradient(f, h, e)
+                  t2.edgeNormal(1, 3, 0)) * edgeGradient(f, h, e)
     + dot_product(qs_gradient - gradient(vgrads2, qs),
-                  t1.edgeNormal(1, 3, 2)) * edgeGradient(f, h, g)
+                  t2.edgeNormal(1, 3, 2)) * edgeGradient(f, h, g)
     + dot_product(rs_gradient - gradient(vgrads2, rs),
-                  t1.edgeNormal(2, 3, 0)) * edgeGradient(g, h, e)
+                  t2.edgeNormal(2, 3, 0)) * edgeGradient(g, h, e)
     + dot_product(rs_gradient - gradient(vgrads2, rs),
-                  t1.edgeNormal(2, 3, 1)) * edgeGradient(g, h, f);
+                  t2.edgeNormal(2, 3, 1)) * edgeGradient(g, h, f);
 
   // And check that they are correct
 
@@ -559,23 +559,23 @@ int main(int argc, char *argv[]) {
 
   MPoly<3> fgrads1 = egrads1
     + dot_product(pqr_gradient - gradient(egrads1, pqr),
-                  t0.faceNormal(3)) * faceGradient(a, b, c, d)
+                  t1.faceNormal(3)) * faceGradient(a, b, c, d)
     + dot_product(pqs_gradient - gradient(egrads1, pqs),
-                  t0.faceNormal(2)) * faceGradient(a, b, d, c)
+                  t1.faceNormal(2)) * faceGradient(a, b, d, c)
     + dot_product(prs_gradient - gradient(egrads1, prs),
-                  t0.faceNormal(1)) * faceGradient(a, c, d, b)
+                  t1.faceNormal(1)) * faceGradient(a, c, d, b)
     + dot_product(qrs_gradient - gradient(egrads1, qrs),
-                  t0.faceNormal(0)) * faceGradient(b, c, d, a);
+                  t1.faceNormal(0)) * faceGradient(b, c, d, a);
 
   MPoly<3> fgrads2 = egrads2
     + dot_product(tqr_gradient - gradient(egrads2, tqr),
-                  t1.faceNormal(3)) * faceGradient(e, f, g, h)
+                  t2.faceNormal(3)) * faceGradient(e, f, g, h)
     + dot_product(tqs_gradient - gradient(egrads2, tqs),
-                  t1.faceNormal(2)) * faceGradient(e, f, h, g)
+                  t2.faceNormal(2)) * faceGradient(e, f, h, g)
     + dot_product(trs_gradient - gradient(egrads2, trs),
-                  t1.faceNormal(1)) * faceGradient(e, g, h, f)
+                  t2.faceNormal(1)) * faceGradient(e, g, h, f)
     + dot_product(qrs_gradient - gradient(egrads2, qrs),
-                  t1.faceNormal(0)) * faceGradient(f, g, h, e);
+                  t2.faceNormal(0)) * faceGradient(f, g, h, e);
 
   // And check that they are correct
 
