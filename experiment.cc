@@ -452,29 +452,29 @@ int main(int argc, char *argv[]) {
 
   MPoly<3> egrads2 = vgrads2
     + dot_product(tq_gradient - gradient(vgrads2, tq),
-                  perp(r - tq, t - q)) * edgeGradient(e, f, g)
+                  t1.edgeNormal(0, 1, 2)) * edgeGradient(e, f, g)
     + dot_product(tq_gradient - gradient(vgrads2, tq),
-                  perp(s - tq, t - q)) * edgeGradient(e, f, h)
+                  t1.edgeNormal(0, 1, 3)) * edgeGradient(e, f, h)
     + dot_product(tr_gradient - gradient(vgrads2, tr),
-                  perp(q - tr, t - r)) * edgeGradient(e, g, f)
+                  t1.edgeNormal(0, 2, 1)) * edgeGradient(e, g, f)
     + dot_product(tr_gradient - gradient(vgrads2, tr),
-                  perp(s - tr, t - r)) * edgeGradient(e, g, h)
+                  t1.edgeNormal(0, 2, 3)) * edgeGradient(e, g, h)
     + dot_product(ts_gradient - gradient(vgrads2, ts),
-                  perp(q - ts, t - s)) * edgeGradient(e, h, f)
+                  t1.edgeNormal(0, 3, 1)) * edgeGradient(e, h, f)
     + dot_product(ts_gradient - gradient(vgrads2, ts),
-                  perp(r - ts, t - s)) * edgeGradient(e, h, g)
+                  t1.edgeNormal(0, 3, 2)) * edgeGradient(e, h, g)
     + dot_product(qr_gradient - gradient(vgrads2, qr),
-                  perp(t - qr, q - r)) * edgeGradient(f, g, e)
+                  t1.edgeNormal(1, 2, 0)) * edgeGradient(f, g, e)
     + dot_product(qr_gradient - gradient(vgrads2, qr),
-                  perp(s - qr, q - r)) * edgeGradient(f, g, h)
+                  t1.edgeNormal(1, 2, 3)) * edgeGradient(f, g, h)
     + dot_product(qs_gradient - gradient(vgrads2, qs),
-                  perp(t - qs, q - s)) * edgeGradient(f, h, e)
+                  t1.edgeNormal(1, 3, 0)) * edgeGradient(f, h, e)
     + dot_product(qs_gradient - gradient(vgrads2, qs),
-                  perp(r - qs, q - s)) * edgeGradient(f, h, g)
+                  t1.edgeNormal(1, 3, 2)) * edgeGradient(f, h, g)
     + dot_product(rs_gradient - gradient(vgrads2, rs),
-                  perp(t - rs, r - s)) * edgeGradient(g, h, e)
+                  t1.edgeNormal(2, 3, 0)) * edgeGradient(g, h, e)
     + dot_product(rs_gradient - gradient(vgrads2, rs),
-                  perp(q - rs, r - s)) * edgeGradient(g, h, f);
+                  t1.edgeNormal(2, 3, 1)) * edgeGradient(g, h, f);
 
   // And check that they are correct
 
