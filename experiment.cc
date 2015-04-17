@@ -693,5 +693,14 @@ int main(int argc, char *argv[]) {
 
   // Now, test the various interpolants for accuracy
 
-  printf("RMS error: %f\n", test_error(t1, values1));
+  printf("RMS error:\n");
+  printf("\tt1\tt2\n");
+  printf("Linear\t%.5f\t%.5f\n",
+         test_error(t1, values1), test_error(t2, values2));
+  printf("Cubic\t%.5f\t%.5f\n",
+         test_error(t1, vgrads1), test_error(t2, vgrads2));
+  printf("Quartic\t%.5f\t%.5f\n",
+         test_error(t1, egrads1), test_error(t2, egrads2));
+  printf("Quintic\t%.5f\t%.5f\n",
+         test_error(t1, fgrads1), test_error(t2, fgrads2));
 }
