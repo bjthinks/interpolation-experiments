@@ -56,15 +56,18 @@ public:
     }
 
     quintic_interpolant = quartic_interpolant;
-    for (int f = 0; f < 4; ++f) {
+    for (int opposite = 0; opposite < 4; ++opposite) {
+      int face1 = (opposite + 1) % 4;
+      int face2 = (opposite + 2) % 4;
+      int face3 = (opposite + 3) % 4;
+      Vector<3> center = t.faceCenter(opposite);
+      Vector<3> normal = t.faceNormal(opposite);
+      Vector<3> gradient_want = dff(center);
+      Vector<3> gradient_have = gradient(quartic_interpolant, center);
       quintic_interpolant +=
-        dot_product(dff(t.faceCenter(f))
-                    - gradient(quartic_interpolant, t.faceCenter(f)),
-                    t.faceNormal(f))
-        * faceGradient(indicator[(f + 1) % 4],
-                       indicator[(f + 2) % 4],
-                       indicator[(f + 3) % 4],
-                       indicator[f]);
+        dot_product(gradient_want - gradient_have, normal)
+        * faceGradient(indicator[face1], indicator[face2], indicator[face3],
+                       indicator[opposite]);
     }
   }
   const MPoly<3> &linear() const {
