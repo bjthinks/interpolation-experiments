@@ -50,6 +50,18 @@ public:
         }
       }
     }
+
+    quintic_poly = quartic_poly;
+    for (int f = 0; f < 4; ++f) {
+      quintic_poly +=
+        dot_product(dff(t.faceCenter(f))
+                    - gradient(quartic_poly, t.faceCenter(f)),
+                    t.faceNormal(f))
+        * faceGradient(indicator[(f + 1) % 4],
+                       indicator[(f + 2) % 4],
+                       indicator[(f + 3) % 4],
+                       indicator[f]);
+    }
   }
   const MPoly<3> &linear() const {
     return linear_poly;
@@ -60,11 +72,15 @@ public:
   const MPoly<3> &quartic() const {
     return quartic_poly;
   }
+  const MPoly<3> &quintic() const {
+    return quintic_poly;
+  }
 
 private:
   MPoly<3> linear_poly;
   MPoly<3> cubic_poly;
   MPoly<3> quartic_poly;
+  MPoly<3> quintic_poly;
 
   static MPoly<3> linear_indicator(const Vector<3> &one,
                                    const Vector<3> &zero1,
@@ -89,6 +105,10 @@ private:
   }
   static MPoly<3> edgeGradient(MPoly<3> &e1, MPoly<3> &e2, MPoly<3> &to) {
     return 4.0 * e1 * e2 * to * (e1 + e2 - to);
+  }
+  static MPoly<3> faceGradient(MPoly<3> &f1, MPoly<3> &f2, MPoly<3> &f3,
+                               MPoly<3> &to) {
+    return 27.0 * f1 * f2 * f3 * to * (1.0 - 3.0 * to);
   }
 };
 

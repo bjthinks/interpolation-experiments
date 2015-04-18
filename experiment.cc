@@ -417,15 +417,7 @@ int main(int argc, char *argv[]) {
 
   // Make interpolants that approximate these face gradients
 
-  MPoly<3> fgrads1 = egrads1
-    + dot_product(dff(pqr) - gradient(egrads1, pqr),
-                  t1.faceNormal(3)) * faceGradient(a, b, c, d)
-    + dot_product(dff(pqs) - gradient(egrads1, pqs),
-                  t1.faceNormal(2)) * faceGradient(a, b, d, c)
-    + dot_product(dff(prs) - gradient(egrads1, prs),
-                  t1.faceNormal(1)) * faceGradient(a, c, d, b)
-    + dot_product(dff(qrs) - gradient(egrads1, qrs),
-                  t1.faceNormal(0)) * faceGradient(b, c, d, a);
+  MPoly<3> fgrads1 = i1.quintic();
 
   MPoly<3> fgrads2 = egrads2
     + dot_product(dff(tqr) - gradient(egrads2, tqr),
