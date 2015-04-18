@@ -305,29 +305,21 @@ int main(int argc, char *argv[]) {
   should(double_equal(h(r), 0.0));
   should(double_equal(h(s), 1.0));
 
-  // Make up some values for the interpolant to have at the vertices
-
-  double p_value = ff(p);
-  double q_value = ff(q);
-  double r_value = ff(r);
-  double s_value = ff(s);
-  double t_value = ff(t);
-
   // Make interpolants that have these values
 
-  MPoly<3> values1 = p_value * a + q_value * b + r_value * c + s_value * d;
-  MPoly<3> values2 = t_value * e + q_value * f + r_value * g + s_value * h;
+  MPoly<3> values1 = ff(p) * a + ff(q) * b + ff(r) * c + ff(s) * d;
+  MPoly<3> values2 = ff(t) * e + ff(q) * f + ff(r) * g + ff(s) * h;
 
   // And check that they are correct
 
-  should(double_equal(values1(p), p_value));
-  should(double_equal(values1(q), q_value));
-  should(double_equal(values1(r), r_value));
-  should(double_equal(values1(s), s_value));
-  should(double_equal(values2(t), t_value));
-  should(double_equal(values2(q), q_value));
-  should(double_equal(values2(r), r_value));
-  should(double_equal(values2(s), s_value));
+  should(double_equal(values1(p), ff(p)));
+  should(double_equal(values1(q), ff(q)));
+  should(double_equal(values1(r), ff(r)));
+  should(double_equal(values1(s), ff(s)));
+  should(double_equal(values2(t), ff(t)));
+  should(double_equal(values2(q), ff(q)));
+  should(double_equal(values2(r), ff(r)));
+  should(double_equal(values2(s), ff(s)));
 
   // Now make up some gradients at each vertex
 
@@ -393,19 +385,19 @@ int main(int argc, char *argv[]) {
 
   // And check that they are correct
 
-  should(double_equal(vgrads1(p), p_value));
-  should(double_equal(vgrads1(q), q_value));
-  should(double_equal(vgrads1(r), r_value));
-  should(double_equal(vgrads1(s), s_value));
+  should(double_equal(vgrads1(p), ff(p)));
+  should(double_equal(vgrads1(q), ff(q)));
+  should(double_equal(vgrads1(r), ff(r)));
+  should(double_equal(vgrads1(s), ff(s)));
   should(vector_equal(gradient(vgrads1, p), p_gradient));
   should(vector_equal(gradient(vgrads1, q), q_gradient));
   should(vector_equal(gradient(vgrads1, r), r_gradient));
   should(vector_equal(gradient(vgrads1, s), s_gradient));
 
-  should(double_equal(vgrads2(t), t_value));
-  should(double_equal(vgrads2(q), q_value));
-  should(double_equal(vgrads2(r), r_value));
-  should(double_equal(vgrads2(s), s_value));
+  should(double_equal(vgrads2(t), ff(t)));
+  should(double_equal(vgrads2(q), ff(q)));
+  should(double_equal(vgrads2(r), ff(r)));
+  should(double_equal(vgrads2(s), ff(s)));
   should(vector_equal(gradient(vgrads2, t), t_gradient));
   should(vector_equal(gradient(vgrads2, q), q_gradient));
   should(vector_equal(gradient(vgrads2, r), r_gradient));
@@ -500,10 +492,10 @@ int main(int argc, char *argv[]) {
 
   // And check that they are correct
 
-  should(double_equal(egrads1(p), p_value));
-  should(double_equal(egrads1(q), q_value));
-  should(double_equal(egrads1(r), r_value));
-  should(double_equal(egrads1(s), s_value));
+  should(double_equal(egrads1(p), ff(p)));
+  should(double_equal(egrads1(q), ff(q)));
+  should(double_equal(egrads1(r), ff(r)));
+  should(double_equal(egrads1(s), ff(s)));
   should(vector_equal(gradient(egrads1, p), p_gradient));
   should(vector_equal(gradient(egrads1, q), q_gradient));
   should(vector_equal(gradient(egrads1, r), r_gradient));
@@ -521,10 +513,10 @@ int main(int argc, char *argv[]) {
   should(vector_equal(perp(rs_gradient, r - s),
                       perp(gradient(egrads1, rs), r - s)));
 
-  should(double_equal(egrads2(t), t_value));
-  should(double_equal(egrads2(q), q_value));
-  should(double_equal(egrads2(r), r_value));
-  should(double_equal(egrads2(s), s_value));
+  should(double_equal(egrads2(t), ff(t)));
+  should(double_equal(egrads2(q), ff(q)));
+  should(double_equal(egrads2(r), ff(r)));
+  should(double_equal(egrads2(s), ff(s)));
   should(vector_equal(gradient(egrads2, t), t_gradient));
   should(vector_equal(gradient(egrads2, q), q_gradient));
   should(vector_equal(gradient(egrads2, r), r_gradient));
@@ -601,10 +593,10 @@ int main(int argc, char *argv[]) {
 
   // And check that they are correct
 
-  should(double_equal(fgrads1(p), p_value));
-  should(double_equal(fgrads1(q), q_value));
-  should(double_equal(fgrads1(r), r_value));
-  should(double_equal(fgrads1(s), s_value));
+  should(double_equal(fgrads1(p), ff(p)));
+  should(double_equal(fgrads1(q), ff(q)));
+  should(double_equal(fgrads1(r), ff(r)));
+  should(double_equal(fgrads1(s), ff(s)));
   should(vector_equal(gradient(fgrads1, p), p_gradient));
   should(vector_equal(gradient(fgrads1, q), q_gradient));
   should(vector_equal(gradient(fgrads1, r), r_gradient));
@@ -634,10 +626,10 @@ int main(int argc, char *argv[]) {
                       project(gradient(fgrads1, qrs),
                               t1.faceNormalUnscaled(0))));
 
-  should(double_equal(fgrads2(t), t_value));
-  should(double_equal(fgrads2(q), q_value));
-  should(double_equal(fgrads2(r), r_value));
-  should(double_equal(fgrads2(s), s_value));
+  should(double_equal(fgrads2(t), ff(t)));
+  should(double_equal(fgrads2(q), ff(q)));
+  should(double_equal(fgrads2(r), ff(r)));
+  should(double_equal(fgrads2(s), ff(s)));
   should(vector_equal(gradient(fgrads2, t), t_gradient));
   should(vector_equal(gradient(fgrads2, q), q_gradient));
   should(vector_equal(gradient(fgrads2, r), r_gradient));
