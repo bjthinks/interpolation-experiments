@@ -9,16 +9,16 @@ public:
   Interpolant(const Tetrahedron &t, double (*ff)(const Vector<3> &),
               Vector<3> (*dff)(const Vector<3> &))
   {
-    MPoly<3> indicator[4];
+    MPoly<3> linear_basis[4];
     for (int i = 0; i < 4; ++i)
-      indicator[i] = linear_indicator(t.vertex(i),
-                                      t.vertex((i + 1) % 4),
-                                      t.vertex((i + 2) % 4),
-                                      t.vertex((i + 3) % 4));
+      linear_basis[i] = linear_indicator(t.vertex(i),
+                                         t.vertex((i + 1) % 4),
+                                         t.vertex((i + 2) % 4),
+                                         t.vertex((i + 3) % 4));
 
     linear_interpolant = 0.0;
     for (int v = 0; v < 4; ++v)
-      linear_interpolant += ff(t.vertex(v)) * indicator[v];
+      linear_interpolant += ff(t.vertex(v)) * linear_basis[v];
 
     cubic_interpolant = linear_interpolant;
     for (int at = 0; at < 4; ++at) {
@@ -31,7 +31,7 @@ public:
         Vector<3> edge = t.edge(at, towards);
         cubic_interpolant +=
           dot_product(gradient_difference, edge)
-          * vertexGradient(indicator[at], indicator[towards]);
+          * vertexGradient(linear_basis[at], linear_basis[towards]);
       }
     }
 
@@ -47,8 +47,8 @@ public:
           Vector<3> normal = t.edgeNormal(endpoint1, endpoint2, towards);
           quartic_interpolant +=
             dot_product(gradient_difference, normal)
-            * edgeGradient(indicator[endpoint1], indicator[endpoint2],
-                           indicator[towards]);
+            * edgeGradient(linear_basis[endpoint1], linear_basis[endpoint2],
+                           linear_basis[towards]);
         }
       }
     }
@@ -65,8 +65,8 @@ public:
       Vector<3> gradient_difference = gradient_want - gradient_have;
       quintic_interpolant +=
         dot_product(gradient_difference, normal)
-        * faceGradient(indicator[face1], indicator[face2], indicator[face3],
-                       indicator[opposite]);
+        * faceGradient(linear_basis[face1], linear_basis[face2],
+                       linear_basis[face3], linear_basis[opposite]);
     }
   }
   const MPoly<3> &linear() const {
