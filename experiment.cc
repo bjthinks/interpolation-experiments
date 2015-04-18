@@ -211,10 +211,6 @@ static MPoly<3> faceGradient(MPoly<3> &f1, MPoly<3> &f2, MPoly<3> &f3,
   return 27.0 * f1 * f2 * f3 * to * (1.0 - 3.0 * to);
 }
 
-static MPoly<3> edgeGradient(MPoly<3> &e1, MPoly<3> &e2, MPoly<3> &to) {
-  return 4.0 * e1 * e2 * to * (e1 + e2 - to);
-}
-
 double ff(const Vector<3> &x) {
   double value = x[0] * x[0] + sin(x[1]) + exp(x[2]);
   return value;
@@ -347,32 +343,7 @@ int main(int argc, char *argv[]) {
   // Make interpolants that approximate these edge gradients
 
   MPoly<3> egrads1 = i1.quartic();
-
-  MPoly<3> egrads2 = vgrads2
-    + dot_product(dff(tq) - gradient(vgrads2, tq),
-                  t2.edgeNormal(0, 1, 2)) * edgeGradient(e, f, g)
-    + dot_product(dff(tq) - gradient(vgrads2, tq),
-                  t2.edgeNormal(0, 1, 3)) * edgeGradient(e, f, h)
-    + dot_product(dff(tr) - gradient(vgrads2, tr),
-                  t2.edgeNormal(0, 2, 1)) * edgeGradient(e, g, f)
-    + dot_product(dff(tr) - gradient(vgrads2, tr),
-                  t2.edgeNormal(0, 2, 3)) * edgeGradient(e, g, h)
-    + dot_product(dff(ts) - gradient(vgrads2, ts),
-                  t2.edgeNormal(0, 3, 1)) * edgeGradient(e, h, f)
-    + dot_product(dff(ts) - gradient(vgrads2, ts),
-                  t2.edgeNormal(0, 3, 2)) * edgeGradient(e, h, g)
-    + dot_product(dff(qr) - gradient(vgrads2, qr),
-                  t2.edgeNormal(1, 2, 0)) * edgeGradient(f, g, e)
-    + dot_product(dff(qr) - gradient(vgrads2, qr),
-                  t2.edgeNormal(1, 2, 3)) * edgeGradient(f, g, h)
-    + dot_product(dff(qs) - gradient(vgrads2, qs),
-                  t2.edgeNormal(1, 3, 0)) * edgeGradient(f, h, e)
-    + dot_product(dff(qs) - gradient(vgrads2, qs),
-                  t2.edgeNormal(1, 3, 2)) * edgeGradient(f, h, g)
-    + dot_product(dff(rs) - gradient(vgrads2, rs),
-                  t2.edgeNormal(2, 3, 0)) * edgeGradient(g, h, e)
-    + dot_product(dff(rs) - gradient(vgrads2, rs),
-                  t2.edgeNormal(2, 3, 1)) * edgeGradient(g, h, f);
+  MPoly<3> egrads2 = i2.quartic();
 
   // And check that they are correct
 
