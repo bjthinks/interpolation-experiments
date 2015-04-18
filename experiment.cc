@@ -5,6 +5,7 @@
 
 #include "mpoly.hh"
 #include "tetrahedron.hh"
+#include "interpolant.hh"
 
 using namespace std;
 
@@ -270,6 +271,8 @@ int main(int argc, char *argv[]) {
 
   Tetrahedron t1(p, q, r, s);
   Tetrahedron t2(t, q, r, s);
+
+  Interpolant i1(t1);
 
   // Define some linear functions on the tetrahedra
 
