@@ -394,19 +394,11 @@ int main(int argc, char *argv[]) {
   Vector<3> qs = t1.edgeMidpoint(1, 3); // == t2.edgeMidpoint(1, 3);
   Vector<3> rs = t1.edgeMidpoint(2, 3); // == t2.edgeMidpoint(2, 3);
 
-  Vector<3> qr_gradient = dff(qr);
-  Vector<3> qs_gradient = dff(qs);
-  Vector<3> rs_gradient = dff(rs);
-
   // Edges unique to first tetrahedron
 
   Vector<3> pq = t1.edgeMidpoint(0, 1);
   Vector<3> pr = t1.edgeMidpoint(0, 2);
   Vector<3> ps = t1.edgeMidpoint(0, 3);
-
-  Vector<3> pq_gradient = dff(pq);
-  Vector<3> pr_gradient = dff(pr);
-  Vector<3> ps_gradient = dff(ps);
 
   // Edges unique to second tetrahedron
 
@@ -414,62 +406,58 @@ int main(int argc, char *argv[]) {
   Vector<3> tr = t2.edgeMidpoint(0, 2);
   Vector<3> ts = t2.edgeMidpoint(0, 3);
 
-  Vector<3> tq_gradient = dff(tq);
-  Vector<3> tr_gradient = dff(tr);
-  Vector<3> ts_gradient = dff(ts);
-
   // Make interpolants that approximate these edge gradients
 
   MPoly<3> egrads1 = vgrads1
-    + dot_product(pq_gradient - gradient(vgrads1, pq),
+    + dot_product(dff(pq) - gradient(vgrads1, pq),
                   t1.edgeNormal(0, 1, 2)) * edgeGradient(a, b, c)
-    + dot_product(pq_gradient - gradient(vgrads1, pq),
+    + dot_product(dff(pq) - gradient(vgrads1, pq),
                   t1.edgeNormal(0, 1, 3)) * edgeGradient(a, b, d)
-    + dot_product(pr_gradient - gradient(vgrads1, pr),
+    + dot_product(dff(pr) - gradient(vgrads1, pr),
                   t1.edgeNormal(0, 2, 1)) * edgeGradient(a, c, b)
-    + dot_product(pr_gradient - gradient(vgrads1, pr),
+    + dot_product(dff(pr) - gradient(vgrads1, pr),
                   t1.edgeNormal(0, 2, 3)) * edgeGradient(a, c, d)
-    + dot_product(ps_gradient - gradient(vgrads1, ps),
+    + dot_product(dff(ps) - gradient(vgrads1, ps),
                   t1.edgeNormal(0, 3, 1)) * edgeGradient(a, d, b)
-    + dot_product(ps_gradient - gradient(vgrads1, ps),
+    + dot_product(dff(ps) - gradient(vgrads1, ps),
                   t1.edgeNormal(0, 3, 2)) * edgeGradient(a, d, c)
-    + dot_product(qr_gradient - gradient(vgrads1, qr),
+    + dot_product(dff(qr) - gradient(vgrads1, qr),
                   t1.edgeNormal(1, 2, 0)) * edgeGradient(b, c, a)
-    + dot_product(qr_gradient - gradient(vgrads1, qr),
+    + dot_product(dff(qr) - gradient(vgrads1, qr),
                   t1.edgeNormal(1, 2, 3)) * edgeGradient(b, c, d)
-    + dot_product(qs_gradient - gradient(vgrads1, qs),
+    + dot_product(dff(qs) - gradient(vgrads1, qs),
                   t1.edgeNormal(1, 3, 0)) * edgeGradient(b, d, a)
-    + dot_product(qs_gradient - gradient(vgrads1, qs),
+    + dot_product(dff(qs) - gradient(vgrads1, qs),
                   t1.edgeNormal(1, 3, 2)) * edgeGradient(b, d, c)
-    + dot_product(rs_gradient - gradient(vgrads1, rs),
+    + dot_product(dff(rs) - gradient(vgrads1, rs),
                   t1.edgeNormal(2, 3, 0)) * edgeGradient(c, d, a)
-    + dot_product(rs_gradient - gradient(vgrads1, rs),
+    + dot_product(dff(rs) - gradient(vgrads1, rs),
                   t1.edgeNormal(2, 3, 1)) * edgeGradient(c, d, b);
 
   MPoly<3> egrads2 = vgrads2
-    + dot_product(tq_gradient - gradient(vgrads2, tq),
+    + dot_product(dff(tq) - gradient(vgrads2, tq),
                   t2.edgeNormal(0, 1, 2)) * edgeGradient(e, f, g)
-    + dot_product(tq_gradient - gradient(vgrads2, tq),
+    + dot_product(dff(tq) - gradient(vgrads2, tq),
                   t2.edgeNormal(0, 1, 3)) * edgeGradient(e, f, h)
-    + dot_product(tr_gradient - gradient(vgrads2, tr),
+    + dot_product(dff(tr) - gradient(vgrads2, tr),
                   t2.edgeNormal(0, 2, 1)) * edgeGradient(e, g, f)
-    + dot_product(tr_gradient - gradient(vgrads2, tr),
+    + dot_product(dff(tr) - gradient(vgrads2, tr),
                   t2.edgeNormal(0, 2, 3)) * edgeGradient(e, g, h)
-    + dot_product(ts_gradient - gradient(vgrads2, ts),
+    + dot_product(dff(ts) - gradient(vgrads2, ts),
                   t2.edgeNormal(0, 3, 1)) * edgeGradient(e, h, f)
-    + dot_product(ts_gradient - gradient(vgrads2, ts),
+    + dot_product(dff(ts) - gradient(vgrads2, ts),
                   t2.edgeNormal(0, 3, 2)) * edgeGradient(e, h, g)
-    + dot_product(qr_gradient - gradient(vgrads2, qr),
+    + dot_product(dff(qr) - gradient(vgrads2, qr),
                   t2.edgeNormal(1, 2, 0)) * edgeGradient(f, g, e)
-    + dot_product(qr_gradient - gradient(vgrads2, qr),
+    + dot_product(dff(qr) - gradient(vgrads2, qr),
                   t2.edgeNormal(1, 2, 3)) * edgeGradient(f, g, h)
-    + dot_product(qs_gradient - gradient(vgrads2, qs),
+    + dot_product(dff(qs) - gradient(vgrads2, qs),
                   t2.edgeNormal(1, 3, 0)) * edgeGradient(f, h, e)
-    + dot_product(qs_gradient - gradient(vgrads2, qs),
+    + dot_product(dff(qs) - gradient(vgrads2, qs),
                   t2.edgeNormal(1, 3, 2)) * edgeGradient(f, h, g)
-    + dot_product(rs_gradient - gradient(vgrads2, rs),
+    + dot_product(dff(rs) - gradient(vgrads2, rs),
                   t2.edgeNormal(2, 3, 0)) * edgeGradient(g, h, e)
-    + dot_product(rs_gradient - gradient(vgrads2, rs),
+    + dot_product(dff(rs) - gradient(vgrads2, rs),
                   t2.edgeNormal(2, 3, 1)) * edgeGradient(g, h, f);
 
   // And check that they are correct
@@ -482,17 +470,17 @@ int main(int argc, char *argv[]) {
   should(vector_equal(gradient(egrads1, q), q_gradient));
   should(vector_equal(gradient(egrads1, r), r_gradient));
   should(vector_equal(gradient(egrads1, s), s_gradient));
-  should(vector_equal(perp(pq_gradient, p - q),
+  should(vector_equal(perp(dff(pq), p - q),
                       perp(gradient(egrads1, pq), p - q)));
-  should(vector_equal(perp(pr_gradient, p - r),
+  should(vector_equal(perp(dff(pr), p - r),
                       perp(gradient(egrads1, pr), p - r)));
-  should(vector_equal(perp(ps_gradient, p - s),
+  should(vector_equal(perp(dff(ps), p - s),
                       perp(gradient(egrads1, ps), p - s)));
-  should(vector_equal(perp(qr_gradient, q - r),
+  should(vector_equal(perp(dff(qr), q - r),
                       perp(gradient(egrads1, qr), q - r)));
-  should(vector_equal(perp(qs_gradient, q - s),
+  should(vector_equal(perp(dff(qs), q - s),
                       perp(gradient(egrads1, qs), q - s)));
-  should(vector_equal(perp(rs_gradient, r - s),
+  should(vector_equal(perp(dff(rs), r - s),
                       perp(gradient(egrads1, rs), r - s)));
 
   should(double_equal(egrads2(t), ff(t)));
@@ -503,17 +491,17 @@ int main(int argc, char *argv[]) {
   should(vector_equal(gradient(egrads2, q), q_gradient));
   should(vector_equal(gradient(egrads2, r), r_gradient));
   should(vector_equal(gradient(egrads2, s), s_gradient));
-  should(vector_equal(perp(tq_gradient, t - q),
+  should(vector_equal(perp(dff(tq), t - q),
                       perp(gradient(egrads2, tq), t - q)));
-  should(vector_equal(perp(tr_gradient, t - r),
+  should(vector_equal(perp(dff(tr), t - r),
                       perp(gradient(egrads2, tr), t - r)));
-  should(vector_equal(perp(ts_gradient, t - s),
+  should(vector_equal(perp(dff(ts), t - s),
                       perp(gradient(egrads2, ts), t - s)));
-  should(vector_equal(perp(qr_gradient, q - r),
+  should(vector_equal(perp(dff(qr), q - r),
                       perp(gradient(egrads2, qr), q - r)));
-  should(vector_equal(perp(qs_gradient, q - s),
+  should(vector_equal(perp(dff(qs), q - s),
                       perp(gradient(egrads2, qs), q - s)));
-  should(vector_equal(perp(rs_gradient, r - s),
+  should(vector_equal(perp(dff(rs), r - s),
                       perp(gradient(egrads2, rs), r - s)));
 
   // In particular, edge gradients of the two interpolants
@@ -574,17 +562,17 @@ int main(int argc, char *argv[]) {
   should(vector_equal(gradient(fgrads1, q), q_gradient));
   should(vector_equal(gradient(fgrads1, r), r_gradient));
   should(vector_equal(gradient(fgrads1, s), s_gradient));
-  should(vector_equal(perp(pq_gradient, p - q),
+  should(vector_equal(perp(dff(pq), p - q),
                       perp(gradient(fgrads1, pq), p - q)));
-  should(vector_equal(perp(pr_gradient, p - r),
+  should(vector_equal(perp(dff(pr), p - r),
                       perp(gradient(fgrads1, pr), p - r)));
-  should(vector_equal(perp(ps_gradient, p - s),
+  should(vector_equal(perp(dff(ps), p - s),
                       perp(gradient(fgrads1, ps), p - s)));
-  should(vector_equal(perp(qr_gradient, q - r),
+  should(vector_equal(perp(dff(qr), q - r),
                       perp(gradient(fgrads1, qr), q - r)));
-  should(vector_equal(perp(qs_gradient, q - s),
+  should(vector_equal(perp(dff(qs), q - s),
                       perp(gradient(fgrads1, qs), q - s)));
-  should(vector_equal(perp(rs_gradient, r - s),
+  should(vector_equal(perp(dff(rs), r - s),
                       perp(gradient(fgrads1, rs), r - s)));
   should(vector_equal(project(dff(pqr), t1.faceNormalUnscaled(3)),
                       project(gradient(fgrads1, pqr),
@@ -607,17 +595,17 @@ int main(int argc, char *argv[]) {
   should(vector_equal(gradient(fgrads2, q), q_gradient));
   should(vector_equal(gradient(fgrads2, r), r_gradient));
   should(vector_equal(gradient(fgrads2, s), s_gradient));
-  should(vector_equal(perp(tq_gradient, t - q),
+  should(vector_equal(perp(dff(tq), t - q),
                       perp(gradient(fgrads2, tq), t - q)));
-  should(vector_equal(perp(tr_gradient, t - r),
+  should(vector_equal(perp(dff(tr), t - r),
                       perp(gradient(fgrads2, tr), t - r)));
-  should(vector_equal(perp(ts_gradient, t - s),
+  should(vector_equal(perp(dff(ts), t - s),
                       perp(gradient(fgrads2, ts), t - s)));
-  should(vector_equal(perp(qr_gradient, q - r),
+  should(vector_equal(perp(dff(qr), q - r),
                       perp(gradient(fgrads2, qr), q - r)));
-  should(vector_equal(perp(qs_gradient, q - s),
+  should(vector_equal(perp(dff(qs), q - s),
                       perp(gradient(fgrads2, qs), q - s)));
-  should(vector_equal(perp(rs_gradient, r - s),
+  should(vector_equal(perp(dff(rs), r - s),
                       perp(gradient(fgrads2, rs), r - s)));
   should(vector_equal(project(dff(tqr), t2.faceNormalUnscaled(3)),
                       project(gradient(fgrads2, tqr),
