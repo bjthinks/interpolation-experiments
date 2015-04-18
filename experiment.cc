@@ -273,6 +273,7 @@ int main(int argc, char *argv[]) {
   Tetrahedron t2(t, q, r, s);
 
   Interpolant i1(t1, ff);
+  Interpolant i2(t2, ff);
 
   // Define some linear functions on the tetrahedra
 
@@ -286,29 +287,10 @@ int main(int argc, char *argv[]) {
   MPoly<3> g = linear_indicator(r, t, q, s);
   MPoly<3> h = linear_indicator(s, t, q, r);
 
-  // Make sure they have the desired properties
-
-  should(double_equal(e(t), 1.0));
-  should(double_equal(e(q), 0.0));
-  should(double_equal(e(r), 0.0));
-  should(double_equal(e(s), 0.0));
-  should(double_equal(f(t), 0.0));
-  should(double_equal(f(q), 1.0));
-  should(double_equal(f(r), 0.0));
-  should(double_equal(f(s), 0.0));
-  should(double_equal(g(t), 0.0));
-  should(double_equal(g(q), 0.0));
-  should(double_equal(g(r), 1.0));
-  should(double_equal(g(s), 0.0));
-  should(double_equal(h(t), 0.0));
-  should(double_equal(h(q), 0.0));
-  should(double_equal(h(r), 0.0));
-  should(double_equal(h(s), 1.0));
-
   // Make interpolants that have these values
 
   MPoly<3> values1 = i1.linear();
-  MPoly<3> values2 = ff(t) * e + ff(q) * f + ff(r) * g + ff(s) * h;
+  MPoly<3> values2 = i2.linear();
 
   // And check that they are correct
 
