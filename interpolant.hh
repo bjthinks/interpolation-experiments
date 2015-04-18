@@ -19,6 +19,13 @@ public:
     MPoly<3> d = linear_indicator(s, p, q, r);
 
     linear_poly = ff(p) * a + ff(q) * b + ff(r) * c + ff(s) * d;
+
+    Vector<3> pq = t.edgeMidpoint(0, 1);
+    Vector<3> pr = t.edgeMidpoint(0, 2);
+    Vector<3> ps = t.edgeMidpoint(0, 3);
+    Vector<3> qr = t.edgeMidpoint(1, 2);
+    Vector<3> qs = t.edgeMidpoint(1, 3);
+    Vector<3> rs = t.edgeMidpoint(2, 3);
   }
   const MPoly<3> &linear() const {
     return linear_poly;
