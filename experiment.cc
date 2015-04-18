@@ -163,19 +163,6 @@ static Vector<N> random_vector() {
   return foo;
 }
 
-static MPoly<3> linear_indicator(const Vector<3> &one,
-                                 const Vector<3> &zero1,
-                                 const Vector<3> &zero2,
-                                 const Vector<3> &zero3) {
-  Vector<3> zero_normal = cross_product(zero2 - zero1, zero3 - zero1);
-  MPoly<3> pre_result
-    = zero_normal[0] * MPoly<3>::var(0)
-    + zero_normal[1] * MPoly<3>::var(1)
-    + zero_normal[2] * MPoly<3>::var(2);
-  return (pre_result - pre_result(zero1))
-    / (pre_result(one) - pre_result(zero1));
-}
-
 static bool double_equal(double a, double b) {
   double diff = a - b;
   if (fabs(diff) < 1e-12)
