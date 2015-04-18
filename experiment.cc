@@ -215,10 +215,6 @@ static MPoly<3> edgeGradient(MPoly<3> &e1, MPoly<3> &e2, MPoly<3> &to) {
   return 4.0 * e1 * e2 * to * (e1 + e2 - to);
 }
 
-static MPoly<3> vertexGradient(MPoly<3> &v, MPoly<3> &to) {
-  return v * v * to;
-}
-
 double ff(const Vector<3> &x) {
   double value = x[0] * x[0] + sin(x[1]) + exp(x[2]);
   return value;
@@ -306,32 +302,7 @@ int main(int argc, char *argv[]) {
   // Now make interpolants that have these vertex gradients
 
   MPoly<3> vgrads1 = i1.cubic();
-
-  MPoly<3> vgrads2 = values2
-    + dot_product(dff(t) - gradient(values2, t),
-                  t2.edge(0, 1)) * vertexGradient(e, f)
-    + dot_product(dff(t) - gradient(values2, t),
-                  t2.edge(0, 2)) * vertexGradient(e, g)
-    + dot_product(dff(t) - gradient(values2, t),
-                  t2.edge(0, 3)) * vertexGradient(e, h)
-    + dot_product(dff(q) - gradient(values2, q),
-                  t2.edge(1, 0)) * vertexGradient(f, e)
-    + dot_product(dff(q) - gradient(values2, q),
-                  t2.edge(1, 2)) * vertexGradient(f, g)
-    + dot_product(dff(q) - gradient(values2, q),
-                  t2.edge(1, 3)) * vertexGradient(f, h)
-    + dot_product(dff(r) - gradient(values2, r),
-                  t2.edge(2, 0)) * vertexGradient(g, e)
-    + dot_product(dff(r) - gradient(values2, r),
-                  t2.edge(2, 1)) * vertexGradient(g, f)
-    + dot_product(dff(r) - gradient(values2, r),
-                  t2.edge(2, 3)) * vertexGradient(g, h)
-    + dot_product(dff(s) - gradient(values2, s),
-                  t2.edge(3, 0)) * vertexGradient(h, e)
-    + dot_product(dff(s) - gradient(values2, s),
-                  t2.edge(3, 1)) * vertexGradient(h, f)
-    + dot_product(dff(s) - gradient(values2, s),
-                  t2.edge(3, 2)) * vertexGradient(h, g);
+  MPoly<3> vgrads2 = i2.cubic();
 
   // And check that they are correct
 
@@ -353,8 +324,7 @@ int main(int argc, char *argv[]) {
   should(vector_equal(gradient(vgrads2, r), dff(r)));
   should(vector_equal(gradient(vgrads2, s), dff(s)));
 
-  // Now define the edge midpoints, and make up gradients to approximate
-  // at each of them
+  // Now define the edge midpoints
 
   // Shared edges
 
@@ -376,31 +346,7 @@ int main(int argc, char *argv[]) {
 
   // Make interpolants that approximate these edge gradients
 
-  MPoly<3> egrads1 = vgrads1
-    + dot_product(dff(pq) - gradient(vgrads1, pq),
-                  t1.edgeNormal(0, 1, 2)) * edgeGradient(a, b, c)
-    + dot_product(dff(pq) - gradient(vgrads1, pq),
-                  t1.edgeNormal(0, 1, 3)) * edgeGradient(a, b, d)
-    + dot_product(dff(pr) - gradient(vgrads1, pr),
-                  t1.edgeNormal(0, 2, 1)) * edgeGradient(a, c, b)
-    + dot_product(dff(pr) - gradient(vgrads1, pr),
-                  t1.edgeNormal(0, 2, 3)) * edgeGradient(a, c, d)
-    + dot_product(dff(ps) - gradient(vgrads1, ps),
-                  t1.edgeNormal(0, 3, 1)) * edgeGradient(a, d, b)
-    + dot_product(dff(ps) - gradient(vgrads1, ps),
-                  t1.edgeNormal(0, 3, 2)) * edgeGradient(a, d, c)
-    + dot_product(dff(qr) - gradient(vgrads1, qr),
-                  t1.edgeNormal(1, 2, 0)) * edgeGradient(b, c, a)
-    + dot_product(dff(qr) - gradient(vgrads1, qr),
-                  t1.edgeNormal(1, 2, 3)) * edgeGradient(b, c, d)
-    + dot_product(dff(qs) - gradient(vgrads1, qs),
-                  t1.edgeNormal(1, 3, 0)) * edgeGradient(b, d, a)
-    + dot_product(dff(qs) - gradient(vgrads1, qs),
-                  t1.edgeNormal(1, 3, 2)) * edgeGradient(b, d, c)
-    + dot_product(dff(rs) - gradient(vgrads1, rs),
-                  t1.edgeNormal(2, 3, 0)) * edgeGradient(c, d, a)
-    + dot_product(dff(rs) - gradient(vgrads1, rs),
-                  t1.edgeNormal(2, 3, 1)) * edgeGradient(c, d, b);
+  MPoly<3> egrads1 = i1.quartic();
 
   MPoly<3> egrads2 = vgrads2
     + dot_product(dff(tq) - gradient(vgrads2, tq),

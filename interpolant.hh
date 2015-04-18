@@ -35,6 +35,21 @@ public:
           * vertexGradient(indicator[v_from], indicator[v_to]);
       }
     }
+
+    quartic_poly = cubic_poly;
+    for (int e0 = 0; e0 < 4; ++e0) {
+      for (int e1 = e0 + 1; e1 < 4; ++e1) {
+        for (int to = 0; to < 4; ++to) {
+          if (e0 == to || e1 == to)
+            continue;
+          quartic_poly += dot_product(dff(t.edgeMidpoint(e0, e1))
+                                    - gradient(cubic_poly,
+                                               t.edgeMidpoint(e0, e1)),
+                                    t.edgeNormal(e0, e1, to))
+          * edgeGradient(indicator[e0], indicator[e1], indicator[to]);
+        }
+      }
+    }
   }
   const MPoly<3> &linear() const {
     return linear_poly;
@@ -42,10 +57,14 @@ public:
   const MPoly<3> &cubic() const {
     return cubic_poly;
   }
+  const MPoly<3> &quartic() const {
+    return quartic_poly;
+  }
 
 private:
   MPoly<3> linear_poly;
   MPoly<3> cubic_poly;
+  MPoly<3> quartic_poly;
 
   static MPoly<3> linear_indicator(const Vector<3> &one,
                                    const Vector<3> &zero1,
@@ -67,6 +86,9 @@ private:
   }
   static MPoly<3> vertexGradient(MPoly<3> &v, MPoly<3> &to) {
     return v * v * to;
+  }
+  static MPoly<3> edgeGradient(MPoly<3> &e1, MPoly<3> &e2, MPoly<3> &to) {
+    return 4.0 * e1 * e2 * to * (e1 + e2 - to);
   }
 };
 
