@@ -272,8 +272,8 @@ int main(int argc, char *argv[]) {
   Tetrahedron t1(p, q, r, s);
   Tetrahedron t2(t, q, r, s);
 
-  Interpolant i1(t1, ff);
-  Interpolant i2(t2, ff);
+  Interpolant i1(t1, ff, dff);
+  Interpolant i2(t2, ff, dff);
 
   // Define some linear functions on the tetrahedra
 
@@ -305,31 +305,7 @@ int main(int argc, char *argv[]) {
 
   // Now make interpolants that have these vertex gradients
 
-  MPoly<3> vgrads1 = values1
-    + dot_product(dff(p) - gradient(values1, p),
-                  t1.edge(0, 1)) * vertexGradient(a, b)
-    + dot_product(dff(p) - gradient(values1, p),
-                  t1.edge(0, 2)) * vertexGradient(a, c)
-    + dot_product(dff(p) - gradient(values1, p),
-                  t1.edge(0, 3)) * vertexGradient(a, d)
-    + dot_product(dff(q) - gradient(values1, q),
-                  t1.edge(1, 0)) * vertexGradient(b, a)
-    + dot_product(dff(q) - gradient(values1, q),
-                  t1.edge(1, 2)) * vertexGradient(b, c)
-    + dot_product(dff(q) - gradient(values1, q),
-                  t1.edge(1, 3)) * vertexGradient(b, d)
-    + dot_product(dff(r) - gradient(values1, r),
-                  t1.edge(2, 0)) * vertexGradient(c, a)
-    + dot_product(dff(r) - gradient(values1, r),
-                  t1.edge(2, 1)) * vertexGradient(c, b)
-    + dot_product(dff(r) - gradient(values1, r),
-                  t1.edge(2, 3)) * vertexGradient(c, d)
-    + dot_product(dff(s) - gradient(values1, s),
-                  t1.edge(3, 0)) * vertexGradient(d, a)
-    + dot_product(dff(s) - gradient(values1, s),
-                  t1.edge(3, 1)) * vertexGradient(d, b)
-    + dot_product(dff(s) - gradient(values1, s),
-                  t1.edge(3, 2)) * vertexGradient(d, c);
+  MPoly<3> vgrads1 = i1.cubic();
 
   MPoly<3> vgrads2 = values2
     + dot_product(dff(t) - gradient(values2, t),
