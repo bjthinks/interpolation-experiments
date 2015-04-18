@@ -303,66 +303,58 @@ int main(int argc, char *argv[]) {
   should(double_equal(values2(r), ff(r)));
   should(double_equal(values2(s), ff(s)));
 
-  // Now make up some gradients at each vertex
-
-  Vector<3> p_gradient = dff(p);
-  Vector<3> q_gradient = dff(q);
-  Vector<3> r_gradient = dff(r);
-  Vector<3> s_gradient = dff(s);
-  Vector<3> t_gradient = dff(t);
-
-  // And make interpolants that have these vertex gradients
+  // Now make interpolants that have these vertex gradients
 
   MPoly<3> vgrads1 = values1
-    + dot_product(p_gradient - gradient(values1, p),
+    + dot_product(dff(p) - gradient(values1, p),
                   t1.edge(0, 1)) * vertexGradient(a, b)
-    + dot_product(p_gradient - gradient(values1, p),
+    + dot_product(dff(p) - gradient(values1, p),
                   t1.edge(0, 2)) * vertexGradient(a, c)
-    + dot_product(p_gradient - gradient(values1, p),
+    + dot_product(dff(p) - gradient(values1, p),
                   t1.edge(0, 3)) * vertexGradient(a, d)
-    + dot_product(q_gradient - gradient(values1, q),
+    + dot_product(dff(q) - gradient(values1, q),
                   t1.edge(1, 0)) * vertexGradient(b, a)
-    + dot_product(q_gradient - gradient(values1, q),
+    + dot_product(dff(q) - gradient(values1, q),
                   t1.edge(1, 2)) * vertexGradient(b, c)
-    + dot_product(q_gradient - gradient(values1, q),
+    + dot_product(dff(q) - gradient(values1, q),
                   t1.edge(1, 3)) * vertexGradient(b, d)
-    + dot_product(r_gradient - gradient(values1, r),
+    + dot_product(dff(r) - gradient(values1, r),
                   t1.edge(2, 0)) * vertexGradient(c, a)
-    + dot_product(r_gradient - gradient(values1, r),
+    + dot_product(dff(r) - gradient(values1, r),
                   t1.edge(2, 1)) * vertexGradient(c, b)
-    + dot_product(r_gradient - gradient(values1, r),
+    + dot_product(dff(r) - gradient(values1, r),
                   t1.edge(2, 3)) * vertexGradient(c, d)
-    + dot_product(s_gradient - gradient(values1, s),
+    + dot_product(dff(s) - gradient(values1, s),
                   t1.edge(3, 0)) * vertexGradient(d, a)
-    + dot_product(s_gradient - gradient(values1, s),
+    + dot_product(dff(s) - gradient(values1, s),
                   t1.edge(3, 1)) * vertexGradient(d, b)
-    + dot_product(s_gradient - gradient(values1, s),
+    + dot_product(dff(s) - gradient(values1, s),
                   t1.edge(3, 2)) * vertexGradient(d, c);
 
   MPoly<3> vgrads2 = values2
-    + dot_product(t_gradient - gradient(values2, t),
+    + dot_product(dff(t) - gradient(values2, t),
                   t2.edge(0, 1)) * vertexGradient(e, f)
-    + dot_product(t_gradient - gradient(values2, t),
+    + dot_product(dff(t) - gradient(values2, t),
                   t2.edge(0, 2)) * vertexGradient(e, g)
-    + dot_product(t_gradient - gradient(values2, t),
+    + dot_product(dff(t) - gradient(values2, t),
                   t2.edge(0, 3)) * vertexGradient(e, h)
-    + dot_product(q_gradient - gradient(values2, q),
+    + dot_product(dff(q) - gradient(values2, q),
                   t2.edge(1, 0)) * vertexGradient(f, e)
-    + dot_product(q_gradient - gradient(values2, q),
+    + dot_product(dff(q) - gradient(values2, q),
                   t2.edge(1, 2)) * vertexGradient(f, g)
-    + dot_product(q_gradient - gradient(values2, q),
+    + dot_product(dff(q) - gradient(values2, q),
                   t2.edge(1, 3)) * vertexGradient(f, h)
-    + dot_product(r_gradient - gradient(values2, r),
+    + dot_product(dff(r) - gradient(values2, r),
                   t2.edge(2, 0)) * vertexGradient(g, e)
-    + dot_product(r_gradient - gradient(values2, r),
+    + dot_product(dff(r) - gradient(values2, r),
                   t2.edge(2, 1)) * vertexGradient(g, f)
-    + dot_product(r_gradient - gradient(values2, r),
+    + dot_product(dff(r) - gradient(values2, r),
                   t2.edge(2, 3)) * vertexGradient(g, h)
-    + dot_product(s_gradient - gradient(values2, s),
+    + dot_product(dff(s) - gradient(values2, s),
                   t2.edge(3, 0)) * vertexGradient(h, e)
-    + dot_product(s_gradient - gradient(values2, s),
+    + dot_product(dff(s) - gradient(values2, s),
                   t2.edge(3, 1)) * vertexGradient(h, f)
-    + dot_product(s_gradient - gradient(values2, s),
+    + dot_product(dff(s) - gradient(values2, s),
                   t2.edge(3, 2)) * vertexGradient(h, g);
 
   // And check that they are correct
@@ -371,19 +363,19 @@ int main(int argc, char *argv[]) {
   should(double_equal(vgrads1(q), ff(q)));
   should(double_equal(vgrads1(r), ff(r)));
   should(double_equal(vgrads1(s), ff(s)));
-  should(vector_equal(gradient(vgrads1, p), p_gradient));
-  should(vector_equal(gradient(vgrads1, q), q_gradient));
-  should(vector_equal(gradient(vgrads1, r), r_gradient));
-  should(vector_equal(gradient(vgrads1, s), s_gradient));
+  should(vector_equal(gradient(vgrads1, p), dff(p)));
+  should(vector_equal(gradient(vgrads1, q), dff(q)));
+  should(vector_equal(gradient(vgrads1, r), dff(r)));
+  should(vector_equal(gradient(vgrads1, s), dff(s)));
 
   should(double_equal(vgrads2(t), ff(t)));
   should(double_equal(vgrads2(q), ff(q)));
   should(double_equal(vgrads2(r), ff(r)));
   should(double_equal(vgrads2(s), ff(s)));
-  should(vector_equal(gradient(vgrads2, t), t_gradient));
-  should(vector_equal(gradient(vgrads2, q), q_gradient));
-  should(vector_equal(gradient(vgrads2, r), r_gradient));
-  should(vector_equal(gradient(vgrads2, s), s_gradient));
+  should(vector_equal(gradient(vgrads2, t), dff(t)));
+  should(vector_equal(gradient(vgrads2, q), dff(q)));
+  should(vector_equal(gradient(vgrads2, r), dff(r)));
+  should(vector_equal(gradient(vgrads2, s), dff(s)));
 
   // Now define the edge midpoints, and make up gradients to approximate
   // at each of them
@@ -466,10 +458,10 @@ int main(int argc, char *argv[]) {
   should(double_equal(egrads1(q), ff(q)));
   should(double_equal(egrads1(r), ff(r)));
   should(double_equal(egrads1(s), ff(s)));
-  should(vector_equal(gradient(egrads1, p), p_gradient));
-  should(vector_equal(gradient(egrads1, q), q_gradient));
-  should(vector_equal(gradient(egrads1, r), r_gradient));
-  should(vector_equal(gradient(egrads1, s), s_gradient));
+  should(vector_equal(gradient(egrads1, p), dff(p)));
+  should(vector_equal(gradient(egrads1, q), dff(q)));
+  should(vector_equal(gradient(egrads1, r), dff(r)));
+  should(vector_equal(gradient(egrads1, s), dff(s)));
   should(vector_equal(perp(dff(pq), p - q),
                       perp(gradient(egrads1, pq), p - q)));
   should(vector_equal(perp(dff(pr), p - r),
@@ -487,10 +479,10 @@ int main(int argc, char *argv[]) {
   should(double_equal(egrads2(q), ff(q)));
   should(double_equal(egrads2(r), ff(r)));
   should(double_equal(egrads2(s), ff(s)));
-  should(vector_equal(gradient(egrads2, t), t_gradient));
-  should(vector_equal(gradient(egrads2, q), q_gradient));
-  should(vector_equal(gradient(egrads2, r), r_gradient));
-  should(vector_equal(gradient(egrads2, s), s_gradient));
+  should(vector_equal(gradient(egrads2, t), dff(t)));
+  should(vector_equal(gradient(egrads2, q), dff(q)));
+  should(vector_equal(gradient(egrads2, r), dff(r)));
+  should(vector_equal(gradient(egrads2, s), dff(s)));
   should(vector_equal(perp(dff(tq), t - q),
                       perp(gradient(egrads2, tq), t - q)));
   should(vector_equal(perp(dff(tr), t - r),
@@ -558,10 +550,10 @@ int main(int argc, char *argv[]) {
   should(double_equal(fgrads1(q), ff(q)));
   should(double_equal(fgrads1(r), ff(r)));
   should(double_equal(fgrads1(s), ff(s)));
-  should(vector_equal(gradient(fgrads1, p), p_gradient));
-  should(vector_equal(gradient(fgrads1, q), q_gradient));
-  should(vector_equal(gradient(fgrads1, r), r_gradient));
-  should(vector_equal(gradient(fgrads1, s), s_gradient));
+  should(vector_equal(gradient(fgrads1, p), dff(p)));
+  should(vector_equal(gradient(fgrads1, q), dff(q)));
+  should(vector_equal(gradient(fgrads1, r), dff(r)));
+  should(vector_equal(gradient(fgrads1, s), dff(s)));
   should(vector_equal(perp(dff(pq), p - q),
                       perp(gradient(fgrads1, pq), p - q)));
   should(vector_equal(perp(dff(pr), p - r),
@@ -591,10 +583,10 @@ int main(int argc, char *argv[]) {
   should(double_equal(fgrads2(q), ff(q)));
   should(double_equal(fgrads2(r), ff(r)));
   should(double_equal(fgrads2(s), ff(s)));
-  should(vector_equal(gradient(fgrads2, t), t_gradient));
-  should(vector_equal(gradient(fgrads2, q), q_gradient));
-  should(vector_equal(gradient(fgrads2, r), r_gradient));
-  should(vector_equal(gradient(fgrads2, s), s_gradient));
+  should(vector_equal(gradient(fgrads2, t), dff(t)));
+  should(vector_equal(gradient(fgrads2, q), dff(q)));
+  should(vector_equal(gradient(fgrads2, r), dff(r)));
+  should(vector_equal(gradient(fgrads2, s), dff(s)));
   should(vector_equal(perp(dff(tq), t - q),
                       perp(gradient(fgrads2, tq), t - q)));
   should(vector_equal(perp(dff(tr), t - r),
