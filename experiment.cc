@@ -529,7 +529,6 @@ int main(int argc, char *argv[]) {
   // Shared face
 
   Vector<3> qrs = t1.faceCenter(0);
-  Vector<3> qrs_gradient = dff(qrs);
 
   // Faces unique to first tetrahedron
 
@@ -537,40 +536,32 @@ int main(int argc, char *argv[]) {
   Vector<3> pqs = t1.faceCenter(2);
   Vector<3> prs = t1.faceCenter(1);
 
-  Vector<3> pqr_gradient = dff(pqr);
-  Vector<3> pqs_gradient = dff(pqs);
-  Vector<3> prs_gradient = dff(prs);
-
   // Faces unique to second tetrahedron
 
   Vector<3> tqr = t2.faceCenter(3);
   Vector<3> tqs = t2.faceCenter(2);
   Vector<3> trs = t2.faceCenter(1);
 
-  Vector<3> tqr_gradient = dff(tqr);
-  Vector<3> tqs_gradient = dff(tqs);
-  Vector<3> trs_gradient = dff(trs);
-
   // Make interpolants that approximate these face gradients
 
   MPoly<3> fgrads1 = egrads1
-    + dot_product(pqr_gradient - gradient(egrads1, pqr),
+    + dot_product(dff(pqr) - gradient(egrads1, pqr),
                   t1.faceNormal(3)) * faceGradient(a, b, c, d)
-    + dot_product(pqs_gradient - gradient(egrads1, pqs),
+    + dot_product(dff(pqs) - gradient(egrads1, pqs),
                   t1.faceNormal(2)) * faceGradient(a, b, d, c)
-    + dot_product(prs_gradient - gradient(egrads1, prs),
+    + dot_product(dff(prs) - gradient(egrads1, prs),
                   t1.faceNormal(1)) * faceGradient(a, c, d, b)
-    + dot_product(qrs_gradient - gradient(egrads1, qrs),
+    + dot_product(dff(qrs) - gradient(egrads1, qrs),
                   t1.faceNormal(0)) * faceGradient(b, c, d, a);
 
   MPoly<3> fgrads2 = egrads2
-    + dot_product(tqr_gradient - gradient(egrads2, tqr),
+    + dot_product(dff(tqr) - gradient(egrads2, tqr),
                   t2.faceNormal(3)) * faceGradient(e, f, g, h)
-    + dot_product(tqs_gradient - gradient(egrads2, tqs),
+    + dot_product(dff(tqs) - gradient(egrads2, tqs),
                   t2.faceNormal(2)) * faceGradient(e, f, h, g)
-    + dot_product(trs_gradient - gradient(egrads2, trs),
+    + dot_product(dff(trs) - gradient(egrads2, trs),
                   t2.faceNormal(1)) * faceGradient(e, g, h, f)
-    + dot_product(qrs_gradient - gradient(egrads2, qrs),
+    + dot_product(dff(qrs) - gradient(egrads2, qrs),
                   t2.faceNormal(0)) * faceGradient(f, g, h, e);
 
   // And check that they are correct
@@ -595,16 +586,16 @@ int main(int argc, char *argv[]) {
                       perp(gradient(fgrads1, qs), q - s)));
   should(vector_equal(perp(rs_gradient, r - s),
                       perp(gradient(fgrads1, rs), r - s)));
-  should(vector_equal(project(pqr_gradient, t1.faceNormalUnscaled(3)),
+  should(vector_equal(project(dff(pqr), t1.faceNormalUnscaled(3)),
                       project(gradient(fgrads1, pqr),
                               t1.faceNormalUnscaled(3))));
-  should(vector_equal(project(pqs_gradient, t1.faceNormalUnscaled(2)),
+  should(vector_equal(project(dff(pqs), t1.faceNormalUnscaled(2)),
                       project(gradient(fgrads1, pqs),
                               t1.faceNormalUnscaled(2))));
-  should(vector_equal(project(prs_gradient, t1.faceNormalUnscaled(1)),
+  should(vector_equal(project(dff(prs), t1.faceNormalUnscaled(1)),
                       project(gradient(fgrads1, prs),
                               t1.faceNormalUnscaled(1))));
-  should(vector_equal(project(qrs_gradient, t1.faceNormalUnscaled(0)),
+  should(vector_equal(project(dff(qrs), t1.faceNormalUnscaled(0)),
                       project(gradient(fgrads1, qrs),
                               t1.faceNormalUnscaled(0))));
 
@@ -628,16 +619,16 @@ int main(int argc, char *argv[]) {
                       perp(gradient(fgrads2, qs), q - s)));
   should(vector_equal(perp(rs_gradient, r - s),
                       perp(gradient(fgrads2, rs), r - s)));
-  should(vector_equal(project(tqr_gradient, t2.faceNormalUnscaled(3)),
+  should(vector_equal(project(dff(tqr), t2.faceNormalUnscaled(3)),
                       project(gradient(fgrads2, tqr),
                               t2.faceNormalUnscaled(3))));
-  should(vector_equal(project(tqs_gradient, t2.faceNormalUnscaled(2)),
+  should(vector_equal(project(dff(tqs), t2.faceNormalUnscaled(2)),
                       project(gradient(fgrads2, tqs),
                               t2.faceNormalUnscaled(2))));
-  should(vector_equal(project(trs_gradient, t2.faceNormalUnscaled(1)),
+  should(vector_equal(project(dff(trs), t2.faceNormalUnscaled(1)),
                       project(gradient(fgrads2, trs),
                               t2.faceNormalUnscaled(1))));
-  should(vector_equal(project(qrs_gradient, t2.faceNormalUnscaled(0)),
+  should(vector_equal(project(dff(qrs), t2.faceNormalUnscaled(0)),
                       project(gradient(fgrads2, qrs),
                               t2.faceNormalUnscaled(0))));
 
