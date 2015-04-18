@@ -14,38 +14,25 @@ public:
     Vector<3> r = t.vertex(2);
     Vector<3> s = t.vertex(3);
 
-    MPoly<3> a = linear_indicator(p, q, r, s);
-    MPoly<3> b = linear_indicator(q, p, r, s);
-    MPoly<3> c = linear_indicator(r, p, q, s);
-    MPoly<3> d = linear_indicator(s, p, q, r);
+    MPoly<3> indicator[4];
+    indicator[0] = linear_indicator(p, q, r, s);
+    indicator[1] = linear_indicator(q, p, r, s);
+    indicator[2] = linear_indicator(r, p, q, s);
+    indicator[3] = linear_indicator(s, p, q, r);
 
-    linear_poly = ff(p) * a + ff(q) * b + ff(r) * c + ff(s) * d;
+    linear_poly = 0.0;
+    for (int v = 0; v < 4; ++v)
+      linear_poly += ff(t.vertex(v)) * indicator[v];
 
-    cubic_poly = linear_poly
-      + dot_product(dff(p) - gradient(linear_poly, p),
-                    t.edge(0, 1)) * vertexGradient(a, b)
-      + dot_product(dff(p) - gradient(linear_poly, p),
-                    t.edge(0, 2)) * vertexGradient(a, c)
-      + dot_product(dff(p) - gradient(linear_poly, p),
-                    t.edge(0, 3)) * vertexGradient(a, d)
-      + dot_product(dff(q) - gradient(linear_poly, q),
-                    t.edge(1, 0)) * vertexGradient(b, a)
-      + dot_product(dff(q) - gradient(linear_poly, q),
-                    t.edge(1, 2)) * vertexGradient(b, c)
-      + dot_product(dff(q) - gradient(linear_poly, q),
-                    t.edge(1, 3)) * vertexGradient(b, d)
-      + dot_product(dff(r) - gradient(linear_poly, r),
-                    t.edge(2, 0)) * vertexGradient(c, a)
-      + dot_product(dff(r) - gradient(linear_poly, r),
-                    t.edge(2, 1)) * vertexGradient(c, b)
-      + dot_product(dff(r) - gradient(linear_poly, r),
-                    t.edge(2, 3)) * vertexGradient(c, d)
-      + dot_product(dff(s) - gradient(linear_poly, s),
-                    t.edge(3, 0)) * vertexGradient(d, a)
-      + dot_product(dff(s) - gradient(linear_poly, s),
-                    t.edge(3, 1)) * vertexGradient(d, b)
-      + dot_product(dff(s) - gradient(linear_poly, s),
-                    t.edge(3, 2)) * vertexGradient(d, c);
+    cubic_poly = linear_poly;
+    for (int v_from = 0; v_from < 4; ++v_from) {
+      for (int v_to = 0; v_to < 4; ++v_to) {
+        if (v_from == v_to)
+          continue;
+        cubic_poly += dot_product(dff(t.vertex(v_from)) - gradient(linear_poly, t.vertex(v_from)),
+                                  t.edge(v_from, v_to)) * vertexGradient(indicator[v_from], indicator[v_to]);
+      }
+    }
   }
   const MPoly<3> &linear() const {
     return linear_poly;
