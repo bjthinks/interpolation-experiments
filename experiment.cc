@@ -288,23 +288,6 @@ int main(int argc, char *argv[]) {
 
   // Make sure they have the desired properties
 
-  should(double_equal(a(p), 1.0));
-  should(double_equal(a(q), 0.0));
-  should(double_equal(a(r), 0.0));
-  should(double_equal(a(s), 0.0));
-  should(double_equal(b(p), 0.0));
-  should(double_equal(b(q), 1.0));
-  should(double_equal(b(r), 0.0));
-  should(double_equal(b(s), 0.0));
-  should(double_equal(c(p), 0.0));
-  should(double_equal(c(q), 0.0));
-  should(double_equal(c(r), 1.0));
-  should(double_equal(c(s), 0.0));
-  should(double_equal(d(p), 0.0));
-  should(double_equal(d(q), 0.0));
-  should(double_equal(d(r), 0.0));
-  should(double_equal(d(s), 1.0));
-
   should(double_equal(e(t), 1.0));
   should(double_equal(e(q), 0.0));
   should(double_equal(e(r), 0.0));
