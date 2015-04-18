@@ -22,12 +22,12 @@ public:
 
     cubic_interpolant = linear_interpolant;
     for (int at = 0; at < 4; ++at) {
+      Vector<3> vertex = t.vertex(at);
+      Vector<3> gradient_want = dff(vertex);
+      Vector<3> gradient_have = gradient(linear_interpolant, vertex);
       for (int towards = 0; towards < 4; ++towards) {
         if (at == towards) continue;
-        Vector<3> vertex = t.vertex(at);
         Vector<3> edge = t.edge(at, towards);
-        Vector<3> gradient_want = dff(vertex);
-        Vector<3> gradient_have = gradient(linear_interpolant, vertex);
         cubic_interpolant +=
           dot_product(gradient_want - gradient_have, edge)
           * vertexGradient(indicator[at], indicator[towards]);
@@ -37,12 +37,12 @@ public:
     quartic_interpolant = cubic_interpolant;
     for (int endpoint1 = 0; endpoint1 < 4; ++endpoint1) {
       for (int endpoint2 = endpoint1 + 1; endpoint2 < 4; ++endpoint2) {
+        Vector<3> midpoint = t.edgeMidpoint(endpoint1, endpoint2);
+        Vector<3> gradient_want = dff(midpoint);
+        Vector<3> gradient_have = gradient(cubic_interpolant, midpoint);
         for (int towards = 0; towards < 4; ++towards) {
           if (endpoint1 == towards || endpoint2 == towards) continue;
-          Vector<3> midpoint = t.edgeMidpoint(endpoint1, endpoint2);
           Vector<3> normal = t.edgeNormal(endpoint1, endpoint2, towards);
-          Vector<3> gradient_want = dff(midpoint);
-          Vector<3> gradient_have = gradient(cubic_interpolant, midpoint);
           quartic_interpolant +=
             dot_product(gradient_want - gradient_have, normal)
             * edgeGradient(indicator[endpoint1], indicator[endpoint2],
