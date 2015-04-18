@@ -200,17 +200,6 @@ static Vector<3> perp(const Vector<3> &vec, const Vector<3> &away) {
   return vec - project(vec, away);
 }
 
-template <int N>
-static Vector<N> random_on_segment(const Vector<N> &x, const Vector<N> &y) {
-  double t = double(rand()) / double(RAND_MAX);
-  return t * x + (1.0 - t) * y;
-}
-
-static MPoly<3> faceGradient(MPoly<3> &f1, MPoly<3> &f2, MPoly<3> &f3,
-                             MPoly<3> &to) {
-  return 27.0 * f1 * f2 * f3 * to * (1.0 - 3.0 * to);
-}
-
 double ff(const Vector<3> &x) {
   double value = x[0] * x[0] + sin(x[1]) + exp(x[2]);
   return value;
@@ -418,18 +407,7 @@ int main(int argc, char *argv[]) {
   // Make interpolants that approximate these face gradients
 
   MPoly<3> fgrads1 = i1.quintic();
-
-  MPoly<3> fgrads2 = egrads2
-    + dot_product(dff(tqr) - gradient(egrads2, tqr),
-                  t2.faceNormal(3)) * faceGradient(e, f, g, h)
-    + dot_product(dff(tqs) - gradient(egrads2, tqs),
-                  t2.faceNormal(2)) * faceGradient(e, f, h, g)
-    + dot_product(dff(trs) - gradient(egrads2, trs),
-                  t2.faceNormal(1)) * faceGradient(e, g, h, f)
-    + dot_product(dff(qrs) - gradient(egrads2, qrs),
-                  t2.faceNormal(0)) * faceGradient(f, g, h, e);
-
-  // And check that they are correct
+  MPoly<3> fgrads2 = i2.quintic();
 
   should(double_equal(fgrads1(p), ff(p)));
   should(double_equal(fgrads1(q), ff(q)));
