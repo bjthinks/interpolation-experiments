@@ -39,15 +39,18 @@ public:
     }
 
     quartic_interpolant = cubic_interpolant;
-    for (int e0 = 0; e0 < 4; ++e0) {
-      for (int e1 = e0 + 1; e1 < 4; ++e1) {
-        for (int to = 0; to < 4; ++to) {
-          if (e0 == to || e1 == to) continue;
-          Vector<3> midpoint = t.edgeMidpoint(e0, e1);
-          quartic_interpolant += dot_product(dff(midpoint)
-                                             - gradient(cubic_interpolant, midpoint),
-                                             t.edgeNormal(e0, e1, to))
-            * edgeGradient(indicator[e0], indicator[e1], indicator[to]);
+    for (int endpoint1 = 0; endpoint1 < 4; ++endpoint1) {
+      for (int endpoint2 = endpoint1 + 1; endpoint2 < 4; ++endpoint2) {
+        for (int towards = 0; towards < 4; ++towards) {
+          if (endpoint1 == towards || endpoint2 == towards) continue;
+          Vector<3> midpoint = t.edgeMidpoint(endpoint1, endpoint2);
+          Vector<3> normal = t.edgeNormal(endpoint1, endpoint2, towards);
+          Vector<3> gradient_want = dff(midpoint);
+          Vector<3> gradient_have = gradient(cubic_interpolant, midpoint);
+          quartic_interpolant +=
+            dot_product(gradient_want - gradient_have, normal)
+            * edgeGradient(indicator[endpoint1], indicator[endpoint2],
+                           indicator[towards]);
         }
       }
     }
