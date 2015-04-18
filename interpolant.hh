@@ -29,8 +29,10 @@ public:
       for (int v_to = 0; v_to < 4; ++v_to) {
         if (v_from == v_to)
           continue;
-        cubic_poly += dot_product(dff(t.vertex(v_from)) - gradient(linear_poly, t.vertex(v_from)),
-                                  t.edge(v_from, v_to)) * vertexGradient(indicator[v_from], indicator[v_to]);
+        cubic_poly += dot_product(dff(t.vertex(v_from))
+                                  - gradient(linear_poly, t.vertex(v_from)),
+                                  t.edge(v_from, v_to))
+          * vertexGradient(indicator[v_from], indicator[v_to]);
       }
     }
   }
