@@ -256,18 +256,6 @@ int main(int argc, char *argv[]) {
   Interpolant i1(t1, ff, dff);
   Interpolant i2(t2, ff, dff);
 
-  // Define some linear functions on the tetrahedra
-
-  MPoly<3> a = linear_indicator(p, q, r, s);
-  MPoly<3> b = linear_indicator(q, p, r, s);
-  MPoly<3> c = linear_indicator(r, p, q, s);
-  MPoly<3> d = linear_indicator(s, p, q, r);
-
-  MPoly<3> e = linear_indicator(t, q, r, s);
-  MPoly<3> f = linear_indicator(q, t, r, s);
-  MPoly<3> g = linear_indicator(r, t, q, s);
-  MPoly<3> h = linear_indicator(s, t, q, r);
-
   // Make interpolants that have these values
 
   MPoly<3> values1 = i1.linear();
