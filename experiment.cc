@@ -272,7 +272,7 @@ int main(int argc, char *argv[]) {
   Tetrahedron t1(p, q, r, s);
   Tetrahedron t2(t, q, r, s);
 
-  Interpolant i1(t1);
+  Interpolant i1(t1, ff);
 
   // Define some linear functions on the tetrahedra
 
@@ -307,7 +307,7 @@ int main(int argc, char *argv[]) {
 
   // Make interpolants that have these values
 
-  MPoly<3> values1 = ff(p) * a + ff(q) * b + ff(r) * c + ff(s) * d;
+  MPoly<3> values1 = i1.linear();
   MPoly<3> values2 = ff(t) * e + ff(q) * f + ff(r) * g + ff(s) * h;
 
   // And check that they are correct
