@@ -20,41 +20,43 @@ public:
     indicator[2] = linear_indicator(r, p, q, s);
     indicator[3] = linear_indicator(s, p, q, r);
 
-    linear_poly = 0.0;
+    linear_interpolant = 0.0;
     for (int v = 0; v < 4; ++v)
-      linear_poly += ff(t.vertex(v)) * indicator[v];
+      linear_interpolant += ff(t.vertex(v)) * indicator[v];
 
-    cubic_poly = linear_poly;
-    for (int v_from = 0; v_from < 4; ++v_from) {
-      for (int v_to = 0; v_to < 4; ++v_to) {
-        if (v_from == v_to)
-          continue;
-        cubic_poly += dot_product(dff(t.vertex(v_from))
-                                  - gradient(linear_poly, t.vertex(v_from)),
-                                  t.edge(v_from, v_to))
-          * vertexGradient(indicator[v_from], indicator[v_to]);
+    cubic_interpolant = linear_interpolant;
+    for (int at = 0; at < 4; ++at) {
+      for (int towards = 0; towards < 4; ++towards) {
+        if (at == towards) continue;
+        Vector<3> vertex = t.vertex(at);
+        Vector<3> edge = t.edge(at, towards);
+        Vector<3> gradient_want = dff(vertex);
+        Vector<3> gradient_have = gradient(linear_interpolant, vertex);
+        cubic_interpolant +=
+          dot_product(gradient_want - gradient_have, edge)
+          * vertexGradient(indicator[at], indicator[towards]);
       }
     }
 
-    quartic_poly = cubic_poly;
+    quartic_interpolant = cubic_interpolant;
     for (int e0 = 0; e0 < 4; ++e0) {
       for (int e1 = e0 + 1; e1 < 4; ++e1) {
         for (int to = 0; to < 4; ++to) {
           if (e0 == to || e1 == to) continue;
           Vector<3> midpoint = t.edgeMidpoint(e0, e1);
-          quartic_poly += dot_product(dff(midpoint)
-                                    - gradient(cubic_poly, midpoint),
-                                    t.edgeNormal(e0, e1, to))
-          * edgeGradient(indicator[e0], indicator[e1], indicator[to]);
+          quartic_interpolant += dot_product(dff(midpoint)
+                                             - gradient(cubic_interpolant, midpoint),
+                                             t.edgeNormal(e0, e1, to))
+            * edgeGradient(indicator[e0], indicator[e1], indicator[to]);
         }
       }
     }
 
-    quintic_poly = quartic_poly;
+    quintic_interpolant = quartic_interpolant;
     for (int f = 0; f < 4; ++f) {
-      quintic_poly +=
+      quintic_interpolant +=
         dot_product(dff(t.faceCenter(f))
-                    - gradient(quartic_poly, t.faceCenter(f)),
+                    - gradient(quartic_interpolant, t.faceCenter(f)),
                     t.faceNormal(f))
         * faceGradient(indicator[(f + 1) % 4],
                        indicator[(f + 2) % 4],
@@ -63,23 +65,23 @@ public:
     }
   }
   const MPoly<3> &linear() const {
-    return linear_poly;
+    return linear_interpolant;
   }
   const MPoly<3> &cubic() const {
-    return cubic_poly;
+    return cubic_interpolant;
   }
   const MPoly<3> &quartic() const {
-    return quartic_poly;
+    return quartic_interpolant;
   }
   const MPoly<3> &quintic() const {
-    return quintic_poly;
+    return quintic_interpolant;
   }
 
 private:
-  MPoly<3> linear_poly;
-  MPoly<3> cubic_poly;
-  MPoly<3> quartic_poly;
-  MPoly<3> quintic_poly;
+  MPoly<3> linear_interpolant;
+  MPoly<3> cubic_interpolant;
+  MPoly<3> quartic_interpolant;
+  MPoly<3> quintic_interpolant;
 
   static MPoly<3> linear_indicator(const Vector<3> &one,
                                    const Vector<3> &zero1,
