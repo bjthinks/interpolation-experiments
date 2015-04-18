@@ -9,16 +9,12 @@ public:
   Interpolant(const Tetrahedron &t, double (*ff)(const Vector<3> &),
               Vector<3> (*dff)(const Vector<3> &))
   {
-    Vector<3> p = t.vertex(0);
-    Vector<3> q = t.vertex(1);
-    Vector<3> r = t.vertex(2);
-    Vector<3> s = t.vertex(3);
-
     MPoly<3> indicator[4];
-    indicator[0] = linear_indicator(p, q, r, s);
-    indicator[1] = linear_indicator(q, p, r, s);
-    indicator[2] = linear_indicator(r, p, q, s);
-    indicator[3] = linear_indicator(s, p, q, r);
+    for (int i = 0; i < 4; ++i)
+      indicator[i] = linear_indicator(t.vertex(i),
+                                      t.vertex((i + 1) % 4),
+                                      t.vertex((i + 2) % 4),
+                                      t.vertex((i + 3) % 4));
 
     linear_interpolant = 0.0;
     for (int v = 0; v < 4; ++v)
