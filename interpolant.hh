@@ -40,11 +40,10 @@ public:
     for (int e0 = 0; e0 < 4; ++e0) {
       for (int e1 = e0 + 1; e1 < 4; ++e1) {
         for (int to = 0; to < 4; ++to) {
-          if (e0 == to || e1 == to)
-            continue;
-          quartic_poly += dot_product(dff(t.edgeMidpoint(e0, e1))
-                                    - gradient(cubic_poly,
-                                               t.edgeMidpoint(e0, e1)),
+          if (e0 == to || e1 == to) continue;
+          Vector<3> midpoint = t.edgeMidpoint(e0, e1);
+          quartic_poly += dot_product(dff(midpoint)
+                                    - gradient(cubic_poly, midpoint),
                                     t.edgeNormal(e0, e1, to))
           * edgeGradient(indicator[e0], indicator[e1], indicator[to]);
         }
