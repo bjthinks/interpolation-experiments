@@ -73,18 +73,11 @@ public:
         * (1.0 - 3.0 * linear_basis[opposite]);
     }
   }
-  const MPoly<3> &linear() const {
-    return linear_interpolant;
-  }
-  const MPoly<3> &cubic() const {
-    return cubic_interpolant;
-  }
-  const MPoly<3> &quartic() const {
-    return quartic_interpolant;
-  }
-  const MPoly<3> &quintic() const {
-    return quintic_interpolant;
-  }
+
+  const MPoly<3> &linear () const { return  linear_interpolant; }
+  const MPoly<3> &cubic  () const { return   cubic_interpolant; }
+  const MPoly<3> &quartic() const { return quartic_interpolant; }
+  const MPoly<3> &quintic() const { return quintic_interpolant; }
 
 private:
   MPoly<3> linear_interpolant;
@@ -104,6 +97,7 @@ private:
     return (pre_result - pre_result(zero1))
       / (pre_result(one) - pre_result(zero1));
   }
+
   static Vector<3> gradient(const MPoly<3> &f, const Vector<3> &p) {
     Vector<3> g;
     for (int i = 0; i < 3; ++i)
