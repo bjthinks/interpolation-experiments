@@ -31,7 +31,7 @@ public:
         Vector<3> edge = t.edge(at, towards);
         cubic_interpolant +=
           dot_product(gradient_difference, edge)
-          * vertexGradient(linear_basis[at], linear_basis[towards]);
+          * linear_basis[at] * linear_basis[at] * linear_basis[towards];
       }
     }
 
@@ -47,8 +47,10 @@ public:
           Vector<3> normal = t.edgeNormal(endpoint1, endpoint2, towards);
           quartic_interpolant +=
             dot_product(gradient_difference, normal)
-            * edgeGradient(linear_basis[endpoint1], linear_basis[endpoint2],
-                           linear_basis[towards]);
+            * 4.0 * linear_basis[endpoint1] * linear_basis[endpoint2]
+            * linear_basis[towards]
+            * (linear_basis[endpoint1] + linear_basis[endpoint2]
+               - linear_basis[towards]);
         }
       }
     }
@@ -65,8 +67,10 @@ public:
       Vector<3> gradient_difference = gradient_want - gradient_have;
       quintic_interpolant +=
         dot_product(gradient_difference, normal)
-        * faceGradient(linear_basis[face1], linear_basis[face2],
-                       linear_basis[face3], linear_basis[opposite]);
+        * 27.0
+        * linear_basis[face1] * linear_basis[face2]
+        * linear_basis[face3] * linear_basis[opposite]
+        * (1.0 - 3.0 * linear_basis[opposite]);
     }
   }
   const MPoly<3> &linear() const {
@@ -105,16 +109,6 @@ private:
     for (int i = 0; i < 3; ++i)
       g[i] = f.diff(i)(p);
     return g;
-  }
-  static MPoly<3> vertexGradient(MPoly<3> &v, MPoly<3> &to) {
-    return v * v * to;
-  }
-  static MPoly<3> edgeGradient(MPoly<3> &e1, MPoly<3> &e2, MPoly<3> &to) {
-    return 4.0 * e1 * e2 * to * (e1 + e2 - to);
-  }
-  static MPoly<3> faceGradient(MPoly<3> &f1, MPoly<3> &f2, MPoly<3> &f3,
-                               MPoly<3> &to) {
-    return 27.0 * f1 * f2 * f3 * to * (1.0 - 3.0 * to);
   }
 };
 
